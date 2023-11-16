@@ -14,6 +14,11 @@ class DefaultCategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'type' => $this->getTypeOfCategoryAttribute(),
+            'name' => $this->name
+            // custom options e custom data
+        ];
     }
 }

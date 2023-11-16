@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class DefaultCategory extends Model
 {
     use HasFactory;
+
+    public function getTypeOfCategoryAttribute(){    
+        return $this->type == 'C' ? 'Credit' : 'Debit';
+    }
 }

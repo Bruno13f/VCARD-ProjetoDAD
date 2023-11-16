@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\TransactionController;
 use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\VcardController;
+use App\Http\Controllers\api\DefaultCategoryController;
 
 
 /*
@@ -38,6 +39,6 @@ Route::get('transactions', [TransactionController::class, 'index']);
 
 //Categorias
 
-Route::get('categories', [CategoryController::class, 'index']);
+Route::get('categories', [DefaultCategoryController::class, 'index']);
 Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 
