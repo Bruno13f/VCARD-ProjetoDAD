@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('vcards/{vcard}/transactions', [TransactionController::class, 'getTransactionOfVcard']);
+
+Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
