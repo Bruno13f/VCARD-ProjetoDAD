@@ -14,7 +14,7 @@ class Transaction extends Model
     }
 
     public function vcardOfTransaction(){
-        return $this->belongsTo(Vcard::class, 'vcards', 'phone_number');
+        return $this->belongsTo(Vcard::class, 'vcard', 'phone_number');
     }
 
     public function category(){

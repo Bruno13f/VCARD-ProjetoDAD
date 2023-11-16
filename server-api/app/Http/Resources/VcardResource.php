@@ -21,8 +21,8 @@ class VcardResource extends JsonResource
             'photo_url' => $this->photo_url ?? '',
             //'confirmation_code' => $this->confirmation_code, ????
             'blocked' => $this->blocked,
-            'balance' => $this->balance,
-            'max_debit' => $this->max_debit
+            'balance' => $this->balance.' €',
+            'max_debit' => $this->max_debit.' €'
             // custom_data e custom_options??
         ];
     }
