@@ -32,6 +32,8 @@ Route::get('users', [UserController::class, 'index']);
 Route::get('vcards', [VcardController::class, 'index']);
 Route::get('vcards/{vcard}/transactions', [TransactionController::class, 'getTransactionOfVcard']);
 Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
+Route::put('vcards/{vcard}', [VcardController::class, 'update']);
+
 
 //Transactions
 
