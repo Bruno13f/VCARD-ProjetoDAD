@@ -12,4 +12,8 @@ class DefaultCategoryController extends Controller
     public function index(){
         return DefaultCategoryResource::collection(DefaultCategory::all());
     }
+
+    public function show(DefaultCategory $category){
+        return new DefaultCategoryResource($category);
+    }
 }

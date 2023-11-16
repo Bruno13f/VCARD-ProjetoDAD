@@ -14,8 +14,11 @@ class VcardController extends Controller
         return VcardResource::collection(Vcard::all());  
     }
 
-    public function store(StoreUpdateVcardRequest $request)
-    {
+    public function show (Vcard $vcard){
+        return new VCardResource($vcard);
+    }
+
+    public function store(StoreUpdateVcardRequest $request){
         $newVcard = Vcard::create($request->validated());
         return new VcardResource($newVcard);
     }
