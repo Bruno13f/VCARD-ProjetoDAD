@@ -11,7 +11,7 @@ class StoreUpdateVcardRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreUpdateVcardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'phone_number' => 'required|string|size:9',
+            'name' => 'required|string|size:255',
+            'email' => 'required|string|size:255',
+            'photo_url' => 'nullable|string|size:255',
         ];
     }
 }
