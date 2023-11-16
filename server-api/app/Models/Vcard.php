@@ -12,7 +12,7 @@ class Vcard extends Model
     protected $primaryKey = 'phone_number';
 
     public function transactions(){
-        return $this->hasMany(Transaction::class, 'vcard');
+        return $this->hasMany(Transaction::class, 'vcard', 'phone_number');
     }
 
     // ????
@@ -22,8 +22,6 @@ class Vcard extends Model
 
     public function categories(){
         return $this->hasMany(Category::class, 'vcard');
-    } 
-
-
+    }
 
 }

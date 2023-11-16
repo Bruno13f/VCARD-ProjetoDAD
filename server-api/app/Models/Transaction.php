@@ -13,11 +13,11 @@ class Transaction extends Model
         return $this->type == 'C' ? 'Credit Transaction' : 'Debit Transaction';
     }
 
-    public function vcards(){
-        return $this->belongsTo(Vcard::class, 'vcards');
+    public function vcardOfTransaction(){
+        return $this->belongsTo(Vcard::class, 'vcards', 'phone_number');
     }
 
-    public function categories(){
+    public function category(){
         return $this->belongsTo(Category::class, 'category_id');
     }
 

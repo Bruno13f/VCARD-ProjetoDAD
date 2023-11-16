@@ -13,7 +13,7 @@ class Category extends Model
         return $this->type == 'C' ? 'Credit' : 'Debit';
     }
     
-    public function vcards(){
+    public function vcardOfTransaction(){
         return $this->belongsTo(Vcard::class, 'vcards');
     }
 

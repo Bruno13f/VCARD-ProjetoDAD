@@ -14,6 +14,12 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'vcard' => '',//new VcardResource($this->vcards),
+            'type' => $this->getTypeOfCategoryAttribute(),
+            'name' => $this->name
+            // custom options e custom data ??
+        ];
     }
 }
