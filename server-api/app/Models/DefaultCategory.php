@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Default_categories extends Model
+class DefaultCategory extends Model
 {
     use HasFactory;
 }

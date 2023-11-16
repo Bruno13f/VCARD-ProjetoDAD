@@ -5,23 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vcards extends Model
+class Vcard extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'phone_number';
 
     public function transactions(){
-        return $this->hasMany(Transactions::class, 'vcard');
+        return $this->hasMany(Transaction::class, 'vcard');
     }
 
     // ????
     public function vcardPair(){
-        return $this->hasMany(Transactions::class, 'pair_vcard');
+        return $this->hasMany(Transaction::class, 'pair_vcard');
     }
 
     public function categories(){
-        return $this->hasMany(Categories::class, 'vcard');
+        return $this->hasMany(Category::class, 'vcard');
     } 
 
 
