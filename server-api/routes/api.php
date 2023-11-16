@@ -33,6 +33,7 @@ Route::get('users/{user}', [UserController::class, 'show']);
 
 Route::get('vcards', [VcardController::class, 'index']);
 Route::post('vcards', [VcardController::class, 'store']);
+Route::put('vcards/{vcard}', [VcardController::class, 'update']);
 //Route::get('vcards/{vcard}/transactions', [TransactionController::class, 'getTransactionOfVcard']);
 //Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
 
