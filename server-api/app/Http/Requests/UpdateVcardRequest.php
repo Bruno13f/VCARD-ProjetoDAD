@@ -27,7 +27,7 @@ class UpdateVcardRequest extends FormRequest
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
             //todo corrigir blocked
-            'blocked' => 'required|in:false,true',
+            'blocked' => 'nullable|in:false,true',
             'max_debit' => 'nullable|decimal|min:0',
             'custom_options' => 'nullable|json',
             'custom_data' => 'nullable|json'
