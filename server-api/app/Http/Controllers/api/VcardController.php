@@ -35,6 +35,6 @@ class VcardController extends Controller
     public function updateBlocked (UpdateBlockVcardRequest $request, Vcard $vcard){
         $vcard->blocked = $request->blocked;
         $vcard->save();
-        return new VcardResource($newVcard);
+        return new VcardResource($vcard);
     }
 }
