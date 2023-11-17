@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\StoreUpdateVcardRequest;
+use App\Http\Requests\UpdateBlockVcardRequest;
 
 class VcardController extends Controller
 {
@@ -28,6 +29,12 @@ class VcardController extends Controller
 
     public function store(StoreUpdateVcardRequest $request){
         $newVcard = Vcard::create($request->validated());
+        return new VcardResource($newVcard);
+    }
+
+    public function updateBlocked (UpdateBlockVcardRequest $request, Vcard $vcard){
+        $vcard->blocked = $request->blocked;
+        $vcard->save();
         return new VcardResource($newVcard);
     }
 }
