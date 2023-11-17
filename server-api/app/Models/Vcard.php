@@ -10,7 +10,7 @@ class Vcard extends Model
     use HasFactory;
 
     protected $primaryKey = 'phone_number';
-    protected $fillable = ['name', 'email', 'photo_url', 'blocked', 'max_debit', 'custom_options', 'custom_data'];
+    protected $fillable = ['phone_number', 'name', 'email', 'photo_url', 'blocked', 'max_debit', 'custom_options', 'custom_data'];
     
     public function transactions(){
         return $this->hasMany(Transaction::class, 'vcard', 'phone_number');

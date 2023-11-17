@@ -24,10 +24,13 @@ class StoreUpdateVcardRequest extends FormRequest
     public function rules()
     {
         return [
+            // A implementar
             'phone_number' => 'required|string|size:9',
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
-            'photo_url' => 'nullable|file|image'        
+            'photo_url' => 'nullable|file|image',
+            'password' => 'required|string|min:3',
+            'confirmation_code' => 'required|integer|size:3'        
         ];
     }
 }
