@@ -28,7 +28,11 @@ class VcardController extends Controller
     }
 
     public function store(StoreUpdateVcardRequest $request){
-        $newVcard = Vcard::create($request->validated());
+        if (Vcard::where('phone_number', $request->phone_number)->exists()) {
+            return response()->json(['error' => 'Phone number is already associated with a vcard'], 422);
+        }
+        
+        $newVcard = Vcard::create($request->validated()); 
         return new VcardResource($newVcard);
     }
 
