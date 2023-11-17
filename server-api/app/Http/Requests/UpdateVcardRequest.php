@@ -23,7 +23,7 @@ class UpdateVcardRequest extends FormRequest
     {
         return [
             //'phone_number' => 'required|exists:users,id',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
             'password' => 'nullable|file|image',

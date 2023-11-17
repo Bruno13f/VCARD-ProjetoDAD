@@ -4,14 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUpdateVcardRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -19,15 +17,14 @@ class StoreUpdateVcardRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'phone_number' => 'required|string|size:9',
-            'name' => 'required|string|min:3|max:255',
+            'name' => 'required|string|min:3|max:200',
             'email' => 'required|email',
-            'photo_url' => 'nullable|file|image'        
+            'photo_url' => 'nullable|file|img'
         ];
     }
 }
