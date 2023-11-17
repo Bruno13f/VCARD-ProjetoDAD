@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('users', [UserController::class, 'index']);
 Route::get('users/{user}', [UserController::class, 'show']);
+Route::put('users/{user}', [UserController::class, 'update']);
 
 //Vcards
 

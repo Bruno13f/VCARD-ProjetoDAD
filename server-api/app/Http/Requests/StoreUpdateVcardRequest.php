@@ -25,7 +25,7 @@ class StoreUpdateVcardRequest extends FormRequest
     {
         return [
             'phone_number' => 'required|string|size:9',
-            'name' => 'required|string|size:255',
+            'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image'        
         ];
