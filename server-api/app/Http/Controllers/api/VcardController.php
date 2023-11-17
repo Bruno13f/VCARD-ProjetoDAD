@@ -9,18 +9,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\StoreUpdateVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
+use App\Http\Requests\UpdateMaxDebitVcardRequest;
 
 class VcardController extends Controller
 {
     public function index()
     {
         return VcardResource::collection(Vcard::all());
-    }
-
-    public function update(UpdateVcardRequest $request, Vcard $vcard)
-    {
-        $vcard->update($request->validated());
-        return new VcardResource($vcard);
     }
 
     public function show (Vcard $vcard){
@@ -35,6 +30,18 @@ class VcardController extends Controller
     public function updateBlocked (UpdateBlockVcardRequest $request, Vcard $vcard){
         $vcard->blocked = $request->blocked;
         $vcard->save();
+        return new VcardResource($vcard);
+    }
+
+    public function update(UpdateVcardRequest $request, Vcard $vcard)
+    {
+        $vcard->update($request->validated());
+        return new VcardResource($vcard);
+    }
+
+    public function updateMaxDebit(UpdateMaxDebitVcardRequest $request, Vcard $vcard)
+    {
+        $vcard->update($request->validated());
         return new VcardResource($vcard);
     }
 }

@@ -26,11 +26,13 @@ class UpdateVcardRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
+            'password' => 'nullable|file|image',
+            'confirmation_code' => 'nullable|file|image',
             //todo corrigir blocked
-            'blocked' => 'nullable|in:false,true',
-            'max_debit' => 'nullable|decimal|min:0',
-            'custom_options' => 'nullable|json',
-            'custom_data' => 'nullable|json'
+            //'blocked' => 'nullable|in:false,true',
+            //'max_debit' => 'nullable|decimal|min:0',
+            //'custom_options' => 'nullable|json',
+            //'custom_data' => 'nullable|json'
         ];
     }
 }
