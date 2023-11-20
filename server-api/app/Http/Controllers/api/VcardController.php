@@ -65,7 +65,7 @@ class VcardController extends Controller
         
     }
 
-    public function getTransactionOfVcard(Vcard $vcard){
+    public function getTransactiosnOfVcard(Vcard $vcard){
         return TransactionResource::collection($vcard->transactions);
     }
 }
