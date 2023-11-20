@@ -4,17 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public function getTypeOfTransactionAttribute(){
         return $this->type == 'C' ? 'Credit Transaction' : 'Debit Transaction';
     }
 
     public function vcardOfTransaction(){
-        return $this->belongsTo(Vcard::class, 'vcard', 'phone_number');
+        return $this->belongsTo(Vcard::class, 'vcard', 'phone_number')->withTrashed();
     }
 
     public function category(){

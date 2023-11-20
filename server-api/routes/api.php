@@ -46,6 +46,7 @@ Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
 
 Route::get('transactions', [TransactionController::class, 'index']);
 Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
+Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
 
 //Categorias
 

@@ -19,4 +19,15 @@ class TransactionController extends Controller
     public function show (Transaction $transaction){
         return new TransactionResource($transaction);
     }
+
+    public function destroy (Transaction $transaction){
+        
+        // pode ser soft deleted se vcard soft deleted
+        if ($transaction->vcardOfTransaction->trashed()){
+            $transaction->delete();
+            return new TransactionResource($transaction);
+        }
+
+        return; //nao pode ser soft deleted
+    }
 }
