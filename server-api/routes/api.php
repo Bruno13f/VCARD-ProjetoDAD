@@ -39,6 +39,7 @@ Route::put('vcards/{vcard}', [VcardController::class, 'update']);
 Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
 Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
 Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactionOfVcard']);
+Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
 //Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
 
 //Transactions

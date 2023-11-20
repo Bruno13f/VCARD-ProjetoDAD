@@ -49,6 +49,22 @@ class VcardController extends Controller
         return new VcardResource($vcard);
     }
 
+    public function destroy (Vcard $vcard){
+        if ($vcard->balance != 0)
+            return; // nao e possivel eliminar 
+
+        // soft delete se tiver transacoes senao forceDelete
+        
+        if ($vcard->transactions){
+            $vcard->delete(); // soft delete
+        }else{
+            $vcard->forceDelete();
+        }
+            
+        return new VCardResource($vcard);
+        
+    }
+
     public function getTransactionOfVcard(Vcard $vcard){
         return TransactionResource::collection($vcard->transactions);
     }
