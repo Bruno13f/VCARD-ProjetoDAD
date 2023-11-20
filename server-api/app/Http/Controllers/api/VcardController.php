@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Models\Vcard;
 use App\Http\Resources\VcardResource;
+use App\Http\Resources\TransactionResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateVcardRequest;
@@ -30,12 +31,6 @@ class VcardController extends Controller
         return new VcardResource($newVcard);
     }
 
-    public function updateBlocked (UpdateBlockVcardRequest $request, Vcard $vcard){
-        $vcard->blocked = $request->blocked;
-        $vcard->save();
-        return new VcardResource($vcard);
-    }
-
     public function update(UpdateVcardRequest $request, Vcard $vcard)
     {
         $vcard->update($request->validated());
@@ -46,5 +41,15 @@ class VcardController extends Controller
     {
         $vcard->update($request->validated());
         return new VcardResource($vcard);
+    }
+    
+    public function updateBlocked (UpdateBlockVcardRequest $request, Vcard $vcard){
+        $vcard->blocked = $request->blocked;
+        $vcard->save();
+        return new VcardResource($vcard);
+    }
+
+    public function getTransactionOfVcard(Vcard $vcard){
+        return TransactionResource::collection($vcard->transactions);
     }
 }

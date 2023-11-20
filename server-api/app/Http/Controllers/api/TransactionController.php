@@ -19,9 +19,4 @@ class TransactionController extends Controller
     public function show (Transaction $transaction){
         return new TransactionResource($transaction);
     }
-
-
-    public function getTransactionOfVcard(Vcard $vcard){
-        return $vcard->transactions;
-    }
 }
