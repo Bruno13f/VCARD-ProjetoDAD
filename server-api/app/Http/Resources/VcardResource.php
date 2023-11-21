@@ -22,7 +22,10 @@ class VcardResource extends JsonResource
             //'confirmation_code' => $this->confirmation_code, ????
             'blocked' => $this->blocked,
             'balance' => $this->balance.' €',
-            'max_debit' => $this->max_debit.' €'
+            'max_debit' => $this->max_debit.' €',
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at
             // custom_data e custom_options??
         ];
     }

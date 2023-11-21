@@ -72,43 +72,29 @@ import Dashboard from "./components/Dashboard.vue"
                 Dashboard
               </router-link>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="bi bi-list-stars"></i>
-                Current Tasks
-              </a>
+            <li class="nav-item d-flex justify-content-between align-items-center pe-3">
+              <router-link class="nav-link w-100 me-3" :class="{ active: $route.name === 'Vcards' }" 
+                          :to="{ name: 'Vcards' }">
+                <i class="bi bi-list-check"></i>
+                Vcards
+              </router-link>
             </li>
             <li class="nav-item d-flex justify-content-between align-items-center pe-3">
               <a class="nav-link w-100 me-3" href="#">
                 <i class="bi bi-list-check"></i>
-                Tasks
-              </a>
-              <a class="link-secondary" href="#" aria-label="Add a new task">
-                <i class="bi bi-xs bi-plus-circle"></i>
+                Transactions
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-files"></i>
-                Projects
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="bi bi-people"></i>
-                Team Members
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="bi bi-bar-chart-line"></i>
-                Reports
+                Users
               </a>
             </li>
           </ul>
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>My Projects</span>
+            <span>My Vcards</span>
             <a class="link-secondary" href="#" aria-label="Add a new project">
               <i class="bi bi-xs bi-plus-circle"></i>
             </a>
@@ -117,17 +103,17 @@ import Dashboard from "./components/Dashboard.vue"
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-file-ruled"></i>
-                Some project
+                Vcard 1
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#"><i class="bi bi-file-ruled"></i>
-                Another project
+                Vcard 2
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#"><i class="bi bi-file-ruled"></i>
-                Yet another project
+                Vcard 3
               </a>
             </li>
           </ul>
@@ -180,7 +166,9 @@ import Dashboard from "./components/Dashboard.vue"
       </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <dashboard></dashboard>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <router-view></router-view>
+        </main>
       </main>
     </div>
   </div>
