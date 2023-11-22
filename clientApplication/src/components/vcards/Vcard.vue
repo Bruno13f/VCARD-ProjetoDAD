@@ -5,25 +5,25 @@
 
   const newVcard = () => { 
     return {
-      id: null,
+      phone_number: null,
       name: '',
-      responsible_id: 1,  // Change it later
-      status: 'P',
-      preview_start_date: null,
-      preview_end_date: null,
-      real_start_date: null,
-      real_end_date: null,
-      total_hours: null,
-      billed: false,
-      total_price: null,
+      email: '',
+      password: '',
+      confirmation_code: '',
+      blocked: 0,
+      balance: 0,
+      max_debit: 2500,
+      created_at:null,
+      updated_at:null,
+      deleted_at:null,
     }
   }
 
-  const loadVcard = (id) => {
-      if (!id || (id < 0)) {
+  const loadVcard = (phone_number) => {
+      if (!phone_number || phone_number <0) {
         vcard.value = newVcard()
       } else {
-        axios.get('vcards/' + id)
+        axios.get('vcards/' + phone_number)
           .then((response) => {
             vcard.value = response.data.data
           })
@@ -44,7 +44,7 @@
             console.dir(error)
           })
       } else {
-        axios.put('vcards/' + props.id, vcard.value)
+        axios.put('vcards/' + props.phone_number, vcard.value)
           .then((response) => {
             console.log('Vcard Updated')
             console.dir(response.data.data)
@@ -72,11 +72,11 @@
   const users = ref([])  
 
   const operation = computed(() => {
-    return (!props.id || props.id < 0) ? 'insert' : 'update'
+    return (!props.phone_number || (phone_number < 900000000) || (phone_number > 999999999)) ? 'insert' : 'update'
   })
 
   watch(
-    () => props.id, 
+    () => props.phone_number, 
     (newValue) => {
           loadVcard(newValue)
     }, {

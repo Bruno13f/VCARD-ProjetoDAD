@@ -31,7 +31,7 @@
     if (!editingVcard.value) {
         return ''
       }
-      return props.operationType == 'insert' ? 'New Vcard' : 'Vcard #' + editingVcard.value.id
+      return props.operationType == 'insert' ? 'New Vcard' : 'Vcard #' + editingVcard.value.phone_number
   })
 
   const save = () => {
@@ -99,11 +99,8 @@
           v-model="editingVcard.status"
         >
           <option :value="null"></option>
-          <option value="P">Pending</option>
-          <option value="W">Work In Progress</option>
-          <option value="C">Completed</option>
-          <option value="I">Interrupted</option>
-          <option value="D">Discarded</option>
+          <option value="C">Credit</option>
+          <option value="D">Debit</option>
         </select>
       </div>
     </div>

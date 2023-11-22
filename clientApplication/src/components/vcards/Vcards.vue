@@ -12,7 +12,7 @@
           console.log(error)
         })
   }
-  
+
   const loadUsers = () => {
       axios.get('users')
         .then((response) => {

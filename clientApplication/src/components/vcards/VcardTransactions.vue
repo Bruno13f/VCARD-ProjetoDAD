@@ -20,11 +20,11 @@
       }
     }
     
-  const loadVcard = (id) => {
-      if (!id || (id < 0)) {
+  const loadVcard = (phone_number) => {
+      if (!phone_number || phone_number < 0) {
         vcard.value = emptyVcard.value()
       } else {
-        axios.get('vcards/' + id + '/transactions')
+        axios.get('vcards/' + phone_number + '/transactions')
           .then((response) => {
             vcard.value = response.data.data
           })
@@ -35,7 +35,7 @@
     }
 
   const editVcard = () => {
-      console.log('Navigate to Edit Vcard with ID = ' + props.id)
+      console.log('Navigate to Edit Vcard with ID = ' + props.phone_number)
     }
 
   const addTransaction = () => {

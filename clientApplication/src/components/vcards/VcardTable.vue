@@ -28,7 +28,11 @@
       type: Boolean,
       default: true,
     },
-    showDeletedAt: {
+    showEditButton: {
+      type: Boolean,
+      default: true,
+    },
+    showDeleteButton: {
       type: Boolean,
       default: true,
     }
@@ -56,8 +60,6 @@
         <th v-if="showBalance">Balance</th>
         <th v-if="showMaxDebit">Max Debit</th>
         <th v-if="showCreatedAt">Created At</th>
-        <th v-if="showUpdatedAt">Updated At</th>
-        <th v-if="showDeletedAt">Deleted At</th>
         <th v-if="showEditButton || showDeleteButton"></th>
       </tr>
     </thead>
@@ -73,8 +75,6 @@
         <td v-if="showBalance">{{ vcard.balance }}</td>
         <td v-if="showMaxDebit">{{ vcard.max_debit }}</td>
         <td v-if="showCreatedAt">{{ vcard.created_at }}</td>
-        <td v-if="showUpdatedAt">{{ vcard.updated_at }}</td>
-        <td v-if="showDeletedAt">{{ vcard.deleted_at }}</td>
         <td
           class="text-end"
           v-if="showEditButton || showDeleteButton"
