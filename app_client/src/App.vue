@@ -8,9 +8,10 @@ import Dashboard from "./components/Dashboard.vue"
 
 
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0 shadow">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0">
     <div class="container-fluid">
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
+      
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark shadow-none" href="#">
         <img src="@/assets/logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
         Vcards
       </a>
