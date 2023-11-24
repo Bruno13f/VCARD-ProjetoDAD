@@ -12,7 +12,7 @@ import Dashboard from "./components/Dashboard.vue"
     <div class="container-fluid">
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
         <img src="@/assets/logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
-        App name
+        Vcards
       </a>
       <button id="buttonSidebarExpandId" class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,16 +68,10 @@ import Dashboard from "./components/Dashboard.vue"
                 Dashboard
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="bi bi-list-stars"></i>
-                Current Tasks
-              </a>
-            </li>
             <li class="nav-item d-flex justify-content-between align-items-center pe-3">
               <a class="nav-link w-100 me-3" href="#">
-                <i class="bi bi-list-check"></i>
-                Tasks
+                <i class="bi bi-credit-card"></i>
+                Vcards
               </a>
               <a class="link-secondary" href="#" aria-label="Add a new task">
                 <i class="bi bi-xs bi-plus-circle"></i>
@@ -85,14 +79,14 @@ import Dashboard from "./components/Dashboard.vue"
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
-                <i class="bi bi-files"></i>
-                Projects
+                <i class="bi bi-wallet2"></i>
+                Transactions
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-people"></i>
-                Team Members
+                Users
               </a>
             </li>
             <li class="nav-item">
@@ -104,7 +98,7 @@ import Dashboard from "./components/Dashboard.vue"
           </ul>
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>My Projects</span>
+            <span>My Vcards</span>
             <a class="link-secondary" href="#" aria-label="Add a new project">
               <i class="bi bi-xs bi-plus-circle"></i>
             </a>
@@ -112,18 +106,8 @@ import Dashboard from "./components/Dashboard.vue"
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
               <a class="nav-link" href="#">
-                <i class="bi bi-file-ruled"></i>
-                Some project
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="bi bi-file-ruled"></i>
-                Another project
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="bi bi-file-ruled"></i>
-                Yet another project
+                <i class="bi bi-credit-card-2-front"></i>
+                Vcard #1
               </a>
             </li>
           </ul>
