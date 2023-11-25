@@ -14,7 +14,7 @@
     },
     showDateTime: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showType: {
       type: Boolean,
@@ -22,19 +22,19 @@
     },
     showValue: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showOldBalance: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showNewBalance: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showPaymentType: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showDescription: {
       type: Boolean,
@@ -42,7 +42,7 @@
     },
     showPaymentReference: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showEditButton: {
       type: Boolean,
@@ -99,7 +99,7 @@
         <td v-if="showOldBalance">{{ transaction.old_balance }}</td>
         <td v-if="showNewBalance">{{ transaction.new_balance }}</td>
         <td v-if="showPaymentType">{{ transaction.payment_type }}</td>
-        <td v-if="showPaymentReference">{{ transaction.payment_ref }}</td>
+        <td v-if="showPaymentReference">{{ transaction.payment_reference }}</td>
         <td v-if="showDescription">{{ transaction.description }}</td>
         <td
           class="text-end"

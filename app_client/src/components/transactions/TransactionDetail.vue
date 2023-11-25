@@ -58,7 +58,7 @@
         id="inputName"
         placeholder="Vcard"
         required
-        v-model="editingTransaction.vcard"
+        v-model="editingTransaction.vcard.id"
       >
     </div>
 

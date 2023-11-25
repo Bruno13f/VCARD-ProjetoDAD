@@ -21,7 +21,7 @@
       if (!id || id <0) {
         transaction.value = newTransaction()
       } else {
-        axios.get('transaction/' + id)
+        axios.get('transactions/' + id)
           .then((response) => {
             transaction.value = response.data.data
           })
@@ -33,7 +33,7 @@
 
   const save = () => {
       if (operation.value == 'insert') {
-        axios.post('transaction', transaction.value)
+        axios.post('transactions', transaction.value)
           .then((response) => {
             console.log('Transaction Created')
             console.dir(response.data.data)
@@ -42,7 +42,7 @@
             console.dir(error)
           })
       } else {
-        axios.put('transaction/' + props.id, transaction.value)
+        axios.put('transactions/' + props.id, transaction.value)
           .then((response) => {
             console.log('Transaction Updated')
             console.dir(response.data.data)
