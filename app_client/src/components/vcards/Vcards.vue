@@ -50,6 +50,13 @@
           console.log(error)
         })
   }
+
+  const blockVcard = (vcard) => {
+    axios.patch('vcards/' + vcard.phone_number + '/blocked', { blocked: vcard.blocked ? '0' : '1' })
+    .then((response) => {
+      // refresh pagina ??
+    })
+  }
   
 
   const vcards = ref([])
@@ -142,6 +149,7 @@
     :showDates="true"
     @edit="editVcard"
     @delete="deleteVcard"
+    @block="blockVcard"
   ></vcard-table>
 </template>
 

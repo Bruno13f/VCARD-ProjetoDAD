@@ -27,13 +27,6 @@
     }
   )
 
-  /*const VcardTitle = computed(()=>{
-    if (!editingVcard.value) {
-        return ''
-      }
-      return props.operationType == 'insert' ? 'New Vcard' : 'Vcard #' + editingVcard.value.phone_number
-  })*/
-
   const save = () => {
       emit('save', editingVcard.value)
   }

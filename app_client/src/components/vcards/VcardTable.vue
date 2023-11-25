@@ -38,7 +38,7 @@
     }
   })
 
-  const emit = defineEmits(['edit', 'delete'])
+  const emit = defineEmits(['edit', 'delete', 'block'])
 
   const editClick = (vcard) => {
       emit('edit', vcard)
@@ -46,6 +46,10 @@
 
   const deleteClick = (vcard) => {
       emit('delete', vcard)
+  }
+
+  const blockClick = (vcard) => {
+    emit('block', vcard)
   }
 </script>
 
@@ -92,6 +96,12 @@
               @click="deleteClick(vcard)"
               v-if="showDeleteButton"
             ><i class="bi bi-xs bi-x-square-fill"></i>
+            </button>
+            <button
+              class="btn btn-xs btn-light"
+              @click="blockClick(vcard)"
+              v-if="showDeleteButton"
+            ><i class="bi bi-xs bi-ban"></i>
             </button>
           </div>
         </td>
