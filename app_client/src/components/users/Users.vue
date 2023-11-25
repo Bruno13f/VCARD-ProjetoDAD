@@ -7,17 +7,25 @@
   const users = ref([])
   const router = useRouter()
 
-  const totalUsers = computed(() => {
-    return users.value.length
-  })
-
   const filterTypeOfUser = ref(null)
+  const filterBlockedUser = ref(null)
 
   const filteredUsers = computed(()=>{
     return users.value.filter(user =>
         (!filterTypeOfUser.value
           || filterTypeOfUser.value == user.user_type
-        ))
+        ) &&(!filterBlockedUser.value
+          || filterBlockedUser.value == user.blocked))
+  })
+
+  const totalUsers = computed(() => {
+    return users.value.reduce((c, user) =>
+        (!filterTypeOfUser.value
+          || filterTypeOfUser.value == user.user_type
+        ) &&
+          (!filterBlockedUser.value
+            || filterBlockedUser.value == user.blocked
+          ) ? c + 1 : c, 0)
   })
 
   const loadUsers = () => {
@@ -50,7 +58,7 @@
     </div>
   </div>
   <hr>
-  <div class="mb-3 d-flex justify-content-between flex-wrap">
+  <div class="mb-3 d-flex justify-content-start flex-wrap">
     <div class="mx-2 mt-2 filter-div">
       <label
         for="selectTypeOfUser"
@@ -64,6 +72,21 @@
         <option :value="null"></option>
         <option value="A">Administrator</option>
         <option value="V">Vcard Owner</option>
+      </select>
+    </div>
+    <div class="mx-2 mt-2 filter-div">
+      <label
+        for="selectBlockedUser"
+        class="form-label"
+      >Blocked:</label>
+      <select
+        class="form-select"
+        id="selectBlockedUser"
+        v-model="filterBlockedUser"
+      >
+        <option :value="null"></option>
+        <option value="1">Blocked</option>
+        <option value="0">Not Blocked</option>
       </select>
     </div>
   </div>
