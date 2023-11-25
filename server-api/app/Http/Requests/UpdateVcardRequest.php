@@ -26,8 +26,8 @@ class UpdateVcardRequest extends FormRequest
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
-            'password' => 'nullable|file|image',
-            'confirmation_code' => 'nullable|file|image',
+            'password' => 'nullable|string|min:8|max:50',
+            'confirmation_code' => 'nullable|integer|digits:3',  
             //todo corrigir blocked
             //'blocked' => 'nullable|in:false,true',
             //'max_debit' => 'nullable|decimal|min:0',

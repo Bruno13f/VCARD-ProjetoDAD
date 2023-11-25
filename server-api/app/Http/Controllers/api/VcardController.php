@@ -25,10 +25,15 @@ class VcardController extends Controller
     }
 
     public function store(StoreUpdateVcardRequest $request){
-        /*if (Vcard::where('phone_number', $request->phone_number)->exists()) {
-            return response()->json(['error' => 'Phone number is already associated with a vcard'], 422);
-        }*/
-        $newVcard = Vcard::create($request->validated()); 
+
+        $validatedRequest = $request->validated();
+        $validatedRequest['blocked'] = 0;
+        $validatedRequest['max_debit'] = 2500;
+
+        $newVcard = Vcard::create($validatedRequest); 
+
+        $newVcard->phone_number=$validatedRequest['phone_number'];
+        // ate dar fix - resource aparece com number a 0
         return new VcardResource($newVcard);
     }
 

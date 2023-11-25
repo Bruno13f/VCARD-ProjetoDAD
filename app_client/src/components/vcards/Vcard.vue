@@ -2,8 +2,10 @@
   import axios from 'axios'
   import { ref, watch, computed, onMounted} from 'vue'
   import VcardDetail from "./VcardDetail.vue"
-
   import {useRouter} from 'vue-router'
+  import { useToast } from "vue-toastification"
+  
+  const toast = useToast()
   const router = useRouter()
 
   const newVcard = () => { 
@@ -11,6 +13,7 @@
       phone_number: null,
       name: '',
       email: '',
+      photo_url: '',
       password: '',
       confirmation_code: '',
       blocked: 0,
@@ -40,13 +43,20 @@
       if (operation.value == 'insert') {
         axios.post('vcards', vcard.value)
           .then((response) => {
-            console.log('Vcard Created')
-            console.dir(response.data.data)
+            console.log(response)
+            toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
+            router.back();
           })
           .catch((error) => {
-            console.dir(error)
+            if (error.response.status == 422) {
+              toast.error('Vcard was not created due to validation errors!')
+            } else {
+              toast.error('Vcard was not created due to unknown server error!')
+            }
           })
       } else {
+        // falta implementar
+        console.log(vcard.value)
         axios.put('vcards/' + props.phone_number, vcard.value)
           .then((response) => {
             console.log('Vcard Updated')

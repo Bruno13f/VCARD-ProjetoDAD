@@ -32,7 +32,6 @@
   }
 
   const cancel = () => {
-      //console.log(operationType.value)
       emit('cancel', editingVcard.value)
   }
 
@@ -47,19 +46,35 @@
     <h3 class="mt-5 mb-3"></h3>
     <hr>
 
-    <div class="mb-3">
-      <label
-        for="inputName"
-        class="form-label"
-      >Owner *</label>
-      <input
-        type="text"
-        class="form-control"
-        id="inputName"
-        placeholder="Owner name"
-        required
-        v-model="editingVcard.name"
-      >
+    <div class="d-flex flex-wrap justify-content-between">
+      <div class="mb-3 me-3 flex-grow-1">
+        <label
+          for="inputName"
+          class="form-label"
+        >Owner *</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputName"
+          placeholder="Owner name"
+          required
+          v-model="editingVcard.name"
+        >
+      </div>
+      <div class="mb-3 me-3 flex-grow-1">
+        <label
+          for="inputEmail"
+          class="form-label"
+        >Email *</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputEmail"
+          placeholder="Owner email"
+          required
+          v-model="editingVcard.email"
+        >
+      </div>
     </div>
 
     <div class="d-flex flex-wrap justify-content-between">
@@ -84,7 +99,7 @@
           class="form-label"
         >Password *</label>
         <input
-        type="text"
+        type="password"
         class="form-control"
         id="inputPassword"
         placeholder="Password"
@@ -93,13 +108,13 @@
       >
       </div>
 
-      <div class="mb-3 ms-xs-3 flex-grow-1">
+      <div class="mb-3 ms-xs-3 flex-grow-1 form-group">
         <label
           for="inputConfirmationCode"
           class="form-label"
         >Confirmation Code *</label>
         <input
-        type="text"
+        type="password"
         class="form-control"
         id="inputConfirmationCode"
         placeholder="Confirmation Code"
@@ -109,7 +124,7 @@
       </div>
     </div>
 
-    <div class="d-flex flex-wrap justify-content-between">
+    <div class="d-flex flex-wrap justify-content-between" v-if="props.operationType == 'update'">
       <div class="mb-3">
         <label
           for="inputMaxDebit"
@@ -122,7 +137,7 @@
         placeholder=""
         required
         v-model="editingVcard.max_debit"
-      >
+      disabled>
       </div>
     </div>
 

@@ -25,12 +25,12 @@ class StoreUpdateVcardRequest extends FormRequest
     {
         return [
             // A implementar
-            'phone_number' => 'required|string|size:9',
+            'phone_number' => 'required|integer|digits:9|regex:/^9\d{8}$/|unique:Vcards,phone_number',
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
-            'password' => 'required|string|min:3',
-            'confirmation_code' => 'required|integer|size:3'        
+            'password' => 'required|string|min:8|max:50',
+            'confirmation_code' => 'required|integer|digits:3'        
         ];
     }
 }

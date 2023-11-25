@@ -41,23 +41,20 @@
   }
 
   const deleteVcard = async (vcard) => { 
-    try{ 
-      const response = await axios.delete('vcards/' + vcard.phone_number)
-
+    axios.delete('vcards/' + vcard.phone_number).then(response =>{
       let deletedVcard = response.data.data
       let idx = vcards.value.findIndex((t) => t.phone_number === deletedVcard.phone_number)
       if (idx >= 0) {
         vcards.value.splice(idx, 1)
       }
       toast.success('Vcard #' + response.data.data.phone_number + ' was deleted successfully.')
-
-    }catch (error) {
+    }).catch(error=>{
       if (error.response.status == 422){
-        toast.error("Can't delete Vcard - Balance different than 0")
+      toast.error("Can't delete Vcard - Balance different than 0")
       }else {
         toast.error("Vcard wasn't deleted due to unknown server error!")
       }
-    }
+    })
   }
 
   const blockVcard = async (vcard) => {
