@@ -69,6 +69,7 @@
     }catch(error){
       toast.error('Vcard was not ' + blocked + ' due to unknown server error!')
     }
+    loadVcards()
   }
   
 
