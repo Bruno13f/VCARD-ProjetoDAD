@@ -16,7 +16,9 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user_type' => $this->user_type == 'V' ? 'Vcard' : 'Admin',
             'name' => $this->name,
+            'username' => $this->username,
             'email' => $this->email
             // custom_data e custom_options??
         ];

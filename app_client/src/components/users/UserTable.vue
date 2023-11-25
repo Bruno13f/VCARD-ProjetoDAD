@@ -17,7 +17,7 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  showAdmin: {
+  showTypeOfUser: {
     type: Boolean,
     default: true,
   },
@@ -52,7 +52,7 @@ const editClick = (user) => {
         <th v-if="showPhoto" class="align-middle">Photo</th>
         <th class="align-middle">Name</th>
         <th v-if="showEmail" class="align-middle">Email</th>
-        <th v-if="showAdmin" class="align-middle">Type of User</th>
+        <th v-if="showTypeOfUser" class="align-middle">Type of User</th>
       </tr>
     </thead>
     <tbody>
@@ -63,7 +63,7 @@ const editClick = (user) => {
         </td>
         <td class="align-middle">{{ user.name }}</td>
         <td v-if="showEmail" class="align-middle">{{ user.email }}</td>
-        <td v-if="showAdmin" class="align-middle">Admin</td>
+        <td v-if="showTypeOfUser" class="align-middle">{{ user.user_type}}</td>
         <td class="text-end align-middle" v-if="showEditButton">
           <div class="d-flex justify-content-end">
             <button

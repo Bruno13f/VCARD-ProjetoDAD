@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public $timestamps = true;
+
+    protected $table = "view_auth_users";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +25,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'custom_data',
+        'custom_options'
     ];
 
     /**
@@ -42,7 +48,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getUserTypeAttribute(){
-        return $this->user_type == 'V' ? 'vCard' : 'Administrator';
-    }
 }
