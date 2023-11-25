@@ -90,14 +90,6 @@ import Dashboard from "./components/Dashboard.vue"
               </router-link>
             </li>
             <li class="nav-item">
-              <a class="dropdown-item" href="#">
-                  <router-link class="nav-link" :class="{active: $route.name === 'Users'}" :to="{ name: 'Users'}">
-                    <i class="bi bi-people"></i>
-                    Users
-                  </router-link>
-                </a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-bank"></i>
                 Payments
@@ -108,6 +100,14 @@ import Dashboard from "./components/Dashboard.vue"
                 <i class="bi bi-bookmarks"></i>
                 Categories
               </a>
+            </li>
+            <li class="nav-item">
+              <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'Users'}" :to="{ name: 'Users'}">
+                    <i class="bi bi-people"></i>
+                    Users
+                  </router-link>
+                </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">

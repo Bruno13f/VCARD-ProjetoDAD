@@ -55,15 +55,15 @@
   const vcards = ref([])
   const users = ref([])
   const filterByOwnerId = ref(null)
-  const filterByStatus = ref(null)
+  const filterByBlocked = ref(null)
 
   const filteredVcards = computed(()=>{
     return vcards.value.filter(p =>
         (!filterByOwnerId.value
           || filterByOwnerId.value == p.phone_number
         ) &&
-        (!filterByStatus.value
-          || filterByStatus.value == p.blocked
+        (!filterByBlocked.value
+          || filterByBlocked.value == p.blocked
         ))
   })
 
@@ -72,8 +72,8 @@
         (!filterByOwnerId.value
           || filterByOwnerId.value == p.phone_number
         ) &&
-          (!filterByStatus.value
-            || filterByStatus.value == p.blocked
+          (!filterByBlocked.value
+            || filterByBlocked.value == p.blocked
           ) ? c + 1 : c, 0)
   })
 
@@ -97,21 +97,6 @@
   <div class="mb-3 d-flex justify-content-between flex-wrap">
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label
-        for="selectStatus"
-        class="form-label"
-      >Filter by status:</label>
-      <select
-        class="form-select"
-        id="selectStatus"
-        v-model="filterByStatus"
-      >
-        <option :value="null"></option>
-        <option value="D">Debit</option>
-        <option value="C">Credit</option>
-      </select>
-    </div>
-    <div class="mx-2 mt-2 flex-grow-1 filter-div">
-      <label
         for="selectOwner"
         class="form-label"
       >Filter by owner:</label>
@@ -126,6 +111,21 @@
           :key="user.id"
           :value="user.id"
         >{{user.name}}</option>
+      </select>
+    </div>
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+      <label
+        for="selectStatus"
+        class="form-label"
+      >Filter by blocked:</label>
+      <select
+        class="form-select"
+        id="selectStatus"
+        v-model="filterByBlocked"
+      >
+        <option :value="null"></option>
+        <option value="1">Blocked</option>
+        <option value="0">Not Blocked</option>
       </select>
     </div>
     <div class="mx-2 mt-2">

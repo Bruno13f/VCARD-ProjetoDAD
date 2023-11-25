@@ -71,7 +71,7 @@
         <td v-if="showPhoneNumber">{{ vcard.phone_number }}</td>
         <td>{{ vcard.name }}</td>
         <td>{{ vcard.email }}</td>
-        <td v-if="showBlocked">{{ vcard.blocked }}</td>
+        <td v-if="showBlocked">{{ vcard.blocked ? 'Blocked' : 'Not Blocked' }}</td>
         <td v-if="showBalance">{{ vcard.balance }}</td>
         <td v-if="showMaxDebit">{{ vcard.max_debit }}</td>
         <td v-if="showCreatedAt">{{ vcard.created_at }}</td>

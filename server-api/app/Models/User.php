@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function getUserTypeAttribute(){
-        return $this->user_type == 'V' ? 'vCard' : 'Administrators';
+        return $this->user_type == 'V' ? 'vCard' : 'Administrator';
     }
 }
