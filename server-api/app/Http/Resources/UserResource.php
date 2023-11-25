@@ -19,7 +19,8 @@ class UserResource extends JsonResource
             'user_type' => $this->user_type,
             'name' => $this->name,
             'username' => $this->username,
-            'email' => $this->email
+            'email' => $this->email,
+            'photo_url' => $this->photo_url
             // custom_data e custom_options??
         ];
     }
