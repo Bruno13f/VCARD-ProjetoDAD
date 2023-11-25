@@ -1,9 +1,11 @@
 <script setup>
   import axios from 'axios'
   import { ref, computed, onMounted } from 'vue'
+  import {useRouter} from 'vue-router'
   import UserTable from "./UserTable.vue"
 
   const users = ref([])
+  const router = useRouter()
 
   const totalUsers = computed(() => {
     return users.value.length
@@ -21,6 +23,7 @@
 
   const editUser = (user) => {
       console.log('Navigate to Edit User with ID = ' + user.id)
+      router.push({name: 'User', params: { id: user.id }})
   }
 
   onMounted (() => {

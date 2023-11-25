@@ -85,9 +85,9 @@ import Dashboard from "./components/Dashboard.vue"
                 <i class="bi bi-list-check"></i>
                 Vcards
               </router-link>
-              <a class="link-secondary" href="#" aria-label="Add a new task">
+              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard">
                 <i class="bi bi-xs bi-plus-circle"></i>
-              </a>
+              </router-link>
             </li>
             <li class="nav-item">
               <a class="dropdown-item" href="#">
@@ -119,9 +119,6 @@ import Dashboard from "./components/Dashboard.vue"
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>My Vcard</span>
-            <a class="link-secondary" href="#" aria-label="Add a new project">
-              <i class="bi bi-xs bi-plus-circle"></i>
-            </a>
           </h6>
           <ul class="nav flex-column mb-2">
             <li class="nav-item">

@@ -40,7 +40,7 @@ const cancel = () => {
 
 <template>
   <form class="row g-3 needs-validation" novalidate @submit.prevent="save">
-    <h3 class="mt-5 mb-3">User #{{ editingUser.id }}</h3>
+    <h3 class="mt-5 mb-3">{{ editingUser.name }}</h3>
     <hr />
     <div class="d-flex flex-wrap justify-content-between">
       <div class="w-75 pe-4">
@@ -83,31 +83,6 @@ const cancel = () => {
               </label>
             </div>
           </div>
-          <div class="mb-3 ms-xs-3 flex-grow-1">
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="radioGender"
-                value="M"
-                required
-                v-model="editingUser.gender"
-                id="inputGenderM"
-              />
-              <label class="form-check-label" for="inputGenderM">Masculino</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="radioGender"
-                value="F"
-                v-model="editingUser.gender"
-                id="inputGenderF"
-              />
-              <label class="form-check-label" for="inputGenderF">Feminino</label>
-            </div>
-          </div>
         </div>
       </div>
       <div class="w-25">
@@ -119,9 +94,9 @@ const cancel = () => {
         </div>
       </div>
     </div>
-    <div class="mb-3 d-flex justify-content-end">
-      <button type="button" class="btn btn-primary px-5" @click="save">Save</button>
-      <button type="button" class="btn btn-light px-5" @click="cancel">Cancel</button>
+    <div class="mb-3 d-flex justify-content-center">
+      <button type="button" class="btn btn-success px-5 mx-2" @click="save">Save</button>
+      <button type="button" class="btn btn-dark px-5" @click="cancel">Cancel</button>
     </div>
   </form>
 </template>

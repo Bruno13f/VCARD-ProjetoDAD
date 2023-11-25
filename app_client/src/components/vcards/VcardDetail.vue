@@ -143,7 +143,7 @@
     <div class="mb-3 d-flex justify-content-center ">
       <button
         type="button"
-        class="btn btn-dark px-5 mx-2"
+        class="btn btn-success px-5 mx-2"
         @click="save"
       >Save</button>
       <button
