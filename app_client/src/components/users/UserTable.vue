@@ -63,7 +63,7 @@ const editClick = (user) => {
         </td>
         <td class="align-middle">{{ user.name }}</td>
         <td v-if="showEmail" class="align-middle">{{ user.email }}</td>
-        <td v-if="showTypeOfUser" class="align-middle">{{ user.user_type}}</td>
+        <td v-if="showTypeOfUser" class="align-middle">{{ user.user_type == 'V' ? 'Vcard' : 'Admin'}}</td>
         <td class="text-end align-middle" v-if="showEditButton">
           <div class="d-flex justify-content-end">
             <button

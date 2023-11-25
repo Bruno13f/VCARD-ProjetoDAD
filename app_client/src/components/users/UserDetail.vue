@@ -74,10 +74,10 @@ const cancel = () => {
                 class="form-check-input"
                 type="checkbox"
                 true-value="A"
-                false-value="M"
-                v-model="editingUser.type"
+                false-value="V"
+                v-model="editingUser.user_type"
                 id="inputType"
-              />
+               />
               <label class="form-check-label" for="inputType">
                 User is Administrator
               </label>
