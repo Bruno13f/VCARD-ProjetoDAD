@@ -19,7 +19,7 @@ class TransactionResource extends JsonResource
             'vcard' => new VcardResource($this->vcardOfTransaction),
             'date' => $this->date,
             'datetime' => $this->datetime,
-            'type' => $this->getTypeOfTransactionAttribute(),
+            'type' => $this->type,
             'value' => $this->value.' €',
             'old_balance' => $this->old_balance.' €',
             'new_balance' => $this->new_balance.' €',
@@ -28,7 +28,7 @@ class TransactionResource extends JsonResource
             'pair_transaction' => $this->pair_transaction,
             'pair_vcard' => $this->pair_vcard,
             'category_id' => new CategoryResource($this->category),
-            'description' => $this->descripion
+            'description' => $this->description
             // custom_data e custom_options??
 
         ];

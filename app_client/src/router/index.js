@@ -7,6 +7,8 @@ import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import Vcards from '../components/vcards/vcards.vue'
 import Vcard from '../components/vcards/vcard.vue'
+import Transactions from '../components/transactions/transactions.vue'
+import Transaction from '../components/transactions/transaction.vue'
 //import Transactions from "../components/transactions/Transactions.vue"
 
 const router = createRouter({
@@ -67,11 +69,22 @@ const router = createRouter({
       component: Vcard,
       props: route => ({ phone_number: parseInt(route.params.phone_number) })
     },
-    /*{
+    {
       path: '/transactions',
       name: 'Transactions',
-      component: Transactions 
-    },*/
+      component: Transactions
+    },
+    {
+      path: '/transactions/new',
+      name: 'NewTransaction',
+      component: Transaction
+    },
+    {
+      path: '/transactions/:id',
+      name: 'Transaction',
+      component: Transaction,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
   ]
 })
 

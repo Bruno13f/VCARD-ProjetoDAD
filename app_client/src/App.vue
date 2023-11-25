@@ -125,10 +125,12 @@ import { RouterLink, RouterView } from 'vue-router'
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="bi bi-wallet2"></i>
-                Transactions
-              </a>
+              <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'Transactions'}" :to="{ name: 'Transactions'}">
+                    <i class="bi bi-people"></i>
+                    Transactions
+                  </router-link>
+                </a>
             </li>
           </ul>
 
