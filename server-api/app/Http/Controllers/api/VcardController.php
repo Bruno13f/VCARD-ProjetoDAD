@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\StoreUpdateVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
 use App\Http\Requests\UpdateMaxDebitVcardRequest;
+use Illuminate\Http\Response;
 
 class VcardController extends Controller
 {
@@ -51,7 +52,7 @@ class VcardController extends Controller
 
     public function destroy (Vcard $vcard){
         if ($vcard->balance != 0)
-            return; // nao e possivel eliminar 
+            return response()->json(['error' => "Can't delete the Vcard - Balance different than 0"], Response::HTTP_UNPROCESSABLE_ENTITY); // nao e possivel eliminar 
 
         // soft delete se tiver transacoes senao forceDelete
         

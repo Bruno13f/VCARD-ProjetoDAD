@@ -2,6 +2,9 @@
   import axios from 'axios'
   import { ref, watch } from 'vue'
   import UserDetail from "./UserDetail.vue"
+
+  import {useRouter} from 'vue-router'
+  const router = useRouter()
   
   const props = defineProps({
       id: {
@@ -46,7 +49,8 @@
 
   const cancel = () => {
       // Replace this code to navigate back
-      loadUser(props.id)
+      router.back()
+      //loadUser(props.id)
   }
 
   const user = ref(newUser())

@@ -3,6 +3,9 @@
   import { ref, watch, computed, onMounted} from 'vue'
   import VcardDetail from "./VcardDetail.vue"
 
+  import {useRouter} from 'vue-router'
+  const router = useRouter()
+
   const newVcard = () => { 
     return {
       phone_number: null,
@@ -58,7 +61,8 @@
 
   const cancel = () => {
       // Replace this code to navigate back
-      loadVcard(props.phone_number)
+      router.back()
+      //loadVcard(props.phone_number)
   }
 
   const props = defineProps({

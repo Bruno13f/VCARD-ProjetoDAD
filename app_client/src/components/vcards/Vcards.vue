@@ -4,6 +4,10 @@
   import {useRouter} from 'vue-router'
   import VcardTable from "./VcardTable.vue"
 
+  import { useToast } from "vue-toastification"
+  const toast = useToast()
+
+
   const router = useRouter();
 
   const loadVcards = () => {
@@ -36,26 +40,35 @@
       console.log('Navigate to Edit Vcard with Phone_Number = ' + vcard.phone_number)
   }
 
-  const deleteVcard = (vcard) => {
-    // nao implementado 
-      axios.delete('vcards/' + vcard.phone_number)
-        .then((response) => {
-          let deletedVcard = response.data.data
-          let idx = vcards.value.findIndex((t) => t.phone_number === deletedVcard.phone_number)
-          if (idx >= 0) {
-            vcards.value.splice(idx, 1)
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  const deleteVcard = async (vcard) => { 
+    try{ 
+      const response = await axios.delete('vcards/' + vcard.phone_number)
+
+      let deletedVcard = response.data.data
+      let idx = vcards.value.findIndex((t) => t.phone_number === deletedVcard.phone_number)
+      if (idx >= 0) {
+        vcards.value.splice(idx, 1)
+      }
+      toast.success('Vcard #' + response.data.data.phone_number + ' was deleted successfully.')
+
+    }catch (error) {
+      if (error.response.status == 422){
+        toast.error("Can't delete Vcard - Balance different than 0")
+      }else {
+        toast.error("Vcard wasn't deleted due to unknown server error!")
+      }
+    }
   }
 
-  const blockVcard = (vcard) => {
-    axios.patch('vcards/' + vcard.phone_number + '/blocked', { blocked: vcard.blocked ? '0' : '1' })
-    .then((response) => {
-      // refresh pagina ??
-    })
+  const blockVcard = async (vcard) => {
+    let blocked = vcard.blocked ? 'unblocked' : 'blocked'
+    try{
+      const response = await axios.patch('vcards/' + vcard.phone_number + '/blocked', { blocked: vcard.blocked ? '0' : '1' })
+      toast.success('Vcard #' + response.data.data.phone_number + ' was ' + blocked + ' successfully.')
+
+    }catch(error){
+      toast.error('Vcard was not ' + blocked + ' due to unknown server error!')
+    }
   }
   
 

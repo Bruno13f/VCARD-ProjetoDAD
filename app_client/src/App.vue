@@ -1,9 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 
-// REMOVE THESE IMPORTS WHEN VUE-ROUTER IS CONFIGURED
-import Dashboard from "./components/Dashboard.vue"
-
 </script>
 
 
