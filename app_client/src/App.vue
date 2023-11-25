@@ -8,7 +8,7 @@ import Dashboard from "./components/Dashboard.vue"
 
 
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0 shadow-lg">
     <div class="container-fluid">
       
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark shadow-none" href="#">
@@ -28,9 +28,10 @@ import Dashboard from "./components/Dashboard.vue"
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i>
+            <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}">
+              <i class="bi bi-house"></i>
               Login
-            </a>
+            </router-link>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -38,12 +39,22 @@ import Dashboard from "./components/Dashboard.vue"
               <img src="@/assets/avatar-exemplo-1.jpg" class="rounded-circle z-depth-0 avatar-img" alt="avatar image">
               <span class="avatar-text">User Name</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a class="dropdown-item" href="#"><i class="bi bi-person-square"></i>Profile</a>
+                <router-link class="dropdown-item"
+                            :class="{ active: $route.name == 'User' && $route.params.id == 1 }" 
+                            :to="{ name: 'User', params: { id: 1 } }">
+                <i class="bi bi-person-square"></i>
+                Profile
+                </router-link>
               </li>
               <li>
-                <a class="dropdown-item" href="#"><i class="bi bi-key-fill"></i>Change password</a>
+                <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'ChangePassword'}" :to="{ name: 'ChangePassword'}">
+                    <i class="bi bi-key"></i>
+                    Change Password
+                  </router-link>
+                </a>
               </li>
               <li>
                 <hr class="dropdown-divider">
@@ -61,33 +72,41 @@ import Dashboard from "./components/Dashboard.vue"
   <div class="container-fluid">
     <div class="row">
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky pt-3">
+        <div class="position-sticky pt-0">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
+              <router-link class="nav-link" :class="{active: $route.name === 'Dashboard'}" :to="{ name: 'Dashboard'}">
                 <i class="bi bi-house"></i>
-                Dashboard
-              </a>
+                  Dashboard
+              </router-link>
             </li>
             <li class="nav-item d-flex justify-content-between align-items-center pe-3">
-              <a class="nav-link w-100 me-3" href="#">
-                <i class="bi bi-credit-card"></i>
+              <router-link class="nav-link w-100 me-3" :class="{ active: $route.name === 'Vcards' }" :to="{ name: 'Vcards' }">
+                <i class="bi bi-list-check"></i>
                 Vcards
-              </a>
+              </router-link>
               <a class="link-secondary" href="#" aria-label="Add a new task">
                 <i class="bi bi-xs bi-plus-circle"></i>
               </a>
             </li>
             <li class="nav-item">
+              <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'Users'}" :to="{ name: 'Users'}">
+                    <i class="bi bi-people"></i>
+                    Users
+                  </router-link>
+                </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#">
-                <i class="bi bi-wallet2"></i>
-                Transactions
+                <i class="bi bi-bank"></i>
+                Payments
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
-                <i class="bi bi-people"></i>
-                Users
+                <i class="bi bi-bookmarks"></i>
+                Categories
               </a>
             </li>
             <li class="nav-item">
@@ -99,7 +118,7 @@ import Dashboard from "./components/Dashboard.vue"
           </ul>
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>My Vcards</span>
+            <span>My Vcard</span>
             <a class="link-secondary" href="#" aria-label="Add a new project">
               <i class="bi bi-xs bi-plus-circle"></i>
             </a>
@@ -108,7 +127,13 @@ import Dashboard from "./components/Dashboard.vue"
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-credit-card-2-front"></i>
-                Vcard #1
+                Details
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-wallet2"></i>
+                Transactions
               </a>
             </li>
           </ul>
@@ -124,10 +149,10 @@ import Dashboard from "./components/Dashboard.vue"
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="bi bi-box-arrow-in-right"></i>
-                  Login
-                </a>
+                <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}">
+                  <i class="bi bi-house"></i>
+                    Login
+                </router-link>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
@@ -137,8 +162,12 @@ import Dashboard from "./components/Dashboard.vue"
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
                   <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="bi bi-person-square"></i>Profile</a>
+                    <router-link class="dropdown-item"
+                            :class="{ active: $route.name == 'User' && $route.params.id == 1 }" 
+                            :to="{ name: 'User', params: { id: 1 } }">
+                      <i class="bi bi-person-square"></i>
+                      Profile
+                    </router-link>
                   </li>
                   <li>
                     <a class="dropdown-item" href="#">
@@ -161,7 +190,7 @@ import Dashboard from "./components/Dashboard.vue"
       </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <dashboard></dashboard>
+        <router-view></router-view>
       </main>
     </div>
   </div>
