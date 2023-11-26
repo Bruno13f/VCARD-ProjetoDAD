@@ -61,8 +61,11 @@
             router.back()
           })
           .catch((error) => {
-            toast.error('Transaction was not edited due to unknown server error!')
-            console.dir(error)
+            if (error.response.status == 422) {
+              toast.error('Transaction was not edited due to validation errors!')
+            } else {
+              toast.error('Transaction was not edited due to unknown server error!')
+            }
           })
       }
     }
