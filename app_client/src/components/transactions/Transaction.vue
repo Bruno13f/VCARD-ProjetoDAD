@@ -3,6 +3,9 @@
   import { ref, watch, computed, onMounted} from 'vue'
   import {useRouter} from 'vue-router'
   import TransactionDetail from "./TransactionDetail.vue"
+  import { useToast } from "vue-toastification"
+  
+  const toast = useToast()
 
   const router = useRouter()
   const newTransaction = () => { 
@@ -39,19 +42,26 @@
           .then((response) => {
             console.log('Transaction Created')
             console.dir(response.data.data)
+            toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
             router.back()
           })
           .catch((error) => {
-            console.dir(error)
+            if (error.response.status == 422) {
+              toast.error('Transaction was not created due to validation errors!')
+            } else {
+              toast.error('Transaction was not created due to unknown server error!')
+            }
           })
       } else {
         axios.put('transactions/' + props.id, transaction.value)
           .then((response) => {
             console.log('Transaction Updated')
             console.dir(response.data.data)
+            toast.success('Transaction #' + response.data.data.id + ' was edited successfully.')
             router.back()
           })
           .catch((error) => {
+            toast.error('Transaction was not edited due to unknown server error!')
             console.dir(error)
           })
       }
