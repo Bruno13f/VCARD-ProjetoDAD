@@ -1,124 +1,90 @@
 <script setup>
-  import { ref, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 
-  const props = defineProps({
-    transaction: {
-      type: Object,
-      required: true
-    },
-    operationType: {
-      type: String,
-      default: 'insert'  // insert / update
-    },
-    users: {
-      type: Array,
-      required: true
-    }    
-  })
-
-  const emit = defineEmits(['save', 'cancel'])
-
-  const editingTransaction = ref(props.transaction)
-
-  watch(
-    () => props.transaction, 
-    (newTransaction) => { 
-      editingTransaction.value = newTransaction
-    }
-  )
-
-  const save = () => {
-      emit('save', editingTransaction.value)
+const props = defineProps({
+  transaction: {
+    type: Object,
+    required: true
+  },
+  operationType: {
+    type: String,
+    default: 'insert'  // insert / update
+  },
+  users: {
+    type: Array,
+    required: true
   }
+})
 
-  const cancel = () => {
-      //console.log(operationType.value)
-      emit('cancel', editingTransaction.value)
+const emit = defineEmits(['save', 'cancel'])
+
+const editingTransaction = ref({
+  vcard: { phone_number: '' },
+  value: '',
+  payment_reference: props.transaction.payment_type,
+  type: props.transaction.type,
+  status: null,
+  description: '',
+});
+
+// Rest of your code
+
+
+watch(
+  () => props.transaction,
+  (newTransaction) => {
+    editingTransaction.value = newTransaction
   }
+)
+
+const save = () => {
+  emit('save', editingTransaction.value)
+}
+
+const cancel = () => {
+  //console.log(operationType.value)
+  emit('cancel', editingTransaction.value)
+}
 
 </script>
 
 <template>
-  <form
-    class="row g-3 needs-validation"
-    novalidate
-    @submit.prevent="save"
-  >
+  <form class="row g-3 needs-validation" novalidate @submit.prevent="save">
     <h3 class="mt-5 mb-3"></h3>
     <hr>
 
     <div class="mb-3">
-      <label
-        for="inputName"
-        class="form-label"
-      >Vcard *</label>
-      <input
-        type="text"
-        class="form-control"
-        id="inputName"
-        placeholder="Vcard"
-        required
-        v-model="editingTransaction.vcard.id"
-      >
+      <label for="inputName" class="form-label">Vcard *</label>
+      <input type="text" class="form-control" id="inputName" placeholder="Vcard" required
+        v-model="editingTransaction.vcard.phone_number" :disabled="true">
     </div>
 
     <div class="d-flex flex-wrap justify-content-between">
       <div class="mb-3 me-3 flex-grow-1">
-        <label
-          for="inputValue"
-          class="form-label"
-        >Value *</label>
-        <input
-        type="text"
-        class="form-control"
-        id="inputValue"
-        placeholder="Value"
-        required
-        v-model="editingTransaction.value"
-      >
-      </div>
-
-      
-      <div class="mx-2 mt-2 flex-grow-1 filter-div">
-        <label
-          for="selectType"
-         class="form-label"
-        >Filter by Type: *</label>
-        <select
-          class="form-select"
-          id="selectType"
-        >
-          <option :value="null"></option>
-          <option value="C">Credit</option>
-          <option value="D">Debit</option>
-        </select>
+        <label for="inputValue" class="form-label">Value *</label>
+        <input type="text" class="form-control" id="inputValue" placeholder="Value" required
+          v-model="editingTransaction.value" :disabled="true">
       </div>
 
       <div class="mb-3 ms-xs-3 flex-grow-1">
-        <label
-          for="inputPaymentReference"
-          class="form-label"
-        >Payment Reference *</label>
-        <input
-        type="text"
-        class="form-control"
-        id="inputPaymentReference"
-        placeholder="Payment Reference"
-        required
-        v-model="editingTransaction.payment_reference"
-      >
+        <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
+        <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference" required
+          v-model="editingTransaction.payment_reference" :disabled="true">
       </div>
     </div>
 
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+      <label for="selectType" class="form-label">Type: *</label>
+      <select class="form-select" id="selectType" v-model="editingTransaction.type">
+        <option :value="null"></option>
+        <option value="C">Credit</option>
+        <option value="D">Debit</option>
+      </select>
+    </div>
+
     <div class="mx-2 mt-2 filter-div">
-      <label
-        for="selectStatus"
-        class="form-label"
-      >Payment Type: *</label>
-      <select
-        class="form-select"
-        id="selectStatus"
-      >
+      <label for="selectPaymentType" class="form-label">Payment Type: *</label>
+      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled="true">
         <option :value="null"></option>
         <option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
@@ -129,20 +95,18 @@
       </select>
     </div>
 
+    <div class="mb-3 ms-xs-3 flex-grow-1">
+      <label for="inputDescription" class="form-label">Description *</label>
+      <input type="text" class="form-control" id="inputDescription" placeholder="Description" required
+        v-model="editingTransaction.description">
+    </div>
+
     <div class="d-flex flex-wrap justify-content-between">
     </div>
 
     <div class="mb-3 d-flex justify-content-center ">
-      <button
-        type="button"
-        class="btn btn-success px-5 mx-2"
-        @click="save"
-      >Save</button>
-      <button
-        type="button"
-        class="btn btn-dark px-5"
-        @click="cancel"
-      >Cancel</button>
+      <button type="button" class="btn btn-success px-5 mx-2" @click="save">Save</button>
+      <button type="button" class="btn btn-dark px-5" @click="cancel">Cancel</button>
     </div>
 
   </form>
@@ -152,6 +116,7 @@
 .total_price {
   width: 26rem;
 }
+
 .checkBilled {
   margin-top: 0.4rem;
   min-height: 2.375rem;
