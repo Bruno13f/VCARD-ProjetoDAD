@@ -14,7 +14,10 @@ class TransactionController extends Controller
 {
 
     public function index(){
-        return TransactionResource::collection(Transaction::all());
+        //pedido no enunciado para estar ordenado de acordo com a data mais recente primeiro
+        $transactions = Transaction::orderBy('created_at', 'desc')->get();
+
+        return TransactionResource::collection($transactions);
     }
 
     public function show (Transaction $transaction){
