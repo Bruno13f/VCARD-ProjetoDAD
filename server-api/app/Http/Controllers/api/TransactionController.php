@@ -9,6 +9,7 @@ use App\Http\Resources\TransactionResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TransactionController extends Controller
 {
@@ -38,6 +39,6 @@ class TransactionController extends Controller
             return new TransactionResource($transaction);
         }
 
-        return; //nao pode ser soft deleted
+        return response()->json(['error' => "Can't delete tre transaction - Vcard exists"], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

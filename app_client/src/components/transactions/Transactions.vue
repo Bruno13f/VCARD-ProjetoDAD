@@ -3,7 +3,9 @@
   import { ref, computed, onMounted } from 'vue'
   import {useRouter} from 'vue-router'
   import TransactionTable from "./TransactionTable.vue"
+  import { useToast } from "vue-toastification"
 
+  const toast = useToast();
   const router = useRouter();
 
   const loadTransactions = () => {
@@ -45,10 +47,15 @@
           if (idx >= 0) {
             transactions.value.splice(idx, 1)
           }
+          toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
         })
         .catch((error) => {
-          console.log(error)
-        })
+          if (error.response.status == 422){
+            toast.error("Can't delete Transaction - Vcard exists")
+          }else {
+            toast.error("Transaction wasn't deleted due to unknown server error!")
+          }
+      });
   }
 
 
