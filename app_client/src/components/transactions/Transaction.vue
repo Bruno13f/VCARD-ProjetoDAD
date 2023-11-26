@@ -1,8 +1,10 @@
 <script setup>
   import axios from 'axios'
   import { ref, watch, computed, onMounted} from 'vue'
+  import {useRouter} from 'vue-router'
   import TransactionDetail from "./TransactionDetail.vue"
 
+  const router = useRouter()
   const newTransaction = () => { 
     return {
       vcard: '',
@@ -56,7 +58,8 @@
 
   const cancel = () => {
       // Replace this code to navigate back
-      loadTransaction(props.id)
+      router.back()
+      //loadTransaction(props.id)
   }
 
   const props = defineProps({
