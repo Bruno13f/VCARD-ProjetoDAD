@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateTransaction;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -17,6 +18,12 @@ class TransactionController extends Controller
     }
 
     public function show (Transaction $transaction){
+        return new TransactionResource($transaction);
+    }
+
+    public function update(UpdateTransaction $request, Transaction $transaction)
+    {
+        $transaction->update($request->validated());
         return new TransactionResource($transaction);
     }
 

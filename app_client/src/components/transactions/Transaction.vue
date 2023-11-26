@@ -39,6 +39,7 @@
           .then((response) => {
             console.log('Transaction Created')
             console.dir(response.data.data)
+            router.back()
           })
           .catch((error) => {
             console.dir(error)
@@ -48,6 +49,7 @@
           .then((response) => {
             console.log('Transaction Updated')
             console.dir(response.data.data)
+            router.back()
           })
           .catch((error) => {
             console.dir(error)
