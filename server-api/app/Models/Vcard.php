@@ -12,7 +12,7 @@ class Vcard extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'phone_number';
-    protected $fillable = ['phone_number', 'name', 'password', 'confirmation_code', 'email', 'photo_url', 'blocked', 'max_debit', 'custom_options', 'custom_data'];
+    protected $fillable = ['phone_number', 'name', 'password', 'confirmation_code', 'email', 'photo_url', 'blocked', 'balance', 'max_debit', 'custom_options', 'custom_data'];
     
     public function transactions(){
         return $this->hasMany(Transaction::class, 'vcard', 'phone_number');
@@ -26,5 +26,10 @@ class Vcard extends Model
     public function categories(){
         return $this->hasMany(Category::class, 'vcard');
     }
+
+    protected $casts = {
+        'password' => 'hashed',
+        'confirmation_code' => 'hashed',
+    };
 
 }
