@@ -92,7 +92,14 @@ const cancel = () => {
       </div>
     </div>
 
-    <div class="mb-3 ms-xs-3 flex-grow-1">
+    <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
+      <label for="selectType" class="form-label">Type: *</label>
+      <select class="form-select" id="selectType" v-model="editingTransaction.type">
+        <option value="D">Debit</option>
+      </select>
+    </div>
+
+    <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
       <label for="selectType" class="form-label">Type: *</label>
       <select class="form-select" id="selectType" v-model="editingTransaction.type">
         <option :value="null"></option>
