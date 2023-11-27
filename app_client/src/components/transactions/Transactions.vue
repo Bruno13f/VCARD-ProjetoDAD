@@ -8,24 +8,22 @@
   const toast = useToast();
   const router = useRouter();
 
-  const loadTransactions = () => {
-      axios.get('transactions')
-        .then((response) => {
-          transactions.value = response.data.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  const loadTransactions = async () => {
+    try{
+      const response = await axios.get('transactions')
+      transactions.value = response.data.data
+    }catch(error){
+      console.log(error)
+    }
   }
 
-  const loadUsers = () => {
-      axios.get('users')
-        .then((response) => {
-          users.value = response.data.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  const loadUsers = async () => {
+    try{
+      const response = await axios.get('users')
+      users.value = response.data.data
+    }catch(error){
+      console.log(error)
+    }
   }
 
   const addTransaction = () => {
@@ -38,10 +36,9 @@
       console.log('Navigate to Edit Transaction with id = ' + transaction.id)
   }
 
-  const deleteTransaction = (transaction) => {
+  const deleteTransaction = async (transaction) => {
     // nao implementado 
-      axios.delete('transactions/' + transaction.id)
-        .then((response) => {
+      axios.delete('transactions/' + transaction.id).then((response) => {
           let deletedTransaction = response.data.data
           let idx = transactions.value.findIndex((t) => t.id === deletedTransaction.id)
           if (idx >= 0) {
