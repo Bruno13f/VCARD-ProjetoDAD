@@ -55,15 +55,21 @@
             }
           })
       } else {
-        // falta implementar
+        //nao está a funcionar quando se troca o phone_number ele deixa e passa mas nao o troca
         console.log(vcard.value)
         axios.put('vcards/' + props.phone_number, vcard.value)
           .then((response) => {
             console.log('Vcard Updated')
             console.dir(response.data.data)
+            toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
+            router.back()
           })
           .catch((error) => {
-            console.dir(error)
+            if (error.response.status == 422) {
+              toast.error('Vcard was not edited due to validation errors!')
+            } else {
+              toast.error('Vcard was not edited due to unknown server error!')
+            }
           })
       }
     }
