@@ -61,17 +61,17 @@ class VcardController extends Controller
 
         // soft delete se tiver transacoes senao forceDelete
         
-        if ($vcard->transactions){
-            $vcard->delete(); // soft delete
+        if (count($vcard->transactions)){
+            $vcard->delete();
         }else{
             $vcard->forceDelete();
         }
             
-        return new VCardResource($vcard);
+        return new VcardResource($vcard);
         
     }
 
-    public function getTransactiosnOfVcard(Vcard $vcard){
+    public function getTransactiosOfVcard(Vcard $vcard){
         return TransactionResource::collection($vcard->transactions);
     }
 }
