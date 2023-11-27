@@ -25,7 +25,12 @@
     }
   }
 
+  const vcard = ref(newVcard())  
+  const users = ref([]) 
+  const errors = ref(null)
+
   const loadVcard = async (phone_number) => {
+    errors.value = null
       if (!phone_number || phone_number <0) {
         vcard.value = newVcard()
       } else {
@@ -39,6 +44,7 @@
     }
 
   const save = async () => {
+    errors.value = null
       if (operation.value == 'insert') {
         try {
           const response = await axios.post('vcards', vcard.value)
@@ -47,6 +53,7 @@
           router.back();
         } catch (error) {
           if (error.response.status == 422) {
+            errors.value = error.response.data.errors
             toast.error('Vcard was not created due to validation errors!')
           } else {
             toast.error('Vcard was not created due to unknown server error!')
@@ -54,7 +61,6 @@
         }
       } else {
         try {
-          console.log(vcard.value)
           const response = await axios.put('vcards/' + props.phone_number, vcard.value)
           console.log('Vcard Updated')
           console.dir(response.data.data)
@@ -62,6 +68,8 @@
           router.back()
         } catch (error) {
           if (error.response.status == 422) {
+            errors.value = error.response.data.errors
+            console.log(errors)
             toast.error('Vcard was not edited due to validation errors!')
           } else {
             toast.error('Vcard was not edited due to unknown server error!')
@@ -82,10 +90,7 @@
         type: Number,
         default: null
       }
-    })
-
-  const vcard = ref(newVcard())  
-  const users = ref([])  
+    }) 
 
   const operation = computed(() => {
     return (!props.phone_number || (props.phone_number<0 )) ? 'insert' : 'update'
@@ -117,6 +122,7 @@
     :operationType="operation"
     :vcard="vcard"
     :users="users"
+    :errors="errors"
     @save="save"
     @cancel="cancel"
   ></VcardDetail>

@@ -13,7 +13,11 @@
     users: {
       type: Array,
       required: true
-    }    
+    },
+    errors: {
+      type: Object,
+      required: false,
+    },
   })
 
   const emit = defineEmits(['save', 'cancel'])
@@ -60,6 +64,7 @@
           required
           v-model="editingVcard.name"
         >
+        <field-error-message :errors="errors" fieldName="name"></field-error-message>
       </div>
       <div class="mb-3 me-3 flex-grow-1">
         <label
@@ -74,6 +79,7 @@
           required
           v-model="editingVcard.email"
         >
+        <field-error-message :errors="errors" fieldName="email"></field-error-message>
       </div>
     </div>
 
@@ -91,6 +97,7 @@
         required
         v-model="editingVcard.phone_number"
       >
+      <field-error-message :errors="errors" fieldName="phone_number"></field-error-message>
       </div>
 
       <div class="mb-3 me-3 flex-grow-1">
@@ -106,6 +113,7 @@
         required
         v-model="editingVcard.password"
       >
+      <field-error-message :errors="errors" fieldName="password"></field-error-message>
       </div>
 
       <div class="mb-3 ms-xs-3 flex-grow-1 form-group">
@@ -121,6 +129,7 @@
         required
         v-model="editingVcard.confirmation_code"
       >
+      <field-error-message :errors="errors" fieldName="confirmation_code"></field-error-message>
       </div>
     </div>
 
