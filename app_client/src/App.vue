@@ -116,6 +116,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>My Vcard</span>
+            <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard">
+                <i class="bi bi-xs bi-plus-circle"></i>
+            </router-link>
           </h6>
           <ul class="nav flex-column mb-2">
             <li class="nav-item">

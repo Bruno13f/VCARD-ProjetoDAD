@@ -136,13 +136,6 @@
         <option value="VISA">VISA</option>
       </select>
     </div>
-    <div class="mx-2 mt-2">
-      <button
-        type="button"
-        class="btn btn-success px-4 btn-addprj"
-        @click="addTransaction"
-      ><i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Transaction</button>
-    </div>
   </div>
   <transaction-table
     :transactions="filteredTransactions"
