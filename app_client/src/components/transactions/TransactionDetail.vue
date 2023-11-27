@@ -27,9 +27,6 @@ const editingTransaction = ref({
   description: '',
 });
 
-// Rest of your code
-
-
 watch(
   () => props.transaction,
   (newTransaction) => {

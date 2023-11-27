@@ -54,7 +54,7 @@
     }
   })
 
-  const emit = defineEmits(['edit', 'delete', 'block'])
+  const emit = defineEmits(['edit', 'delete'])
 
   const editClick = (transaction) => {
       emit('edit', transaction)
@@ -64,9 +64,6 @@
       emit('delete', transaction)
   }
 
-  const blockClick = (transaction) => {
-    emit('block', transaction)
-  }
 </script>
 
 <template>
