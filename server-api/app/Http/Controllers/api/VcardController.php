@@ -8,7 +8,7 @@ use App\Http\Resources\TransactionResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateVcardRequest;
-use App\Http\Requests\StoreVcardRequest;
+use App\Http\Requests\UpdateStoreVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
 use App\Http\Requests\UpdateMaxDebitVcardRequest;
 use Illuminate\Http\Response;
@@ -24,7 +24,7 @@ class VcardController extends Controller
         return new VCardResource($vcard);
     }
 
-    public function store(StoreVcardRequest $request){
+    public function store(UpdateStoreVcardRequest $request){
 
         $validatedRequest = $request->validated();
         $validatedRequest['blocked'] = 0;
@@ -37,7 +37,7 @@ class VcardController extends Controller
         return new VcardResource($newVcard);
     }
 
-    public function update(UpdateVcardRequest $request, Vcard $vcard)
+    public function update(UpdateStoreVcardRequest $request, Vcard $vcard)
     {
         $vcard->update($request->validated());
         return new VcardResource($vcard);
