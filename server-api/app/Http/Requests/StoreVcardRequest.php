@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateStoreVcardRequest extends FormRequest
+class StoreVcardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,9 @@ class UpdateStoreVcardRequest extends FormRequest
      */
     public function rules()
     {
-
-        $rule = $this->method() == 'POST' ? 'unique:Vcards,phone_number' : 'exists:Vcards,phone_number';
-
         return [
             // A implementar
-            'phone_number' => "required|integer|digits:9|regex:/^9\d{8}$/|$rule",
+            'phone_number' => 'required|integer|digits:9|regex:/^9\d{8}$/|unique:Vcards,phone_number',
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
