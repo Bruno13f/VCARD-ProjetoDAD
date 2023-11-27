@@ -25,52 +25,48 @@
     }
   }
 
-  const loadVcard = (phone_number) => {
+  const loadVcard = async (phone_number) => {
       if (!phone_number || phone_number <0) {
         vcard.value = newVcard()
       } else {
-        axios.get('vcards/' + phone_number)
-          .then((response) => {
-            vcard.value = response.data.data
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+        try{
+          const response = await axios.get('vcards/' + phone_number)
+          vcard.value = response.data.data
+        }catch(error){
+          console.log(error)
+        }
       }
     }
 
-  const save = () => {
+  const save = async () => {
       if (operation.value == 'insert') {
-        axios.post('vcards', vcard.value)
-          .then((response) => {
-            console.log(response)
-            toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
-            router.back();
-          })
-          .catch((error) => {
-            if (error.response.status == 422) {
-              toast.error('Vcard was not created due to validation errors!')
-            } else {
-              toast.error('Vcard was not created due to unknown server error!')
-            }
-          })
+        try {
+          const response = await axios.post('vcards', vcard.value)
+          console.log(response)
+          toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
+          router.back();
+        } catch (error) {
+          if (error.response.status == 422) {
+            toast.error('Vcard was not created due to validation errors!')
+          } else {
+            toast.error('Vcard was not created due to unknown server error!')
+          }
+        }
       } else {
-        //nao está a funcionar quando se troca o phone_number ele deixa e passa mas nao o troca
-        console.log(vcard.value)
-        axios.put('vcards/' + props.phone_number, vcard.value)
-          .then((response) => {
-            console.log('Vcard Updated')
-            console.dir(response.data.data)
-            toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
-            router.back()
-          })
-          .catch((error) => {
-            if (error.response.status == 422) {
-              toast.error('Vcard was not edited due to validation errors!')
-            } else {
-              toast.error('Vcard was not edited due to unknown server error!')
-            }
-          })
+        try {
+          console.log(vcard.value)
+          const response = await axios.put('vcards/' + props.phone_number, vcard.value)
+          console.log('Vcard Updated')
+          console.dir(response.data.data)
+          toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
+          router.back()
+        } catch (error) {
+          if (error.response.status == 422) {
+            toast.error('Vcard was not edited due to validation errors!')
+          } else {
+            toast.error('Vcard was not edited due to unknown server error!')
+          }
+        }
       }
     }
 
@@ -104,15 +100,14 @@
     }
   )
 
-  onMounted (() => {
+  onMounted (async () => {
     users.value = []
-    axios.get('users')
-      .then((response) => {
-        users.value = response.data.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    try{
+      const response = await axios.get('users')
+      users.value = response.data.data
+    }catch(error){
+      console.log(error)
+    }
   })
 </script>
 

@@ -10,24 +10,22 @@
 
   const router = useRouter();
 
-  const loadVcards = () => {
-      axios.get('vcards')
-        .then((response) => {
-          vcards.value = response.data.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  const loadVcards = async () => {
+    try{
+      const response = await axios.get('vcards')
+      vcards.value = response.data.data
+    }catch(error){
+      console.log(error)
+    }
   }
 
-  const loadUsers = () => {
-      axios.get('users')
-        .then((response) => {
-          users.value = response.data.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  const loadUsers = async () => {
+    try{
+      const response = await axios.get('users')
+      users.value = response.data.data
+    }catch(error){
+      console.log(error)
+    }
   }
 
   const addVcard = () => {
