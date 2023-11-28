@@ -69,7 +69,7 @@ defineExpose({ show, hide })
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ cancelBtn }}
                     </button>
-                    <button type="button" class="btn btn-primary" @click="clickConfirm">
+                    <button type="button" class="btn btn-success" @click="clickConfirm">
                         {{ confirmationBtn }}
                     </button>
                 </div>
