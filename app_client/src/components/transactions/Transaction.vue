@@ -22,7 +22,12 @@ const newTransaction = () => {
   }
 }
 
+  const transaction = ref(newTransaction())  
+  const users = ref([]) 
+  const errors = ref(null)
+
 const loadTransaction = async (id) => {
+  errors.value = null
   if (!id || id < 0) {
     transaction.value = newTransaction()
   } else {
@@ -36,6 +41,7 @@ const loadTransaction = async (id) => {
 }
 
 const save = async () => {
+  errors.value = null
   if (operation.value == 'insert') {
     try {
       const response = await axios.post('transactions', transaction.value)
@@ -44,6 +50,7 @@ const save = async () => {
       router.back();
     } catch (error) {
       if (error.response.status == 422) {
+        errors.value = error.response.data.errors
         toast.error('Transaction was not created due to validation errors!')
       } else {
         toast.error('Transaction was not created due to unknown server error!')
@@ -59,6 +66,8 @@ const save = async () => {
       router.back()
     } catch (error) {
       if (error.response.status == 422) {
+        errors.value = error.response.data.errors
+        console.log(errors)
         toast.error('Transaction was not edited due to validation errors!')
       } else {
         toast.error('Transaction was not edited due to unknown server error!')
@@ -80,9 +89,6 @@ const props = defineProps({
     default: null
   }
 })
-
-const transaction = ref(newTransaction())
-const users = ref([])
 
 const operation = computed(() => {
   return (!props.id || (props.id < 0)) ? 'insert' : 'update'
@@ -110,6 +116,12 @@ onMounted(async () => {
 
 
 <template>
-  <TransactionDetail :operationType="operation" :transaction="transaction" :users="users" @save="save" @cancel="cancel">
+  <TransactionDetail 
+  :operationType="operation" 
+  :transaction="transaction" 
+  :users="users" 
+  :errors="errors"
+  @save="save" 
+  @cancel="cancel">
   </TransactionDetail>
 </template>

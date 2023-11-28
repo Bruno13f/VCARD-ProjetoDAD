@@ -13,7 +13,11 @@ const props = defineProps({
   users: {
     type: Array,
     required: true
-  }
+  },
+    errors: {
+      type: Object,
+      required: false,
+    },
 })
 
 const emit = defineEmits(['save', 'cancel'])
@@ -54,6 +58,7 @@ const cancel = () => {
       <label for="inputName" class="form-label">Vcard *</label>
       <input type="text" class="form-control" id="inputName" placeholder="Vcard" required
         v-model="editingTransaction.vcard.phone_number">
+        <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
     </div>
 
     <div class="mb-3" v-if="props.operationType == 'update'">
@@ -68,6 +73,7 @@ const cancel = () => {
         <label for="inputValue" class="form-label">Value *</label>
         <input type="text" class="form-control" id="inputValue" placeholder="Value" required
           v-model="editingTransaction.value">
+          <field-error-message :errors="errors" fieldName="value"></field-error-message>
       </div>
 
       <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'update'">
@@ -86,6 +92,7 @@ const cancel = () => {
         <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
         <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference" required
           v-model="editingTransaction.payment_reference">
+          <field-error-message :errors="errors" fieldName="payment_reference"></field-error-message>
       </div>
     </div>
 
@@ -116,6 +123,7 @@ const cancel = () => {
         <option value="MB">MB</option>
         <option value="VISA">VISA</option>
       </select>
+      <field-error-message :errors="errors" fieldName="payment_type"></field-error-message>
     </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
@@ -132,7 +140,7 @@ const cancel = () => {
     </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
-      <label for="inputDescription" class="form-label">Description *</label>
+      <label for="inputDescription" class="form-label">Description </label>
       <input type="text" class="form-control" id="inputDescription" placeholder="Description" required
         v-model="editingTransaction.description">
     </div>
