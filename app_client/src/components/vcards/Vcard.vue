@@ -28,15 +28,21 @@ const newVcard = () => {
   const vcard = ref(newVcard())  
   const users = ref([]) 
   const errors = ref(null)
+  const confirmationLeaveDialog = ref(null)
+  let originalValueStr = ''
+
 
 const loadVcard = async (phone_number) => {
+  originalValueStr = ''
   errors.value = null
   if (!phone_number || phone_number < 0) {
     vcard.value = newVcard()
+    originalValueStr = JSON.stringify(vcard.value)
   } else {
     try {
       const response = await axios.get('vcards/' + phone_number)
       vcard.value = response.data.data
+      originalValueStr = JSON.stringify(vcard.value)
     } catch (error) {
       console.log(error)
     }
@@ -48,6 +54,8 @@ const save = async () => {
   if (operation.value == 'insert') {
     try {
       const response = await axios.post('vcards', vcard.value)
+      vcard.value = response.data.data
+      originalValueStr = JSON.stringify(vcard.value)
       console.log(response)
       toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
       router.back();
@@ -62,6 +70,8 @@ const save = async () => {
   } else {
     try {
       const response = await axios.put('vcards/' + props.phone_number, vcard.value)
+      vcard.value = response.data.data
+      originalValueStr = JSON.stringify(vcard.value)
       console.log('Vcard Updated')
       console.dir(response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
@@ -80,9 +90,8 @@ const save = async () => {
 
 
 const cancel = () => {
-  // Replace this code to navigate back
+  originalValueStr = JSON.stringify(vcard.value)  
   router.back()
-  //loadVcard(props.phone_number)
 }
 
 const props = defineProps({
@@ -115,15 +124,19 @@ onMounted(async () => {
   }
 })
 
-const initialVcardState = ref(JSON.stringify(newVcard()))
+let nextCallBack = null
+const leaveConfirmed = () => {
+  if (nextCallBack) {
+    nextCallBack()
+  }
+}
 
 onBeforeRouteLeave((to, from, next) => {
-  if (JSON.stringify(vcard.value) !== initialVcardState.value) {
-    if (window.confirm("You have unsaved changes. Do you really want to leave?")) {
-      next();
-    } else {
-      next(false);
-    }
+  nextCallBack = null;
+  let newValueStr = JSON.stringify(vcard.value);
+  if (originalValueStr !== newValueStr) {
+    nextCallBack = next;
+    confirmationDialog.value.show();
   } else {
     next();
   }
@@ -132,6 +145,13 @@ onBeforeRouteLeave((to, from, next) => {
 
 
 <template>
+  <confirmation-dialog
+    ref="confirmationLeaveDialog"
+    confirmationBtn="Discard changes and leave"
+    msg="Do you really want to leave? You have unsaved changes!"
+    @confirmed="leaveConfirmed"
+  >
+  </confirmation-dialog>  
   <VcardDetail 
   :operationType="operation" 
   :vcard="vcard" 

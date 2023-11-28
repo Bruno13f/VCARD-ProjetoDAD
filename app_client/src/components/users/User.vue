@@ -1,10 +1,14 @@
 <script setup>
 import axios from 'axios'
+import { useToast } from "vue-toastification"
 import { ref, watch} from 'vue'
 import UserDetail from "./UserDetail.vue"
-
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
+
+const toast = useToast()
 const router = useRouter()
+const confirmationLeaveDialog = ref(null)
+let originalValueStr = ''
 
 const props = defineProps({
   id: {
@@ -22,35 +26,43 @@ const newUser = () => {
   }
 }
 
-const loadUser = (id) => {
+const loadUser = async (id) => {
+  originalValueStr = ''
+  errors.value = null
   if (!id || (id < 0)) {
     user.value = newUser()
   } else {
-    axios.get('users/' + id)
-      .then((response) => {
+      try {
+        const response = await axios.get('users/' + id)
         user.value = response.data.data
-      })
-      .catch((error) => {
+        originalValueStr = JSON.stringify(user.value)
+      } catch (error) {
         console.log(error)
-      })
+      }
   }
 }
 
-const save = () => {
-  axios.put('users/' + props.id, user.value)
-    .then((response) => {
-      console.log('User Updated')
-      console.dir(response.data.data)
-    })
-    .catch((error) => {
-      console.dir(error)
-    })
+const save = async () => {
+  errors.value = null
+  try {
+    const response = await axios.put('users/' + props.id, user.value)
+    user.value = response.data.data
+    originalValueStr = JSON.stringify(user.value)
+    toast.success('User #' + user.value.id + ' was updated successfully.')
+    router.back()
+  } catch (error) {
+    if (error.response.status == 422) {
+      errors.value = error.response.data.errors
+      toast.error('User #' + props.id + ' was not updated due to validation errors!')
+    } else {
+      toast.error('User #' + props.id + ' was not updated due to unknown server error!')
+    }
+  }
 }
 
 const cancel = () => {
-  // Replace this code to navigate back
+  originalValueStr = JSON.stringify(user.value)
   router.back()
-  //loadUser(props.id)
 }
 
 const user = ref(newUser())
@@ -63,22 +75,35 @@ watch(
   { immediate: true }
 )
 
-const initialUserState = ref(JSON.stringify(newUser()))
+let nextCallBack = null
+const leaveConfirmed = () => {
+  if (nextCallBack) {
+    nextCallBack()
+  }
+}
+
+
 
 onBeforeRouteLeave((to, from, next) => {
-  if (JSON.stringify(user.value) !== initialUserState.value) {
-    if (window.confirm("You have unsaved changes. Do you really want to leave?")) {
-      next();
-    } else {
-      next(false);
-    }
+  nextCallBack = null
+  let newValueStr = JSON.stringify(user.value)
+  if (originalValueStr != newValueStr) {
+    nextCallBack = next
+    confirmationLeaveDialog.value.show()
   } else {
-    next();
+    next()
   }
-});
+}) 
 </script>
 
 <template>
+  <confirmation-dialog
+    ref="confirmationLeaveDialog"
+    confirmationBtn="Discard changes and leave"
+    msg="Do you really want to leave? You have unsaved changes!"
+    @confirmed="leaveConfirmed"
+  >
+  </confirmation-dialog>  
   <user-detail 
   :user="user" 
   @save="save" 

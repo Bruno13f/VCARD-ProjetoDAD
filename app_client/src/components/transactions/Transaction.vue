@@ -25,15 +25,22 @@ const newTransaction = () => {
 const transaction = ref(newTransaction())
 const users = ref([])
 const errors = ref(null)
+const confirmationLeaveDialog = ref(null)
+let originalValueStr = ''
+
+
 
 const loadTransaction = async (id) => {
+  originalValueStr = ''
   errors.value = null
   if (!id || id < 0) {
     transaction.value = newTransaction()
+    originalValueStr = JSON.stringify(transaction.value)
   } else {
     try {
       const response = await axios.get('transactions/' + id)
       transaction.value = response.data.data
+      originalValueStr = JSON.stringify(transaction.value)
     } catch (error) {
       console.log(error)
     }
@@ -45,6 +52,8 @@ const save = async () => {
   if (operation.value == 'insert') {
     try {
       const response = await axios.post('transactions', transaction.value)
+      transaction.value = response.data.data
+      originalValueStr = JSON.stringify(transaction.value)
       console.log(response)
       toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
       router.back();
@@ -60,6 +69,8 @@ const save = async () => {
     try {
       console.log(transaction.value)
       const response = await axios.put('transactions/' + props.id, transaction.value)
+      transaction.value = response.data.data
+      originalValueStr = JSON.stringify(transaction.value)
       console.log('Transaction Updated')
       console.dir(response.data.data)
       toast.success('Transaction #' + response.data.data.id + ' was edited successfully.')
@@ -78,9 +89,8 @@ const save = async () => {
 
 
 const cancel = () => {
-  // Replace this code to navigate back
+  originalValueStr = JSON.stringify(transaction.value)  
   router.back()
-  //loadTransaction(props.id)
 }
 
 const props = defineProps({
@@ -113,15 +123,20 @@ onMounted(async () => {
   }
 })
 
-const initialTransactionState = ref(JSON.stringify(newTransaction()))
+
+let nextCallBack = null
+const leaveConfirmed = () => {
+  if (nextCallBack) {
+    nextCallBack()
+  }
+}
 
 onBeforeRouteLeave((to, from, next) => {
-  if (JSON.stringify(transaction.value) !== initialTransactionState.value) {
-    if (window.confirm("You have unsaved changes. Do you really want to leave?")) {
-      next();
-    } else {
-      next(false);
-    }
+  nextCallBack = null;
+  let newValueStr = JSON.stringify(vcard.value);
+  if (originalValueStr !== newValueStr) {
+    nextCallBack = next;
+    confirmationLeaveDialog.value.show();
   } else {
     next();
   }
@@ -130,6 +145,13 @@ onBeforeRouteLeave((to, from, next) => {
 
 
 <template>
+  <confirmation-dialog
+    ref="confirmationLeaveDialog"
+    confirmationBtn="Discard changes and leave"
+    msg="Do you really want to leave? You have unsaved changes!"
+    @confirmed="leaveConfirmed"
+  >
+  </confirmation-dialog>  
   <TransactionDetail 
   :operationType="operation" 
   :transaction="transaction" 
