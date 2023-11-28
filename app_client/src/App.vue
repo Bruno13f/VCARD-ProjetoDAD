@@ -146,7 +146,7 @@ const logout = async () => {
             <li class="nav-item" v-if="userStore.user">
               <a class="dropdown-item" href="#">
                   <router-link class="nav-link" :class="{active: $route.name === 'Transactions'}" :to="{ name: 'Transactions'}">
-                    <i class="bi bi-people"></i>
+                    <i class="bi bi-wallet"></i>
                     Transactions
                   </router-link>
                 </a>
