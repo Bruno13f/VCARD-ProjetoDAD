@@ -18,6 +18,7 @@
   const emit = defineEmits(['login'])
 
   const login = async () => {
+    console.log(credentials)
     if (await userStore.login(credentials.value)) {
       toast.success('User ' + userStore.user.name + ' has entered the application.')
       emit('login')

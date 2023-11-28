@@ -5,8 +5,9 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController as BaseAccessTokenController;
 
-class AuthController extends Controller
+class AuthController extends BaseAccessTokenController
 {
     private function passportAuthenticationData($username, $password) {
         return [
@@ -17,12 +18,11 @@ class AuthController extends Controller
             'password' => $password,
             'scope' => ''
         ];
-    }
+    }   
 
     public function login(Request $request) {
         try {
-            request()->request->add(
-            $this->passportAuthenticationData($request->username, $request->password));
+            request()->request->add($this->passportAuthenticationData($request->username, $request->password));
             $request = Request::create(env('PASSPORT_SERVER_URL') . '/oauth/token', 'POST');
             $response = Route::dispatch($request);
             $errorCode = $response->getStatusCode();
@@ -40,5 +40,10 @@ class AuthController extends Controller
         $token->revoke();
         $token->delete();
         return response(['msg' => 'Token revoked'], 200);
+    }
+
+    public function findForPassport($username)
+    {
+        return User::where('username', $username)->first();
     }
 }
