@@ -24,7 +24,7 @@ const logout = async () => {
   <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0 shadow-lg">
     <div class="container-fluid">
       
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark shadow-none" href="#">
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark shadow-none" :to="{ name: 'home' }">
         <img src="@/assets/logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
         Vcards
       </a>
@@ -35,18 +35,18 @@ const logout = async () => {
 
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="nav-item" v-show="!userStore.user">
             <a class="nav-link" href="#"><i class="bi bi-person-check-fill"></i>
               Register
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-show="!userStore.user">
             <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}">
               <i class="bi bi-house"></i>
               Login
             </router-link>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" v-show="userStore.user">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
               <img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" alt="avatar image">
@@ -88,33 +88,33 @@ const logout = async () => {
         <div class="position-sticky pt-0">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <router-link class="nav-link" :class="{active: $route.name === 'Dashboard'}" :to="{ name: 'Dashboard'}">
+              <router-link class="nav-link" :class="{active: $route.name === 'Dashboard'}" :to="{ name: 'Dashboard'}" v-if="userStore.user">
                 <i class="bi bi-house"></i>
                   Dashboard
               </router-link>
             </li>
             <li class="nav-item d-flex justify-content-between align-items-center pe-3">
-              <router-link class="nav-link w-100 me-3" :class="{ active: $route.name === 'Vcards' }" :to="{ name: 'Vcards' }">
+              <router-link class="nav-link w-100 me-3" :class="{ active: $route.name === 'Vcards' }" :to="{ name: 'Vcards' }" v-show="userStore.user?.user_type == 'A'">
                 <i class="bi bi-list-check"></i>
                 Vcards
               </router-link>
-              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard">
+              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" v-show="userStore.user?.user_type == 'A'">
                 <i class="bi bi-xs bi-plus-circle"></i>
               </router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="userStore.user">
               <a class="nav-link" href="#">
                 <i class="bi bi-bank"></i>
                 Payments
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="userStore.user">
               <a class="nav-link" href="#">
                 <i class="bi bi-bookmarks"></i>
                 Categories
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
               <a class="dropdown-item" href="#">
                   <router-link class="nav-link" :class="{active: $route.name === 'Users'}" :to="{ name: 'Users'}">
                     <i class="bi bi-people"></i>
@@ -122,7 +122,7 @@ const logout = async () => {
                   </router-link>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="userStore.user">
               <a class="nav-link" href="#">
                 <i class="bi bi-bar-chart-line"></i>
                 Reports
@@ -137,13 +137,13 @@ const logout = async () => {
             </router-link>
           </h6>
           <ul class="nav flex-column mb-2">
-            <li class="nav-item">
+            <li class="nav-item" v-if="userStore.user">
               <a class="nav-link" href="#">
                 <i class="bi bi-credit-card-2-front"></i>
                 Details
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="userStore.user">
               <a class="dropdown-item" href="#">
                   <router-link class="nav-link" :class="{active: $route.name === 'Transactions'}" :to="{ name: 'Transactions'}">
                     <i class="bi bi-people"></i>

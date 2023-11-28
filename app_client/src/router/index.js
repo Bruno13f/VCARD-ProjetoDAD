@@ -9,6 +9,7 @@ import Vcards from '../components/vcards/vcards.vue'
 import Vcard from '../components/vcards/vcard.vue'
 import Transactions from '../components/transactions/transactions.vue'
 import Transaction from '../components/transactions/transaction.vue'
+import { useUserStore } from "../stores/user.js"
 //import Transactions from "../components/transactions/Transactions.vue"
 
 const router = createRouter({
@@ -86,6 +87,63 @@ const router = createRouter({
       props: route => ({ id: parseInt(route.params.id) })
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  if ((to.name == 'Login') || (to.name == 'home') || (to.name == 'NewVcard')) {
+    next()
+    return
+  }
+  if (!userStore.user) {
+    next({ name: 'Login' })
+    return
+  }
+  if (to.name == 'Users') {
+    if (userStore.user.user_type != 'A') {
+      next({ name: 'home' })
+      return
+    }
+  }
+  if (to.name == 'User') {
+    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'Vcards') {
+    if (userStore.user.user_type != 'A') {
+      next({ name: 'home' })
+      return
+    }
+  }
+  if (to.name == 'Vcard') {
+    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'Transaction') {
+    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'NewTransaction') {
+    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  next()
 })
 
 export default router

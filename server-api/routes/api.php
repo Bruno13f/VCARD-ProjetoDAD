@@ -40,7 +40,6 @@ Route::middleware('auth:api')->group(function () {
     //Vcards
     Route::get('vcards', [VcardController::class, 'index']);
     Route::get('vcards/{vcard}', [VcardController::class, 'show']);
-    Route::post('vcards', [VcardController::class, 'store']);
     Route::put('vcards/{vcard}', [VcardController::class, 'update']);
     Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
     Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
@@ -62,6 +61,7 @@ Route::middleware('auth:api')->group(function () {
     //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 });
 
+Route::post('vcards', [VcardController::class, 'store']);
 
 
 

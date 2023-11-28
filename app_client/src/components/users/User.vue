@@ -7,6 +7,7 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
 const toast = useToast()
 const router = useRouter()
+const errors = ref([]) 
 const confirmationLeaveDialog = ref(null)
 let originalValueStr = ''
 
