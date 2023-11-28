@@ -20,7 +20,7 @@
   const login = async () => {
     console.log(credentials)
     if (await userStore.login(credentials.value)) {
-      toast.success('User ' + userStore.user.name + ' has entered the application.')
+      toast.success(userStore.user.name + ' has entered the application.')
       emit('login')
       router.back()
     } else {

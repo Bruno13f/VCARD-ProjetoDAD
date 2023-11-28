@@ -55,8 +55,8 @@ const logout = async () => {
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
               <li>
                 <router-link class="dropdown-item"
-                            :class="{ active: $route.name == 'User' && $route.params.id == 1 }" 
-                            :to="{ name: 'User', params: { id: 1 } }">
+                            :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }" 
+                            :to="{ name: 'User', params: { id: userStore.userId } }">
                 <i class="bi bi-person-square"></i>
                 Profile
                 </router-link>
@@ -178,8 +178,8 @@ const logout = async () => {
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
                   <li>
                     <router-link class="dropdown-item"
-                            :class="{ active: $route.name == 'User' && $route.params.id == 1 }" 
-                            :to="{ name: 'User', params: { id: 1 } }">
+                            :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }" 
+                            :to="{ name: 'User', params: { id: userStore.userId } }">
                       <i class="bi bi-person-square"></i>
                       Profile
                     </router-link>
