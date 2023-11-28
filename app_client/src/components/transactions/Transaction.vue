@@ -133,7 +133,7 @@ const leaveConfirmed = () => {
 
 onBeforeRouteLeave((to, from, next) => {
   nextCallBack = null;
-  let newValueStr = JSON.stringify(vcard.value);
+  let newValueStr = JSON.stringify(transaction.value);
   if (originalValueStr !== newValueStr) {
     nextCallBack = next;
     confirmationLeaveDialog.value.show();
