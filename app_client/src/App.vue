@@ -3,6 +3,7 @@ import { useRouter, RouterLink, RouterView } from 'vue-router'
 import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { useUserStore } from './stores/user.js'
+import { onMounted} from 'vue'
 
 const userStore = useUserStore() 
 const toast = useToast()
@@ -16,6 +17,7 @@ const logout = async () => {
     toast.error('There was a problem logging out of the application!')
   }
 }
+
 
 </script>
 

@@ -89,8 +89,14 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+let handlingFirstRoute = true
+
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
+  if (handlingFirstRoute) {
+      handlingFirstRoute = false
+      await userStore.restoreToken()
+  }
   if ((to.name == 'Login') || (to.name == 'home') || (to.name == 'NewVcard')) {
     next()
     return

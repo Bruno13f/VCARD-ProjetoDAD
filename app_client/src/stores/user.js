@@ -29,6 +29,7 @@ export const useUserStore = defineStore('user', () => {
 
  function clearUser() {
     delete axios.defaults.headers.common.Authorization
+    sessionStorage.removeItem('token')
     user.value = null
  } 
 
@@ -36,6 +37,7 @@ export const useUserStore = defineStore('user', () => {
     try {
         const response = await axios.post('login', credentials)
         axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
+        sessionStorage.setItem('token', response.data.access_token)
         await loadUser()
         return true
     }catch(error) {
@@ -54,5 +56,17 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-return { user, userId, userName, userPhotoUrl, loadUser, clearUser, login, logout}
+    async function restoreToken () {
+        let storedToken = sessionStorage.getItem('token')
+        if (storedToken) {
+            axios.defaults.headers.common.Authorization = "Bearer " + storedToken
+            await loadUser()
+            await loadInProgressProjects()
+            return true
+        }
+        clearUser()
+        return false
+    }
+
+return { user, userId, userName, userPhotoUrl, loadUser, clearUser, login, logout, restoreToken}
 })
