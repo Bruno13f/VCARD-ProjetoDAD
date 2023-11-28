@@ -130,14 +130,14 @@ const logout = async () => {
             </li>
           </ul>
 
-          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" v-if="!userStore.user || userStore.user?.user_type =='V'">
             <span>My Vcard</span>
             <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard">
                 <i class="bi bi-xs bi-plus-circle"></i>
             </router-link>
           </h6>
           <ul class="nav flex-column mb-2">
-            <li class="nav-item" v-if="userStore.user">
+            <li class="nav-item" v-show="userStore.user?.user_type =='V'">
               <a class="nav-link" href="#">
                 <i class="bi bi-credit-card-2-front"></i>
                 Details
