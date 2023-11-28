@@ -136,7 +136,7 @@ onBeforeRouteLeave((to, from, next) => {
   let newValueStr = JSON.stringify(vcard.value);
   if (originalValueStr !== newValueStr) {
     nextCallBack = next;
-    confirmationDialog.value.show();
+    confirmationLeaveDialog.value.show();
   } else {
     next();
   }
