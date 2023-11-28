@@ -1,5 +1,12 @@
 <script setup>
+  import axios from 'axios'
+  import { useToast } from "vue-toastification"
+  import { useRouter } from 'vue-router'
   import { ref } from 'vue'
+
+  const toast = useToast()
+  const router = useRouter()
+
 
   const credentials = ref({
         username: '',
@@ -8,9 +15,19 @@
 
   const emit = defineEmits(['login'])
 
-  const login = () => {
+  const login = async () => {
       // FALTA FAZER O LOGIN
+    try {
+      const response = await axios.post('login', credentials.value)
+      toast.success('User ' + credentials.value.username + ' has entered the application.')
+      axios.defaults.headers.common.Authorization = "Bearer " + response.data.access_token
       emit('login')
+      router.back()
+    } catch (error) {
+      delete axios.defaults.headers.common.Authorization
+      credentials.value.password = ''
+      toast.error('User credentials are invalid!')
+    }
   }
 </script>
 

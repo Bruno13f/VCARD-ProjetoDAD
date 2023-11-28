@@ -7,6 +7,7 @@ use App\Http\Controllers\api\TransactionController;
 use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\VcardController;
 use App\Http\Controllers\api\DefaultCategoryController;
+use App\Http\Controllers\api\AuthController;
 
 
 /*
@@ -23,6 +24,9 @@ use App\Http\Controllers\api\DefaultCategoryController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
 //Users
 
