@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios'
-import { ref, watch, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch, computed, onMounted} from 'vue'
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import TransactionDetail from "./TransactionDetail.vue"
 import { useToast } from "vue-toastification"
 
@@ -22,9 +22,9 @@ const newTransaction = () => {
   }
 }
 
-  const transaction = ref(newTransaction())  
-  const users = ref([]) 
-  const errors = ref(null)
+const transaction = ref(newTransaction())
+const users = ref([])
+const errors = ref(null)
 
 const loadTransaction = async (id) => {
   errors.value = null
@@ -112,6 +112,20 @@ onMounted(async () => {
     console.log(error)
   }
 })
+
+const initialTransactionState = ref(JSON.stringify(newTransaction()))
+
+onBeforeRouteLeave((to, from, next) => {
+  if (JSON.stringify(transaction.value) !== initialTransactionState.value) {
+    if (window.confirm("You have unsaved changes. Do you really want to leave?")) {
+      next();
+    } else {
+      next(false);
+    }
+  } else {
+    next();
+  }
+});
 </script>
 
 
@@ -120,8 +134,8 @@ onMounted(async () => {
   :operationType="operation" 
   :transaction="transaction" 
   :users="users" 
-  :errors="errors"
-  @save="save" 
+  :errors="errors" 
+  @save="save"
   @cancel="cancel">
   </TransactionDetail>
 </template>
