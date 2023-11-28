@@ -120,7 +120,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   if (to.name == 'Vcard') {
-    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.phone_number)) {
       next()
       return
     }

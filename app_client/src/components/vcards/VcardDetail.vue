@@ -169,10 +169,6 @@
     </div>
 
     <div class="d-flex flex-wrap justify-content-between">
-      colocar debito max sem poder alterar user normal, admin pode
-    </div>
-
-    <div class="d-flex flex-wrap justify-content-between">
     </div>
 
     <div class="mb-3 d-flex justify-content-center ">
@@ -180,7 +176,7 @@
         type="button"
         class="btn btn-success px-5 mx-2"
         @click="save"
-      >Save</button>
+      >Edit</button>
       <button
         type="button"
         class="btn btn-dark px-5"
