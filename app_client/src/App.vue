@@ -158,12 +158,12 @@ const logout = async () => {
               <span>User</span>
             </h6>
             <ul class="nav flex-column mb-2">
-              <li class="nav-item">
+              <li class="nav-item" v-show="!userStore.user">
                 <a class="nav-link" href="#"><i class="bi bi-person-check-fill"></i>
                   Register
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-show="!userStore.user">
                 <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}">
                   <i class="bi bi-house"></i>
                     Login
@@ -172,8 +172,8 @@ const logout = async () => {
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
                   data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="@/assets/avatar-exemplo-1.jpg" class="rounded-circle z-depth-0 avatar-img" alt="avatar image">
-                  <span class="avatar-text">User Name</span>
+                  <img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" alt="avatar image">
+                  <span class="avatar-text">{{ userStore.userName }}</span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
                   <li>
