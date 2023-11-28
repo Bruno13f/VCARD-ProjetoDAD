@@ -6,6 +6,7 @@ import Toast from "vue-toastification"
 import "vue-toastification/dist/index.css"
 
 import FieldErrorMessage from './components/global/FieldErrorMessage.vue'
+import ConfirmationDialog from './components/global/FieldErrorMessage.vue'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -40,5 +41,6 @@ app.use(createPinia())
 app.use(router)
 
 app.component('FieldErrorMessage', FieldErrorMessage)
+app.component('ConfirmationDialog', ConfirmationDialog)
 
 app.mount('#app')

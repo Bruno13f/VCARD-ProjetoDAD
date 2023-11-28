@@ -28,6 +28,7 @@
   const vcard = ref(newVcard())  
   const users = ref([]) 
   const errors = ref(null)
+  const confirmationLeaveDialog = ref(null)
 
   const loadVcard = async (phone_number) => {
     errors.value = null
