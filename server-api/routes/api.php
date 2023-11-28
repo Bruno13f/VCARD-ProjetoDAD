@@ -26,36 +26,50 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+Route::middleware('auth:api')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('users/me', [UserController::class, 'show_me']);
 
-//Users
+    //Users
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{user}', [UserController::class, 'show'])->middleware('can:view,user');
+    Route::put('users/{user}', [UserController::class, 'update'])->middleware('can:update,user');
+    Route::get('users/{user}/password', [UserController::class, 'update_password'])->middleware('can:updatePassword,user');
+    
 
-Route::get('users', [UserController::class, 'index']);
-Route::get('users/{user}', [UserController::class, 'show']);
-Route::put('users/{user}', [UserController::class, 'update']);
+    //Vcards
+    Route::get('vcards', [VcardController::class, 'index']);
+    Route::get('vcards/{vcard}', [VcardController::class, 'show']);
+    Route::post('vcards', [VcardController::class, 'store']);
+    Route::put('vcards/{vcard}', [VcardController::class, 'update']);
+    Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
+    Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
+    Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactiosOfVcard']);
+    Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
+    //Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
 
-//Vcards
+    //Transactions
 
-Route::get('vcards', [VcardController::class, 'index']);
-Route::get('vcards/{vcard}', [VcardController::class, 'show']);
-Route::post('vcards', [VcardController::class, 'store']);
-Route::put('vcards/{vcard}', [VcardController::class, 'update']);
-Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
-Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
-Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactiosOfVcard']);
-Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
-//Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
+    Route::get('transactions', [TransactionController::class, 'index']);
+    Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
+    Route::put('transactions/{transaction}', [TransactionController::class,'update']);
+    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
 
-//Transactions
+    //Categorias
 
-Route::get('transactions', [TransactionController::class, 'index']);
-Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
-Route::put('transactions/{transaction}', [TransactionController::class,'update']);
-Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
+    Route::get('categories', [DefaultCategoryController::class, 'index']);
+    Route::get('categories/{category}', [DefaultCategoryController::class, 'show']);
+    //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
+});
 
-//Categorias
 
-Route::get('categories', [DefaultCategoryController::class, 'index']);
-Route::get('categories/{category}', [DefaultCategoryController::class, 'show']);
-//Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
+
+
+
+
+
+
+
+
+
 

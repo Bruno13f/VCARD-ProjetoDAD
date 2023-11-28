@@ -23,4 +23,16 @@ class UserController extends Controller
         $user->update($request->validated());
         return new UserResource($user);
     }
+
+    public function show_me(Request $request)
+    {
+        return new UserResource($request->user());
+    }
+    
+    public function update_password (Request $request)
+    {
+        $user->password = bcrypt($request->validated()['password']);
+        $user->save();
+        return new UserResource($user);
+    }
 }
