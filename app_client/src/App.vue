@@ -54,12 +54,14 @@ const logout = async () => {
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <router-link class="dropdown-item"
-                            :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }" 
-                            :to="{ name: 'User', params: { id: userStore.userId } }">
-                <i class="bi bi-person-square"></i>
-                Profile
-                </router-link>
+                <a class="dropdown-item" href="#">
+                  <router-link class="nav-link"
+                              :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }" 
+                              :to="{ name: 'User', params: { id: userStore.userId } }">
+                  <i class="bi bi-person-square"></i>
+                  Profile
+                  </router-link>
+                </a>
               </li>
               <li>
                 <a class="dropdown-item" href="#">

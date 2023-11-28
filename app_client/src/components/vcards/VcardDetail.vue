@@ -1,5 +1,6 @@
 <script setup>
   import { ref, watch, computed } from 'vue'
+  import { useUserStore } from '@/stores/user.js'
 
   const props = defineProps({
     vcard: {
@@ -21,6 +22,8 @@
   })
 
   const emit = defineEmits(['save', 'cancel'])
+  const userStore = useUserStore() 
+  const flag = userStore.user.user_type == 'A' ? false : true
 
   const editingVcard = ref(props.vcard)
 
@@ -36,7 +39,7 @@
   }
 
   const cancel = () => {
-      emit('cancel', editingVcard.value)
+    emit('cancel', editingVcard.value)
   }
 
 </script>
@@ -133,7 +136,22 @@
       </div>
     </div>
 
-    <div class="d-flex flex-wrap justify-content-between" v-if="props.operationType == 'update'">
+    <div class="d-flex flex-wrap justify-content-start" v-if="props.operationType == 'update'">
+      <div class="mb-3 me-3">
+        <label
+          for="inputBalance"
+          class="form-label"
+        >Balance</label>
+        <input
+        type="text"
+        class="form-control"
+        id="inputBalance"
+        placeholder=""
+        required
+        v-model="editingVcard.balance"
+        :disabled=flag>
+      </div>
+
       <div class="mb-3">
         <label
           for="inputMaxDebit"
@@ -146,7 +164,7 @@
         placeholder=""
         required
         v-model="editingVcard.max_debit"
-      disabled>
+        :disabled=flag>
       </div>
     </div>
 
