@@ -12,9 +12,19 @@ const router = useRouter()
 const logout = async () => {
   if (await userStore.logout()) {
     toast.success('User has logged out of the application.')
+    clickMenuOption()
     router.push({name: 'home'})
   } else {
     toast.error('There was a problem logging out of the application!')
+  }
+}
+
+const clickMenuOption = () => {
+  const domReference = document.getElementById('buttonSidebarExpandId')
+  if (domReference) {
+    if (window.getComputedStyle(domReference).display !== "none") {
+      domReference.click()
+    }
   }
 }
 
@@ -43,7 +53,7 @@ const logout = async () => {
             </a>
           </li>
           <li class="nav-item" v-show="!userStore.user">
-            <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}">
+            <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}" @click="clickMenuOption">
               <i class="bi bi-house"></i>
               Login
             </router-link>
@@ -59,7 +69,7 @@ const logout = async () => {
                 <a class="dropdown-item" href="#">
                   <router-link class="nav-link"
                               :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }" 
-                              :to="{ name: 'User', params: { id: userStore.userId } }">
+                              :to="{ name: 'User', params: { id: userStore.userId } }" @click="clickMenuOption">
                   <i class="bi bi-person-square"></i>
                   Profile
                   </router-link>
@@ -67,7 +77,7 @@ const logout = async () => {
               </li>
               <li>
                 <a class="dropdown-item" href="#">
-                  <router-link class="nav-link" :class="{active: $route.name === 'ChangePassword'}" :to="{ name: 'ChangePassword'}">
+                  <router-link class="nav-link" :class="{active: $route.name === 'ChangePassword'}" :to="{ name: 'ChangePassword'}" @click="clickMenuOption">
                     <i class="bi bi-key"></i>
                     Change Password
                   </router-link>
@@ -92,17 +102,19 @@ const logout = async () => {
         <div class="position-sticky pt-0">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <router-link class="nav-link" :class="{active: $route.name === 'Dashboard'}" :to="{ name: 'Dashboard'}" v-if="userStore.user">
+              <router-link class="nav-link" :class="{active: $route.name === 'Dashboard'}" :to="{ name: 'Dashboard'}" v-if="userStore.user" @click="clickMenuOption">
                 <i class="bi bi-house"></i>
                   Dashboard
               </router-link>
             </li>
             <li class="nav-item d-flex justify-content-between align-items-center pe-3">
-              <router-link class="nav-link w-100 me-3" :class="{ active: $route.name === 'Vcards' }" :to="{ name: 'Vcards' }" v-show="userStore.user?.user_type == 'A'">
+              <router-link class="nav-link w-100 me-3" :class="{ active: $route.name === 'Vcards' }" :to="{ name: 'Vcards' }" v-show="userStore.user?.user_type == 'A'"
+              @click="clickMenuOption">
                 <i class="bi bi-list-check"></i>
                 Vcards
               </router-link>
-              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" v-show="userStore.user?.user_type == 'A'">
+              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" v-show="userStore.user?.user_type == 'A'"
+              @click="clickMenuOption">
                 <i class="bi bi-xs bi-plus-circle"></i>
               </router-link>
             </li>
@@ -120,7 +132,7 @@ const logout = async () => {
             </li>
             <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
               <a class="dropdown-item" href="#">
-                  <router-link class="nav-link" :class="{active: $route.name === 'Users'}" :to="{ name: 'Users'}">
+                  <router-link class="nav-link" :class="{active: $route.name === 'Users'}" :to="{ name: 'Users'}" @click="clickMenuOption">
                     <i class="bi bi-people"></i>
                     Users
                   </router-link>
@@ -136,21 +148,21 @@ const logout = async () => {
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" v-if="!userStore.user || userStore.user?.user_type =='V'">
             <span>My Vcard</span>
-              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard">
+              <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" @click="clickMenuOption">
                 <i class="bi bi-xs bi-plus-circle"></i>
               </router-link>
           </h6>
           <ul class="nav flex-column mb-2">
             <li class="nav-item" v-show="userStore.user?.user_type =='V'">
               <router-link class="nav-link" :class="{ active: $route.name == 'Vcard' && $route.params.phone_number == userStore.userId }" 
-                            :to="{ name: 'Vcard', params: { phone_number: userStore.userId } }" aria-label="Vcard Details">
+                            :to="{ name: 'Vcard', params: { phone_number: userStore.userId } }" aria-label="Vcard Details" @click="clickMenuOption">
                 <i class="bi bi-credit-card-2-front"></i>
                 Details
               </router-link>
             </li>
             <li class="nav-item" v-if="userStore.user">
               <a class="dropdown-item" href="#">
-                  <router-link class="nav-link" :class="{active: $route.name === 'Transactions'}" :to="{ name: 'Transactions'}">
+                  <router-link class="nav-link" :class="{active: $route.name === 'Transactions'}" :to="{ name: 'Transactions'}" @click="clickMenuOption">
                     <i class="bi bi-wallet"></i>
                     Transactions
                   </router-link>
@@ -169,7 +181,7 @@ const logout = async () => {
                 </a>
               </li>
               <li class="nav-item" v-show="!userStore.user">
-                <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}">
+                <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}" @click="clickMenuOption">
                   <i class="bi bi-house"></i>
                     Login
                 </router-link>
@@ -184,7 +196,7 @@ const logout = async () => {
                   <li>
                     <router-link class="dropdown-item"
                             :class="{ active: $route.name == 'User' && $route.params.id == userStore.userId }" 
-                            :to="{ name: 'User', params: { id: userStore.userId } }">
+                            :to="{ name: 'User', params: { id: userStore.userId } }" @click="clickMenuOption">
                       <i class="bi bi-person-square"></i>
                       Profile
                     </router-link>
