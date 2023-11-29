@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\TransactionController;
 use App\Http\Controllers\api\CategoryController;
+use App\Http\Controllers\api\AdminController;
 use App\Http\Controllers\api\VcardController;
 use App\Http\Controllers\api\DefaultCategoryController;
 use App\Http\Controllers\api\AuthController;
@@ -29,6 +30,11 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('users/me', [UserController::class, 'show_me']);
+
+    //Admins
+    Route::get('admins/{admin}', [AdminController::class,'show']);
+    Route::put('admins/{admin}', [AdminController::class,'update']);
+    Route::get('admins/{admin}/password', [AdminController::class,'update_password']);
 
     //Users
     Route::get('users', [UserController::class, 'index']);
