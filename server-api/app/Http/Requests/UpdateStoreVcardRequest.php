@@ -30,7 +30,7 @@ class UpdateStoreVcardRequest extends FormRequest
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
-            'password' => 'required|string|min:8|max:50',
+            'password' => 'required|string|min:3|max:50',
             'confirmation_code' => 'required|integer|digits:3'        
         ];
     }

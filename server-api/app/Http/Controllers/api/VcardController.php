@@ -17,7 +17,7 @@ class VcardController extends Controller
 {
     public function index()
     {
-        return VcardResource::collection(Vcard::all());
+        return VcardResource::collection(VCard::all());
     }
 
     public function show (Vcard $vcard){

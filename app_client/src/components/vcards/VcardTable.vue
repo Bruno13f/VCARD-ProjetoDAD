@@ -51,6 +51,7 @@
   const blockClick = (vcard) => {
     emit('block', vcard)
   }
+
 </script>
 
 <template>

@@ -176,7 +176,7 @@
         type="button"
         class="btn btn-success px-5 mx-2"
         @click="save"
-      >Edit</button>
+      >{{ props.operationType == 'update' ? 'Edit' : 'Create'}}</button>
       <button
         type="button"
         class="btn btn-dark px-5"
