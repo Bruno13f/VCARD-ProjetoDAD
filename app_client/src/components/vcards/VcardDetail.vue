@@ -23,7 +23,7 @@
 
   const emit = defineEmits(['save', 'cancel'])
   const userStore = useUserStore() 
-  const flag = userStore.user.user_type == 'A' ? false : true
+  const flag = userStore.user?.user_type == 'A' ? false : true
 
   const editingVcard = ref(props.vcard)
 
