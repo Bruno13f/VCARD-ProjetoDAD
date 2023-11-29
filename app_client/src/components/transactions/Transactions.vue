@@ -4,13 +4,24 @@
   import {useRouter} from 'vue-router'
   import TransactionTable from "./TransactionTable.vue"
   import { useToast } from "vue-toastification"
+  import { useUserStore } from '@/stores/user.js'
 
   const toast = useToast();
   const router = useRouter();
 
+  const userStore = useUserStore() 
+  const flag = userStore.user.user_type == 'A' ? false : true
+  
+
   const loadTransactions = async () => {
     try{
-      const response = await axios.get('transactions')
+      let apiUrl = 'transactions';
+
+      if (flag) {
+      apiUrl = `vcards/${userStore.user.id}/transactions`;
+    }
+
+      const response = await axios.get(apiUrl)
       transactions.value = response.data.data
     }catch(error){
       console.log(error)
