@@ -26,6 +26,11 @@ const clickMenuOption = () => {
       domReference.click()
     }
   }
+  const routeName = router.currentRoute.value.name;
+
+  if (routeName === 'Payments') {
+    router.push({ name: 'NewTransaction' });
+  }
 }
 
 
@@ -119,10 +124,12 @@ const clickMenuOption = () => {
               </router-link>
             </li>
             <li class="nav-item" v-if="userStore.user">
-              <a class="nav-link" href="#">
-                <i class="bi bi-bank"></i>
-                Payments
-              </a>
+              <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'Transaction'}" :to="{ name: 'NewTransaction'}" @click="() => clickMenuOption('Payments')">
+                    <i class="bi bi-wallet"></i>
+                    Payments
+                  </router-link>
+                </a>
             </li>
             <li class="nav-item" v-if="userStore.user">
               <a class="nav-link" href="#">

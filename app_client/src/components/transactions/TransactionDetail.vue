@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { useUserStore } from '@/stores/user.js'
 
 const props = defineProps({
   transaction: {
@@ -14,13 +15,15 @@ const props = defineProps({
     type: Array,
     required: true
   },
-    errors: {
-      type: Object,
-      required: false,
-    },
+  errors: {
+    type: Object,
+    required: false,
+  },
 })
 
 const emit = defineEmits(['save', 'cancel'])
+const userStore = useUserStore()
+const flag = userStore.user?.user_type == 'A' ? false : true
 
 const editingTransaction = ref({
   vcard: { phone_number: '' },
@@ -54,11 +57,12 @@ const cancel = () => {
     <h3 class="mt-5 mb-3"></h3>
     <hr>
 
-    <div class="mb-3" v-if="props.operationType == 'insert'">
+    <div class="mb-3" v-if="props.operationType === 'insert'">
       <label for="inputName" class="form-label">Vcard *</label>
-      <input type="text" class="form-control" id="inputName" placeholder="Vcard" required
-        v-model="editingTransaction.vcard.phone_number">
-        <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
+      <input type="text" class="form-control" id="inputName"
+        :placeholder="userStore.user?.user_type === 'A' ? '' : (userStore.user ? `${userStore.user.id}` : '')"
+        required v-model="editingTransaction.vcard.phone_number" :disabled="flag" />
+      <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
     </div>
 
     <div class="mb-3" v-if="props.operationType == 'update'">
@@ -73,7 +77,7 @@ const cancel = () => {
         <label for="inputValue" class="form-label">Value *</label>
         <input type="text" class="form-control" id="inputValue" placeholder="Value" required
           v-model="editingTransaction.value">
-          <field-error-message :errors="errors" fieldName="value"></field-error-message>
+        <field-error-message :errors="errors" fieldName="value"></field-error-message>
       </div>
 
       <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'update'">
@@ -92,16 +96,18 @@ const cancel = () => {
         <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
         <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference" required
           v-model="editingTransaction.payment_reference">
-          <field-error-message :errors="errors" fieldName="payment_reference"></field-error-message>
+        <field-error-message :errors="errors" fieldName="payment_reference"></field-error-message>
       </div>
     </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
       <label for="selectType" class="form-label">Type: *</label>
       <select class="form-select" id="selectType" v-model="editingTransaction.type">
-        <option value="D">Debit</option>
+        <option value="D" selected>Debit</option>
+        <option v-if="userStore.user?.user_type === 'A'" value="C">Credit</option>
       </select>
     </div>
+
 
     <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
       <label for="selectType" class="form-label">Type: *</label>

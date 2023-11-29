@@ -36,11 +36,6 @@
       console.log(error)
     }
   }
-
-  const addTransaction = () => {
-      router.push({ name: 'NewTransaction'})
-      console.log("Navigate to New Transaction")
-  }
   
   const editTransaction = (transaction) => {
       router.push({name: 'Transaction', params: { id: transaction.id }})
