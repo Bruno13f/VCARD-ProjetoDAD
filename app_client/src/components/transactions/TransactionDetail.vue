@@ -26,7 +26,11 @@ const userStore = useUserStore()
 const flag = userStore.user?.user_type == 'A' ? false : true
 
 const editingTransaction = ref({
-  vcard: { phone_number: '' },
+  vcard: {
+    phone_number: userStore.user?.user_type === 'A'
+      ? ''
+      : userStore.user?.id || ''
+  },
   value: '',
   payment_reference: props.transaction.payment_type,
   type: props.transaction.type,
@@ -42,6 +46,7 @@ watch(
 )
 
 const save = () => {
+  console.log(editingTransaction.value)
   emit('save', editingTransaction.value)
 }
 
@@ -60,14 +65,14 @@ const cancel = () => {
     <div class="mb-3" v-if="props.operationType === 'insert'">
       <label for="inputName" class="form-label">Vcard *</label>
       <input type="text" class="form-control" id="inputName"
-        :placeholder="userStore.user?.user_type === 'A' ? '' : (userStore.user ? `${userStore.user.id}` : '')"
-        required v-model="editingTransaction.vcard.phone_number" :disabled="flag" />
+        :placeholder="userStore.user?.user_type === 'A' ? '' : (userStore.user ? `${userStore.user.id}` : '')" required
+        v-model="editingTransaction.vcard.phone_number" :disabled="flag" />
       <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
     </div>
 
     <div class="mb-3" v-if="props.operationType == 'update'">
       <label for="inputName" class="form-label">Vcard *</label>
-      <input type="text" class="form-control" id="inputName" placeholder="Vcard" required
+      <input type="text" class="form-control" id="inputName" placeholder="Vcard"
         v-model="editingTransaction.vcard.phone_number" :disabled="true">
     </div>
 
@@ -88,7 +93,7 @@ const cancel = () => {
 
       <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
         <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
-        <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference" required
+        <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference"
           v-model="editingTransaction.payment_reference" :disabled="true">
       </div>
 
@@ -102,7 +107,7 @@ const cancel = () => {
 
     <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
       <label for="selectType" class="form-label">Type: *</label>
-      <select class="form-select" id="selectType" v-model="editingTransaction.type">
+      <select class="form-select" id="selectType" v-model="editingTransaction.type" required>
         <option value="D" selected>Debit</option>
         <option v-if="userStore.user?.user_type === 'A'" value="C">Credit</option>
       </select>
@@ -120,7 +125,7 @@ const cancel = () => {
 
     <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
       <label for="selectPaymentType" class="form-label">Payment Type: *</label>
-      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type">
+      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" required>
         <option :value="null"></option>
         <option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
@@ -147,7 +152,7 @@ const cancel = () => {
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="inputDescription" class="form-label">Description </label>
-      <input type="text" class="form-control" id="inputDescription" placeholder="Description" required
+      <input type="text" class="form-control" id="inputDescription" placeholder="Description"
         v-model="editingTransaction.description">
     </div>
 

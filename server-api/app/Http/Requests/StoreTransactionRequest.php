@@ -3,18 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Models\Vcard;
 
-
-class UpdateTransaction extends FormRequest
+class StoreTransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -25,7 +22,11 @@ class UpdateTransaction extends FormRequest
     public function rules(): array
     {
         return [
+            'vcard' =>'required','integer','digits:9','regex:/^9\d{8}$/',
+            'value' => 'required|numeric|regex:/^\d{0,9}(\.\d{1,2})?$/',
             'type' => 'required|in:C,D',
+            'payment_type' => 'required|in:VCARD,MBWAY,PAYPAL,IBAN,MB,VISA',
+            'payment_reference' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
         ];
     }

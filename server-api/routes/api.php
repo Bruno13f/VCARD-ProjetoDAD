@@ -59,6 +59,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
+    Route::post('transactions', [TransactionController::class, 'store']);
 
     //Categorias
 
@@ -68,6 +69,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::post('vcards', [VcardController::class, 'store']);
+
 
 
 

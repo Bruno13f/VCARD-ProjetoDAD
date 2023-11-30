@@ -6,6 +6,7 @@ use App\Models\Vcard;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
+use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateTransaction;
 use Illuminate\Http\Request;
@@ -14,15 +15,33 @@ use Illuminate\Http\Response;
 class TransactionController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         //pedido no enunciado para estar ordenado de acordo com a data mais recente primeiro
         $transactions = Transaction::orderBy('created_at', 'desc')->get();
 
         return TransactionResource::collection($transactions);
     }
 
-    public function show (Transaction $transaction){
+    public function show(Transaction $transaction)
+    {
         return new TransactionResource($transaction);
+    }
+
+    public function store(StoreTransactionRequest $request)
+    {
+        $validatedRequest = $request->validated();
+
+        $vcard = Vcard::findOrFail($validatedRequest['vcard']);
+
+        $validatedRequest['old_balance'] = $vcard->balance;
+
+        $validatedRequest['new_balance'] = $validatedRequest['type'] === 'C'
+            ? $vcard->balance + $validatedRequest['value']
+            : $vcard->balance - $validatedRequest['value'];
+        $newTransaction = Transaction::create($validatedRequest);
+
+        return new TransactionResource($newTransaction);
     }
 
     public function update(UpdateTransaction $request, Transaction $transaction)
@@ -31,10 +50,11 @@ class TransactionController extends Controller
         return new TransactionResource($transaction);
     }
 
-    public function destroy (Transaction $transaction){
-        
+    public function destroy(Transaction $transaction)
+    {
+
         // pode ser soft deleted se vcard soft deleted
-        if ($transaction->vcardOfTransaction->trashed()){
+        if ($transaction->vcardOfTransaction->trashed()) {
             $transaction->delete();
             return new TransactionResource($transaction);
         }
