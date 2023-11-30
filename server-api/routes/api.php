@@ -36,19 +36,19 @@ Route::middleware('auth:api')->group(function () {
     Route::put('admins/{admin}', [AdminController::class,'update']);
     Route::get('admins/{admin}/password', [AdminController::class,'update_password']);
 
-    //U sers
+    //Users
     Route::get('users', [UserController::class, 'index']);
     Route::get('users/{user}', [UserController::class, 'show'])->middleware('can:view,user');
     Route::put('users/{user}', [UserController::class, 'update'])->middleware('can:update,user');
     Route::get('users/{user}/password', [UserController::class, 'update_password'])->middleware('can:updatePassword,user');
     
-
     //Vcards
     Route::get('vcards', [VcardController::class, 'index']);
     Route::get('vcards/{vcard}', [VcardController::class, 'show']);
     Route::put('vcards/{vcard}', [VcardController::class, 'update']);
     Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
     Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
+    Route::patch('vcards/{vcard}/profile', [VcardController::class,'updateVcardProfile']);
     Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactiosOfVcard']);
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
     //Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
@@ -59,7 +59,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
-    Route::post('transactions', [TransactionController::class, 'store']);
 
     //Categorias
 
@@ -69,6 +68,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::post('vcards', [VcardController::class, 'store']);
+Route::post('transactions', [TransactionController::class, 'store']);
 
 
 

@@ -7,7 +7,7 @@ use App\Http\Resources\VcardResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\UpdateVcardRequest;
+use App\Http\Requests\UpdateProfileVcardRequest;
 use App\Http\Requests\UpdateStoreVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
 use App\Http\Requests\UpdateMaxDebitVcardRequest;
@@ -51,6 +51,12 @@ class VcardController extends Controller
     
     public function updateBlocked (UpdateBlockVcardRequest $request, Vcard $vcard){
         $vcard->blocked = $request->blocked;
+        $vcard->save();
+        return new VcardResource($vcard);
+    }
+    public function updateVcardProfile (UpdateProfileVcardRequest $request, Vcard $vcard){
+        $vcard->name = $request->name;
+        $vcard->email = $request->email;
         $vcard->save();
         return new VcardResource($vcard);
     }
