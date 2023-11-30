@@ -46,25 +46,33 @@ const loadUser = async (id) => {
 }
 
 const save = async () => {
-  errors.value = null
+  errors.value = null;
   try {
-    const response = await axios.put('admins/' + props.id, user.value)
-    user.value = response.data.data
-    originalValueStr = JSON.stringify(user.value)
-    toast.success('User #' + user.value.id + ' was updated successfully.')
-    if (user.value.id == userStore.userId) {
-      await userStore.loadUser()
-    }
-    router.back()
-  } catch (error) {
-    if (error.response.status == 422) {
-      errors.value = error.response.data.errors
-      toast.error('User #' + props.id + ' was not updated due to validation errors!')
+    let response;
+    if (user.value.user_type === 'A') {
+      response = await axios.put('admins/' + props.id, user.value);
     } else {
-      toast.error('User #' + props.id + ' was not updated due to unknown server error!')
+      response = await axios.patch('vcards/' + props.id + '/profile', user.value);
+    }
+
+    user.value = response.data.data;
+    originalValueStr = JSON.stringify(user.value);
+    toast.success('User #' + user.value.id + ' was updated successfully.');
+
+    if (user.value.id == userStore.userId) {
+      await userStore.loadUser();
+    }
+    router.back();
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      errors.value = error.response.data.errors;
+      toast.error('User #' + props.id + ' was not updated due to validation errors!');
+    } else {
+      toast.error('User #' + props.id + ' was not updated due to an unknown server error!');
     }
   }
-}
+};
+
 
 const cancel = () => {
   originalValueStr = JSON.stringify(user.value)
