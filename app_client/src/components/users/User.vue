@@ -1,13 +1,15 @@
 <script setup>
 import axios from 'axios'
-import { useToast } from "vue-toastification"
-import { ref, watch} from 'vue'
 import UserDetail from "./UserDetail.vue"
+import { useToast } from "vue-toastification"
+import { useUserStore } from '../../stores/user.js'
+import { ref, watch} from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
 const toast = useToast()
 const router = useRouter()
 const errors = ref([]) 
+const userStore = useUserStore()
 const confirmationLeaveDialog = ref(null)
 let originalValueStr = ''
 
@@ -46,10 +48,13 @@ const loadUser = async (id) => {
 const save = async () => {
   errors.value = null
   try {
-    const response = await axios.put('users/' + props.id, user.value)
+    const response = await axios.put('admins/' + props.id, user.value)
     user.value = response.data.data
     originalValueStr = JSON.stringify(user.value)
     toast.success('User #' + user.value.id + ' was updated successfully.')
+    if (user.value.id == userStore.userId) {
+      await userStore.loadUser()
+    }
     router.back()
   } catch (error) {
     if (error.response.status == 422) {

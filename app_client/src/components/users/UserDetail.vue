@@ -77,6 +77,7 @@ const cancel = () => {
                 false-value="V"
                 v-model="editingUser.user_type"
                 id="inputType"
+                disabled
                />
               <label class="form-check-label" for="inputType">
                 User is Administrator

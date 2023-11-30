@@ -32,11 +32,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('users/me', [UserController::class, 'show_me']);
 
     //Admins
-    Route::get('admins/{admin}', [AdminController::class,'show']);
     Route::put('admins/{admin}', [AdminController::class,'update']);
     Route::get('admins/{admin}/password', [AdminController::class,'update_password']);
 
-    //Users
+    //U sers
     Route::get('users', [UserController::class, 'index']);
     Route::get('users/{user}', [UserController::class, 'show'])->middleware('can:view,user');
     Route::put('users/{user}', [UserController::class, 'update'])->middleware('can:update,user');
