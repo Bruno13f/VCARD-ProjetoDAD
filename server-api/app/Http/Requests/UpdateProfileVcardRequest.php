@@ -11,7 +11,7 @@ class UpdateProfileVcardRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,9 +22,9 @@ class UpdateProfileVcardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:255',
+            'name' => 'required|string|min:3|max:200',
             'email' => 'required|email',
-            'photo_url' => 'nullable|file|image',
+            'photo_url' => 'nullable|file|img'
         ];
     }
 }

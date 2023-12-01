@@ -21,6 +21,7 @@ class UpdateVcardRequest extends FormRequest
      */
     public function rules(): array
     {
+        
         return [
             // A implementar
             'phone_number' => "required|integer|digits:9|regex:/^9\d{8}$/|exists:Vcards,phone_number",

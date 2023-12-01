@@ -48,12 +48,8 @@ const loadUser = async (id) => {
 const save = async () => {
   errors.value = null;
   try {
-    let response;
-    if (user.value.user_type === 'A') {
-      response = await axios.put('admins/' + props.id, user.value);
-    } else {
-      response = await axios.patch('vcards/' + props.id + '/profile', user.value);
-    }
+    const response = user.value.user_type === 'A' ? await axios.put('admins/' + props.id, user.value) 
+    : response = await axios.patch('vcards/' + props.id + '/profile', user.value);
 
     user.value = response.data.data;
     originalValueStr = JSON.stringify(user.value);
