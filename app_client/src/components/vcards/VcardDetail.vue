@@ -11,10 +11,6 @@
       type: String,
       default: 'insert'  // insert / update
     },
-    users: {
-      type: Array,
-      required: true
-    },
     errors: {
       type: Object,
       required: false,

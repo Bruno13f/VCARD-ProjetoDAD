@@ -26,7 +26,6 @@ const newVcard = () => {
 }
 
   const vcard = ref(newVcard())  
-  const users = ref([]) 
   const errors = ref(null)
   const confirmationLeaveDialog = ref(null)
   let originalValueStr = ''
@@ -115,13 +114,6 @@ watch(
 )
 
 onMounted(async () => {
-  users.value = []
-  try {
-    const response = await axios.get('users')
-    users.value = response.data.data
-  } catch (error) {
-    console.log(error)
-  }
 })
 
 let nextCallBack = null
@@ -155,7 +147,6 @@ onBeforeRouteLeave((to, from, next) => {
   <VcardDetail 
     :operationType="operation" 
     :vcard="vcard" 
-    :users="users" 
     :errors="errors" 
     @save="save" 
     @cancel="cancel">
