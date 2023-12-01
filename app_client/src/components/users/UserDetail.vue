@@ -87,10 +87,18 @@ const cancel = () => {
         </div>
       </div>
       <div class="w-25">
-        <div class="mb-3">
+        <div class="d-flex flex-column">
           <label class="form-label">Photo</label>
           <div class="form-control text-center">
             <img :src="photoFullUrl" class="w-100" />
+          </div>
+          <div class="mt-3 d-flex justify-content-between flex-wrap" v-if="user.user_type == 'V'">
+            <label for="inputPhoto" class="btn btn-secondary flex-grow-1 mx-1">Carregar</label>
+            <button class="btn btn-secondary flex-grow-1 mx-1" @click.prevent="resetToOriginalPhoto" v-if="editingUser.photo_url">Repor</button>
+            <button class="btn btn-danger flex-grow-1 mx-1" @click.prevent="cleanPhoto" v-show="editingUser.photo_url || editingImageAsBase64">Apagar</button>
+          </div>
+          <div>
+            <field-error-message :errors="errors" fieldName="base64ImagePhoto"></field-error-message>
           </div>
         </div>
       </div>
