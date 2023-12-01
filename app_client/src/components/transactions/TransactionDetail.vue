@@ -22,15 +22,13 @@ const userStore = useUserStore()
 const flag = userStore.user?.user_type == 'A' ? false : true
 
 const editingTransaction = ref({
-  vcard: {
-    phone_number: userStore.user?.user_type === 'A'
+  vcard: userStore.user?.user_type === 'A'
       ? ''
       : userStore.user?.id || ''
-  },
+  ,
   value: '',
   payment_reference: props.transaction.payment_type,
   type: props.transaction.type,
-  status: null,
   description: '',
 });
 
