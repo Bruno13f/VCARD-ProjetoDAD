@@ -125,7 +125,7 @@ const clickMenuOption = () => {
             </li>
             <li class="nav-item" v-if="userStore.user">
               <a class="dropdown-item" href="#">
-                  <router-link class="nav-link" :class="{active: $route.name === 'Transaction'}" :to="{ name: 'NewTransaction'}" @click="() => clickMenuOption('Payments')">
+                  <router-link class="nav-link" :class="{active: $route.name === 'NewTransaction'}" :to="{ name: 'NewTransaction'}" @click="() => clickMenuOption('Payments')">
                     <i class="bi bi-wallet"></i>
                     Payments
                   </router-link>
