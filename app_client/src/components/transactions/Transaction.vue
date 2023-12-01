@@ -23,7 +23,6 @@ const newTransaction = () => {
 }
 
 const transaction = ref(newTransaction())
-const users = ref([])
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
 let originalValueStr = ''
@@ -114,13 +113,6 @@ watch(
 )
 
 onMounted(async () => {
-  users.value = []
-  try {
-    const response = await axios.get('users')
-    users.value = response.data.data
-  } catch (error) {
-    console.log(error)
-  }
 })
 
 
@@ -154,8 +146,7 @@ onBeforeRouteLeave((to, from, next) => {
   </confirmation-dialog>  
   <TransactionDetail 
   :operationType="operation" 
-  :transaction="transaction" 
-  :users="users" 
+  :transaction="transaction"
   :errors="errors" 
   @save="save"
   @cancel="cancel">

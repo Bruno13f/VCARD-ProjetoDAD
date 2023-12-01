@@ -27,15 +27,6 @@
       console.log(error)
     }
   }
-
-  const loadUsers = async () => {
-    try{
-      const response = await axios.get('users')
-      users.value = response.data.data
-    }catch(error){
-      console.log(error)
-    }
-  }
   
   const editTransaction = (transaction) => {
       router.push({name: 'Transaction', params: { id: transaction.id }})
@@ -63,7 +54,6 @@
 
 
   const transactions = ref([])
-  const users = ref([])
   const filterByType = ref(null)
   const filterByPaymentType = ref(null)
 
@@ -88,7 +78,6 @@
   })
 
   onMounted(() => {
-    loadUsers()
     loadTransactions()
   })
 

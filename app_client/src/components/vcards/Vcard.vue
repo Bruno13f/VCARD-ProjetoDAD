@@ -153,11 +153,11 @@ onBeforeRouteLeave((to, from, next) => {
   >
   </confirmation-dialog>  
   <VcardDetail 
-  :operationType="operation" 
-  :vcard="vcard" 
-  :users="users" 
-  :errors="errors" 
-  @save="save" 
-  @cancel="cancel">
+    :operationType="operation" 
+    :vcard="vcard" 
+    :users="users" 
+    :errors="errors" 
+    @save="save" 
+    @cancel="cancel">
   </VcardDetail>
 </template>
