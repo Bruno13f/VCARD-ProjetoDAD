@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfileVcardRequest extends FormRequest
+class UpdateVcardProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class UpdateProfileVcardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:200',
+            'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
-            'photo_url' => 'nullable|file|img'
+            // implementar foto
+            //'photo_url' => 'nullable|file|image'
         ];
     }
 }

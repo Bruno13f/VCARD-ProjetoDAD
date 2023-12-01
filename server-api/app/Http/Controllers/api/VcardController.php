@@ -7,8 +7,8 @@ use App\Http\Resources\VcardResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\UpdateProfileVcardRequest;
 use App\Http\Requests\StoreVcardRequest;
+use App\Http\Requests\UpdateVcardProfileRequest;
 use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
 use App\Http\Requests\UpdateMaxDebitVcardRequest;
@@ -56,12 +56,15 @@ class VcardController extends Controller
         $vcard->save();
         return new VcardResource($vcard);
     }
-    public function updateVcardProfile (UpdateProfileVcardRequest $request, Vcard $vcard){
+
+    public function updateProfile (UpdateVcardProfileRequest $request, Vcard $vcard){
         $vcard->name = $request->name;
         $vcard->email = $request->email;
+        $vcard->photo_url = $request->photo_url;
         $vcard->save();
         return new VcardResource($vcard);
     }
+
 
     public function destroy (Vcard $vcard){
         if ($vcard->balance != 0)

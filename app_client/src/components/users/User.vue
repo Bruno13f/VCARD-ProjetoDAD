@@ -47,18 +47,37 @@ const loadUser = async (id) => {
 
 const save = async () => {
   errors.value = null;
+
   try {
-    const response = user.value.user_type === 'A' ? await axios.put('admins/' + props.id, user.value) 
-    : response = await axios.patch('vcards/' + props.id + '/profile', user.value);
 
-    user.value = response.data.data;
-    originalValueStr = JSON.stringify(user.value);
-    toast.success('User #' + user.value.id + ' was updated successfully.');
+    if (user.value.user_type == 'A'){
 
-    if (user.value.id == userStore.userId) {
-      await userStore.loadUser();
+      const response = await axios.put('admins/' + props.id, user.value) 
+
+      user.value = response.data.data;
+      originalValueStr = JSON.stringify(user.value);
+      toast.success('User #' + user.value.id + ' was updated successfully.');
+
+      if (user.value.id == userStore.userId) {
+        await userStore.loadUser();
+      }
+      router.back();
+    }else{
+
+      const response = await axios.patch('vcards/' + props.id + '/profile', user.value)
+
+      console.log(response.data.data);
+
+      user.value = response.data.data;
+      originalValueStr = JSON.stringify(user.value);
+      toast.success('User #' + user.value.phone_number + ' was updated successfully.');
+
+      if (user.value.phone_number == userStore.userId) {
+        await userStore.loadUser();
+      }
+      router.back();
     }
-    router.back();
+    
   } catch (error) {
     if (error.response && error.response.status === 422) {
       errors.value = error.response.data.errors;
@@ -68,7 +87,6 @@ const save = async () => {
     }
   }
 };
-
 
 const cancel = () => {
   originalValueStr = JSON.stringify(user.value)

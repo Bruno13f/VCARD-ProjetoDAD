@@ -48,7 +48,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('vcards/{vcard}', [VcardController::class, 'update']);
     Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
     Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
-    Route::patch('vcards/{vcard}/profile', [VcardController::class,'updateVcardProfile']);
+    Route::patch('vcards/{vcard}/profile', [VCardController::class, 'updateProfile']);
     Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactiosOfVcard']);
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
     //Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
