@@ -36,12 +36,25 @@ class TransactionController extends Controller
 
         $validatedRequest['old_balance'] = $vcard->balance;
 
-        $validatedRequest['new_balance'] = $validatedRequest['type'] === 'C'
-            ? $vcard->balance + $validatedRequest['value']
-            : $vcard->balance - $validatedRequest['value'];
-
         $validatedRequest['date'] = now()->toDateString();
         $validatedRequest['datetime'] = now();
+
+        if ($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'D') {
+            $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
+            
+            $vcardReceiver->balance += $validatedRequest['value'];
+            $validatedRequest['new_balance'] = $vcard->balance -= $validatedRequest['value'];
+            $vcard->save();
+            $vcardReceiver->save();
+
+        }else if($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'C'){
+            $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
+
+            $vcardReceiver->balance -= $validatedRequest['value'];
+            $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
+            $vcard->save();
+            $vcardReceiver->save();
+        }
 
         $newTransaction = $vcard->transactions()->create($validatedRequest);
 
