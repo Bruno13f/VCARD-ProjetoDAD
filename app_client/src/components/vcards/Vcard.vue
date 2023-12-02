@@ -55,7 +55,6 @@ const save = async () => {
       const response = await axios.post('vcards', vcard.value)
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)
-      console.log(response)
       toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
       router.back();
     } catch (error) {

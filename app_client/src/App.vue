@@ -53,9 +53,10 @@ const clickMenuOption = () => {
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
           <li class="nav-item" v-show="!userStore.user">
-            <a class="nav-link" href="#"><i class="bi bi-person-check-fill"></i>
+            <router-link class="nav-link" :class="{active: $route.name === 'NewVcard'}" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" @click="clickMenuOption">
+              <i class="bi bi-person-check-fill"></i>
               Register
-            </a>
+            </router-link>
           </li>
           <li class="nav-item" v-show="!userStore.user">
             <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}" @click="clickMenuOption">
@@ -153,7 +154,7 @@ const clickMenuOption = () => {
             </li>
           </ul>
 
-          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" v-if="!userStore.user || userStore.user?.user_type =='V'">
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" v-if="userStore.user?.user_type =='V'">
             <span>My Vcard</span>
               <router-link class="link-secondary" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" @click="clickMenuOption">
                 <i class="bi bi-xs bi-plus-circle"></i>
