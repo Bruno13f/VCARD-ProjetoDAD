@@ -27,8 +27,6 @@ const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
 let originalValueStr = ''
 
-
-
 const loadTransaction = async (id) => {
   originalValueStr = ''
   errors.value = null

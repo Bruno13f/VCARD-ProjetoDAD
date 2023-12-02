@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', () => {
 
  const user = ref(null)
 
- const userType = computed(() => user.value?.user_type) 
+ const userType = computed(() => user.value?.user_type ?? 'Anonymous') 
  
  const userName = computed(() => user.value?.name ?? 'Anonymous')
 
@@ -64,22 +64,21 @@ export const useUserStore = defineStore('user', () => {
             throw 'Anonymous users cannot change the password!'
         }
 
-        if (userType == 'A'){
+        if (userType.value == 'A'){
             try {
                 await axios.patch(`admins/${user.value.id}/password`, credentials)
                 return true
             } catch (error) {
                 throw error
             }
+        }else{
+            try {
+                await axios.patch(`vcards/${user.value.id}/password`, credentials)
+                return true
+            } catch (error) {
+                throw error
+            }
         }
-
-        try {
-            await axios.patch(`vcards/${user.value.id}/password`, credentials)
-            return true
-        } catch (error) {
-            throw error
-        }
-        
     }
 
     async function restoreToken () {

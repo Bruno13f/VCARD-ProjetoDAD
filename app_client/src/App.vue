@@ -210,10 +210,10 @@ const clickMenuOption = () => {
                     </router-link>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="bi bi-key-fill"></i>
-                      Change password
-                    </a>
+                    <router-link class="dropdown-item" :class="{active: $route.name === 'ChangePassword'}" :to="{ name: 'ChangePassword'}" @click="clickMenuOption">
+                    <i class="bi bi-key"></i>
+                    Change Password
+                  </router-link>
                   </li>
                   <li>
                     <hr class="dropdown-divider">

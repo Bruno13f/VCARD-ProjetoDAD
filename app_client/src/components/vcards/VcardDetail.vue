@@ -160,7 +160,7 @@
         placeholder=""
         required
         v-model="editingVcard.max_debit"
-        :disabled=flag>
+        disabled>
       </div>
     </div>
 

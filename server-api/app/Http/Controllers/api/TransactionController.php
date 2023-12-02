@@ -8,7 +8,7 @@ use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateTransaction;
+use App\Http\Requests\UpdateTransactionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -44,7 +44,7 @@ class TransactionController extends Controller
         return new TransactionResource($newTransaction);
     }
 
-    public function update(UpdateTransaction $request, Transaction $transaction)
+    public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {
         $transaction->update($request->validated());
         return new TransactionResource($transaction);

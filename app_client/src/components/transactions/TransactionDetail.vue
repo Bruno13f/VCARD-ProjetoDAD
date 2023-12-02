@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user.js'
 
 const props = defineProps({
@@ -19,7 +19,9 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel'])
 const userStore = useUserStore()
-const flag = userStore.user?.user_type == 'A' ? false : true
+const flagType = props.transaction == 'D' ? true : false
+const flagOperation = props.operationType == 'insert' ? false : true
+const flagUser = userStore.user.user_type == 'A' && !flagOperation ? false : true
 
 const editingTransaction = ref({
   vcard: userStore.user?.user_type === 'A'
@@ -32,6 +34,8 @@ const editingTransaction = ref({
   description: '',
 });
 
+//const editingTransaction = ref (props.transaction)
+
 watch(
   () => props.transaction,
   (newTransaction) => {
@@ -40,12 +44,10 @@ watch(
 )
 
 const save = () => {
-  console.log(editingTransaction.value)
   emit('save', editingTransaction.value)
 }
 
 const cancel = () => {
-  //console.log(operationType.value)
   emit('cancel', editingTransaction.value)
 }
 
@@ -56,70 +58,44 @@ const cancel = () => {
     <h3 class="mt-5 mb-3"></h3>
     <hr>
 
-    <div class="mb-3" v-if="props.operationType === 'insert'">
+    <div class="mb-3">
       <label for="inputName" class="form-label">Vcard *</label>
-      <input type="text" class="form-control" id="inputName"
-        :placeholder="userStore.user?.user_type === 'A' ? '' : (userStore.user ? `${userStore.user.id}` : '')" required
-        v-model="editingTransaction.vcard.phone_number" :disabled="flag" />
+      <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" 
+      required v-model="editingTransaction.vcard" :disabled=flagUser >
       <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
-    </div>
-
-    <div class="mb-3" v-if="props.operationType == 'update'">
-      <label for="inputName" class="form-label">Vcard *</label>
-      <input type="text" class="form-control" id="inputName" placeholder="Vcard"
-        v-model="editingTransaction.vcard.phone_number" :disabled="true">
     </div>
 
     <div class="d-flex flex-wrap justify-content-between">
 
-      <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'insert'">
+      <div class="mb-3 me-3 flex-grow-1">
         <label for="inputValue" class="form-label">Value *</label>
         <input type="text" class="form-control" id="inputValue" placeholder="Value" required
-          v-model="editingTransaction.value">
-        <field-error-message :errors="errors" fieldName="value"></field-error-message>
+          v-model="editingTransaction.value" :disabled=flagOperation>
+          <field-error-message :errors="errors" fieldName="value"></field-error-message>
       </div>
 
-      <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'update'">
-        <label for="inputValue" class="form-label">Value *</label>
-        <input type="text" class="form-control" id="inputValue" placeholder="Value" required
-          v-model="editingTransaction.value" :disabled="true">
-      </div>
-
-      <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
-        <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
-        <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference"
-          v-model="editingTransaction.payment_reference" :disabled="true">
-      </div>
-
-      <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
+      <div class="mb-3 ms-xs-3 flex-grow-1">
         <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
         <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference" required
-          v-model="editingTransaction.payment_reference">
+          v-model="editingTransaction.payment_reference" :disabled=flagOperation>
         <field-error-message :errors="errors" fieldName="payment_reference"></field-error-message>
       </div>
     </div>
 
-    <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
+    <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectType" class="form-label">Type: *</label>
-      <select class="form-select" id="selectType" v-model="editingTransaction.type" required>
-        <option value="D" selected>Debit</option>
-        <option v-if="userStore.user?.user_type === 'A'" value="C">Credit</option>
+      <select class="form-select" id="selectType" v-model="editingTransaction.type" required :disabled=flagOperation>
+        <option v-show=flagOperation value="null"></option>
+        <option value="D" :selected=flagType>Debit</option>
+        <option v-show=flagOperation value="C" :selected=flagType>Credit</option>
+        <field-error-message :errors="errors" fieldName="type"></field-error-message>
       </select>
+      
     </div>
 
-
-    <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
-      <label for="selectType" class="form-label">Type: *</label>
-      <select class="form-select" id="selectType" v-model="editingTransaction.type">
-        <option :value="null"></option>
-        <option value="C">Credit</option>
-        <option value="D">Debit</option>
-      </select>
-    </div>
-
-    <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'insert'">
+    <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectPaymentType" class="form-label">Payment Type: *</label>
-      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" required>
+      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled=flagOperation required>
         <option :value="null"></option>
         <option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
@@ -131,23 +107,11 @@ const cancel = () => {
       <field-error-message :errors="errors" fieldName="payment_type"></field-error-message>
     </div>
 
-    <div class="mb-3 ms-xs-3 flex-grow-1" v-if="props.operationType == 'update'">
-      <label for="selectPaymentType" class="form-label">Payment Type: *</label>
-      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled="true">
-        <option :value="null"></option>
-        <option value="VCARD">VCARD</option>
-        <option value="MBWAY">MBWAY</option>
-        <option value="PAYPAL">PAYPAL</option>
-        <option value="IBAN">IBAN</option>
-        <option value="MB">MB</option>
-        <option value="VISA">VISA</option>
-      </select>
-    </div>
-
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="inputDescription" class="form-label">Description </label>
       <input type="text" class="form-control" id="inputDescription" placeholder="Description"
         v-model="editingTransaction.description">
+      <field-error-message :errors="errors" fieldName="description"></field-error-message>
     </div>
 
     <div class="d-flex flex-wrap justify-content-between">

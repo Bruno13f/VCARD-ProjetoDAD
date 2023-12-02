@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Vcard;
 
 
-class UpdateTransaction extends FormRequest
+class UpdateTransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class UpdateTransaction extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|in:C,D',
+            // falta categoria
             'description' => 'nullable|string|max:255',
         ];
     }
