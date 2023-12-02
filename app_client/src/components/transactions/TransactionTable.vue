@@ -1,5 +1,4 @@
 <script setup>
-import { useUserStore } from '@/stores/user.js'
 
   const props = defineProps({
     transactions: {

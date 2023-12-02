@@ -133,6 +133,8 @@
     :transactions="filteredTransactions"
     :showId="true"
     :showDates="true"
+    :showEditButton="!flag"
+    :showDeleteButton="!flag"
     @edit="editTransaction"
     @delete="deleteTransaction"
   ></transaction-table>
