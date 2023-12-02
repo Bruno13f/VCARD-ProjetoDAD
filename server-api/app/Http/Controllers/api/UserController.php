@@ -29,10 +29,10 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
     
-    public function update_password (Request $request , User $user)
+    /*public function update_password (Request $request , User $user)
     {
         $user->password = bcrypt($request->validated()['password']);
         $user->save();
         return new UserResource($user);
-    }
+    }*/
 }

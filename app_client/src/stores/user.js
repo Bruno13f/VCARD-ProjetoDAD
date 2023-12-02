@@ -7,6 +7,8 @@ export const useUserStore = defineStore('user', () => {
  const serverBaseUrl = inject('serverBaseUrl')
 
  const user = ref(null)
+
+ const userType = computed(() => user.value?.user_type) 
  
  const userName = computed(() => user.value?.name ?? 'Anonymous')
 
@@ -56,6 +58,30 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function changePassword(credentials) {
+
+        if (userId.value < 0) {
+            throw 'Anonymous users cannot change the password!'
+        }
+
+        if (userType == 'A'){
+            try {
+                await axios.patch(`admins/${user.value.id}/password`, credentials)
+                return true
+            } catch (error) {
+                throw error
+            }
+        }
+
+        try {
+            await axios.patch(`vcards/${user.value.id}/password`, credentials)
+            return true
+        } catch (error) {
+            throw error
+        }
+        
+    }
+
     async function restoreToken () {
         let storedToken = sessionStorage.getItem('token')
         if (storedToken) {
@@ -67,5 +93,5 @@ export const useUserStore = defineStore('user', () => {
         return false
     }
 
-return { user, userId, userName, userPhotoUrl, loadUser, clearUser, login, logout, restoreToken}
+    return { user, userId, userName, userPhotoUrl, loadUser, clearUser, login, logout, restoreToken, changePassword}
 })

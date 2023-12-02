@@ -11,6 +11,7 @@ use App\Http\Requests\StoreVcardRequest;
 use App\Http\Requests\UpdateVcardProfileRequest;
 use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
+use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateMaxDebitVcardRequest;
 use Illuminate\Http\Response;
 use App\Services\Base64Services;
@@ -115,5 +116,12 @@ class VcardController extends Controller
 
     public function getTransactiosOfVcard(Vcard $vcard){
         return TransactionResource::collection($vcard->transactions);
+    }
+
+    public function update_password (UpdateUserPasswordRequest $request, Vcard $vcard)
+    {
+        $vcard->password = bcrypt($request->validated()['password']);
+        $vcard->save();
+        return new VcardResource($vcard);
     }
 }
