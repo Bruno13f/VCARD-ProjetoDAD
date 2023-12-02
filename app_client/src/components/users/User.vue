@@ -81,6 +81,7 @@ const save = async () => {
   } catch (error) {
     if (error.response && error.response.status === 422) {
       errors.value = error.response.data.errors;
+      console.log(errors)
       toast.error('User #' + props.id + ' was not updated due to validation errors!');
     } else {
       toast.error('User #' + props.id + ' was not updated due to an unknown server error!');
@@ -134,6 +135,7 @@ onBeforeRouteLeave((to, from, next) => {
   </confirmation-dialog>  
   <user-detail 
   :user="user" 
+  :errors="errors"
   @save="save" 
   @cancel="cancel">
   </user-detail>

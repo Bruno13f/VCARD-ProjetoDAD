@@ -111,6 +111,7 @@ const cleanPhoto = () => {
             required
             v-model="editingUser.name"
           />
+          <field-error-message :errors="errors" fieldName="name"></field-error-message>
         </div>
 
         <div class="mb-3 px-1">
@@ -123,6 +124,7 @@ const cleanPhoto = () => {
             required
             v-model="editingUser.email"
           />
+          <field-error-message :errors="errors" fieldName="email"></field-error-message>
         </div>
         <div class="d-flex ms-1 mt-4 flex-wrap justify-content-between">
           <div class="mb-3 me-3 flex-grow-1">
