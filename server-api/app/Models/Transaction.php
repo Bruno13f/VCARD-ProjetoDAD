@@ -11,7 +11,7 @@ class Transaction extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['type','description'];
+    protected $fillable = ['type','vcard','date','datetime','value','old_balance','new_balance','payment_reference','description'];
 
     public function getTypeOfTransactionAttribute(){
         return $this->type == 'C' ? 'Credit Transaction' : 'Debit Transaction';

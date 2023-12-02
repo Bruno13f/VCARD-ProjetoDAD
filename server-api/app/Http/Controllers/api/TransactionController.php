@@ -39,10 +39,15 @@ class TransactionController extends Controller
         $validatedRequest['new_balance'] = $validatedRequest['type'] === 'C'
             ? $vcard->balance + $validatedRequest['value']
             : $vcard->balance - $validatedRequest['value'];
-        $newTransaction = Transaction::create($validatedRequest);
+
+        $validatedRequest['date'] = now()->toDateString();
+        $validatedRequest['datetime'] = now();
+
+        $newTransaction = $vcard->transactions()->create($validatedRequest);
 
         return new TransactionResource($newTransaction);
     }
+
 
     public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {

@@ -114,9 +114,13 @@ class VcardController extends Controller
         
     }
 
-    public function getTransactiosOfVcard(Vcard $vcard){
-        return TransactionResource::collection($vcard->transactions);
-    }
+    public function getTransactionsOfVcard(Vcard $vcard)
+{
+    $transactions = $vcard->transactions()->orderBy('date', 'desc')->get();
+
+    return TransactionResource::collection($transactions);
+}
+
 
     public function update_password (UpdateUserPasswordRequest $request, Vcard $vcard)
     {
