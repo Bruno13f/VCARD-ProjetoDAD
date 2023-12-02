@@ -150,7 +150,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
   if (to.name == 'NewTransaction') {
-    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+    if (userStore.user) {
       next()
       return
     }

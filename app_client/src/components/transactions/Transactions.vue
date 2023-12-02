@@ -18,8 +18,8 @@
       let apiUrl = 'transactions';
 
       if (flag) {
-      apiUrl = `vcards/${userStore.user.id}/transactions`;
-    }
+        apiUrl = `vcards/${userStore.user.id}/transactions`;
+      }
 
       const response = await axios.get(apiUrl)
       transactions.value = response.data.data

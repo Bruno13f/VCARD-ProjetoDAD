@@ -41,6 +41,9 @@ class StoreTransactionRequest extends FormRequest
             case 'VISA':
                 $rulesRef = '^4\d{15}$';
                 break;
+            default:
+                $rulesRef = '';
+                break;
         }
 
         return [
@@ -48,7 +51,7 @@ class StoreTransactionRequest extends FormRequest
             'value' => 'required|numeric|regex:/^\d{0,9}(\.\d{1,2})?$/',
             'type' => 'required|in:C,D',
             'payment_type' => 'required|in:VCARD,MBWAY,PAYPAL,IBAN,MB,VISA',
-            'payment_reference' => "required|$rules",
+            'payment_reference' => "required|$rulesRef",
             'description' => 'nullable|string|max:255',
         ];
     }

@@ -23,18 +23,20 @@ const flagType = props.transaction == 'D' ? true : false
 const flagOperation = props.operationType == 'insert' ? false : true
 const flagUser = userStore.user.user_type == 'A' && !flagOperation ? false : true
 
-const editingTransaction = ref({
-  vcard: userStore.user?.user_type === 'A'
-      ? ''
-      : userStore.user?.id || ''
-  ,
-  value: '',
-  payment_reference: props.transaction.payment_type,
-  type: props.transaction.type,
-  description: '',
-});
+// const editingTransaction = ref({
+//   vcard: userStore.user?.user_type === 'A'
+//       ? ''
+//       : userStore.user?.id || ''
+//   ,
+//   value: '',
+//   payment_reference: props.transaction.payment_type,
+//   type: props.transaction.type,
+//   description: '',
+// });
 
-//const editingTransaction = ref (props.transaction)
+props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user.id ;
+
+const editingTransaction = ref (props.transaction)
 
 watch(
   () => props.transaction,
@@ -44,6 +46,7 @@ watch(
 )
 
 const save = () => {
+  console.log(props.transaction)
   emit('save', editingTransaction.value)
 }
 
