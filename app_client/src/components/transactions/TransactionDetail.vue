@@ -90,7 +90,7 @@ const cancel = () => {
       <select class="form-select" id="selectType" v-model="editingTransaction.type" required :disabled=flagOperation>
         <option v-show=flagOperation value="null"></option>
         <option value="D" :selected=flagType>Debit</option>
-        <option v-show=!flagOperation value="C" :selected=flagType>Credit</option>
+        <option v-show=flagOperation value="C" :selected=flagType>Credit</option>
         <field-error-message :errors="errors" fieldName="type"></field-error-message>
       </select>
       

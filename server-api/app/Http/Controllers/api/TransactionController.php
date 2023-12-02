@@ -33,6 +33,15 @@ class TransactionController extends Controller
         $validatedRequest = $request->validated();
 
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
+        $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
+
+        if ($validatedRequest['type'] == 'D') {
+            if(($vcard->balance - $validatedRequest['value']) < 0){
+                return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction - Vcard exists"], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+        }else if (($vcardReceiver->balance - $validatedRequest['value']) < 0){
+            return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction - Vcard exists"], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $validatedRequest['old_balance'] = $vcard->balance;
 
@@ -40,16 +49,12 @@ class TransactionController extends Controller
         $validatedRequest['datetime'] = now();
 
         if ($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'D') {
-            $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
-            
             $vcardReceiver->balance += $validatedRequest['value'];
             $validatedRequest['new_balance'] = $vcard->balance -= $validatedRequest['value'];
             $vcard->save();
             $vcardReceiver->save();
 
         }else if($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'C'){
-            $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
-
             $vcardReceiver->balance -= $validatedRequest['value'];
             $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
             $vcard->save();
