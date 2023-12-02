@@ -9,11 +9,23 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  inserting: {
+    type: Boolean,
+    default: false,
+  },
+  errors: {
+    type: Object,
+    required: false,
+  },
 });
 
 const emit = defineEmits(["save", "cancel"]);
 
 const editingUser = ref(props.user)
+
+const inputPhotoFile = ref(null)
+const editingImageAsBase64 = ref(null)
+const deletePhotoOnTheServer = ref(false)
 
 watch(
   () => props.user,
@@ -24,17 +36,62 @@ watch(
 )
 
 const photoFullUrl = computed(() => {
-  return editingUser.value.photo_url
-    ? serverBaseUrl + "/storage/fotos/" + editingUser.value.photo_url
-    : avatarNoneUrl
+  if (deletePhotoOnTheServer.value) {
+    return avatarNoneUrl
+  }
+  if (editingImageAsBase64.value) {
+    return editingImageAsBase64.value
+  } else {
+    return editingUser.value.photo_url
+      ? serverBaseUrl + "/storage/fotos/" + editingUser.value.photo_url
+      : avatarNoneUrl
+  }
 })
 
 const save = () => {
+  const userToSave = editingUser.value
+  userToSave.deletePhotoOnServer = deletePhotoOnTheServer.value
+  userToSave.base64ImagePhoto = editingImageAsBase64.value
   emit("save", editingUser.value);
 }
 
 const cancel = () => {
   emit("cancel", editingUser.value);
+}
+
+const changePhotoFile = () => {
+  try {
+    const file = inputPhotoFile.value.files[0]
+    if (!file) {
+      editingImageAsBase64.value = null
+    } else {
+      const reader = new FileReader()
+      reader.addEventListener(
+          'load',
+          () => {
+            // convert image file to base64 string
+            editingImageAsBase64.value = reader.result
+            deletePhotoOnTheServer.value = false
+          },
+          false,
+      )
+      if (file) {
+        reader.readAsDataURL(file)
+      }
+    }
+  } catch (error) {
+    editingImageAsBase64.value = null
+  }
+}
+
+const resetToOriginalPhoto = () => {
+  deletePhotoOnTheServer.value = false
+  inputPhotoFile.value.value = ''
+  changePhotoFile()
+}
+
+const cleanPhoto = () => {
+  deletePhotoOnTheServer.value = true
 }
 </script>
 
@@ -108,6 +165,7 @@ const cancel = () => {
       <button type="button" class="btn btn-dark px-5" @click="cancel">Cancel</button>
     </div>
   </form>
+  <input type="file" style="visibility:hidden;" id="inputPhoto" ref="inputPhotoFile" @change="changePhotoFile" />
 </template>
 
 <style scoped>

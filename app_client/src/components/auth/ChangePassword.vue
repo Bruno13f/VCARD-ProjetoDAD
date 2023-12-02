@@ -10,7 +10,6 @@
   const emit = defineEmits(['changedPassword'])
 
   const changePassword = () => {
-      // FALTA FAZER O LOGIN
       emit('changedPassword')
   }
 </script>
@@ -71,7 +70,7 @@
     <div class="mb-3 d-flex justify-content-center">
       <button
         type="button"
-        class="btn btn-primary px-5"
+        class="btn btn-success px-5"
         @click="changePassword"
       >Change Password</button>
     </div>
