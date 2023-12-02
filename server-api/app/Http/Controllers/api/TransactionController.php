@@ -37,10 +37,10 @@ class TransactionController extends Controller
 
         if ($validatedRequest['type'] == 'D') {
             if(($vcard->balance - $validatedRequest['value']) < 0){
-                return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction - Vcard exists"], Response::HTTP_UNPROCESSABLE_ENTITY);
+                return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
         }else if (($vcardReceiver->balance - $validatedRequest['value']) < 0){
-            return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction - Vcard exists"], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $validatedRequest['old_balance'] = $vcard->balance;
