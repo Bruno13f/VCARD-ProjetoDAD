@@ -11,6 +11,8 @@ class Transaction extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public $timestamps = true;
+
     protected $fillable = ['type','vcard','date','datetime','value','old_balance','new_balance','payment_reference','description'];
 
     public function getTypeOfTransactionAttribute(){

@@ -16,10 +16,6 @@ class CategoryController extends Controller
         return CategoryResource::collection(Category::all());
     }
 
-    public function getCategoryOfVcard(Vcard $vcard){
-        return $vcard->categories;
-    }
-
     public function getCategoryOfTransaction(Transaction $transaction){
         return $transaction->categories;
     }

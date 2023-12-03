@@ -9,6 +9,8 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['id', 'vcard', 'type', 'name', 'custom_options', 'custom_data', 'deleted_at'];
+
     public function getTypeOfCategoryAttribute(){    
         return $this->type == 'C' ? 'Credit' : 'Debit';
     }

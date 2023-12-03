@@ -11,9 +11,11 @@ class Vcard extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public $timestamps = true;
+
     protected $primaryKey = 'phone_number';
     protected $fillable = ['phone_number', 'name', 'password', 'confirmation_code', 'email', 'photo_url', 'blocked', 'balance', 'max_debit', 'custom_options', 'custom_data'];
-    
+
     public function transactions(){
         return $this->hasMany(Transaction::class, 'vcard', 'phone_number');
     }

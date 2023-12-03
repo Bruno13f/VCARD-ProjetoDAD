@@ -17,7 +17,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'vcard' => new VcardResource($this->vcardOfCategory),
-            'type' => $this->getTypeOfCategoryAttribute(),
+            'type' => $this->type,
             'name' => $this->name
             // custom options e custom data ??
         ];

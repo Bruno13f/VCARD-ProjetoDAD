@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\Vcard;
 use App\Http\Resources\VcardResource;
 use App\Http\Resources\TransactionResource;
+use App\Http\Resources\CategoryResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreVcardRequest;
@@ -115,11 +116,15 @@ class VcardController extends Controller
     }
 
     public function getTransactionsOfVcard(Vcard $vcard)
-{
-    $transactions = $vcard->transactions()->orderBy('date', 'desc')->get();
+    {
+        $transactions = $vcard->transactions()->orderBy('date', 'desc')->get();
 
-    return TransactionResource::collection($transactions);
-}
+        return TransactionResource::collection($transactions);
+    }
+
+    public function getCategoryOfVcard(Vcard $vcard){
+        return CategoryResource::collection($vcard->categories);
+    }
 
 
     public function update_password (UpdateUserPasswordRequest $request, Vcard $vcard)

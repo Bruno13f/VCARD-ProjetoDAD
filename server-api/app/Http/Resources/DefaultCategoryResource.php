@@ -16,7 +16,7 @@ class DefaultCategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->getTypeOfCategoryAttribute(),
+            'type' => $this->type,
             'name' => $this->name
             // custom options e custom data
         ];

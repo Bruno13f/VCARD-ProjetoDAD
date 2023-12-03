@@ -133,10 +133,10 @@ const clickMenuOption = () => {
                 </a>
             </li>
             <li class="nav-item" v-if="userStore.user">
-              <a class="nav-link" href="#">
+              <router-link class="nav-link" :class="{active: $route.name === 'Categories'}" :to="{ name: 'Categories'}" @click="() => clickMenuOption('Categories')">
                 <i class="bi bi-bookmarks"></i>
                 Categories
-              </a>
+              </router-link>
             </li>
             <li class="nav-item" v-show="userStore.user?.user_type == 'A'">
               <a class="dropdown-item" href="#">

@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group(function () {
     
     //Vcards
     Route::get('vcards', [VcardController::class, 'index']);
+    Route::post('vcards', [VcardController::class, 'store']);
     Route::get('vcards/{vcard}', [VcardController::class, 'show']);
     Route::put('vcards/{vcard}', [VcardController::class, 'update']);
     Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
@@ -51,24 +52,26 @@ Route::middleware('auth:api')->group(function () {
     Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactionsOfVcard']);
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password']);
-    //Route::get('vcards/{vcard}/categories', [CategoryController::class, 'getCategoryOfVcard']);
+    Route::get('vcards/{vcard}/categories', [VcardController::class, 'getCategoryOfVcard']);
 
     //Transactions
 
     Route::get('transactions', [TransactionController::class, 'index']);
+    Route::post('transactions', [TransactionController::class, 'store']);
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
 
     //Categorias
 
-    Route::get('categories', [DefaultCategoryController::class, 'index']);
-    Route::get('categories/{category}', [DefaultCategoryController::class, 'show']);
     //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 });
 
-Route::post('vcards', [VcardController::class, 'store']);
-Route::post('transactions', [TransactionController::class, 'store']);
+Route::get('defaultCategories', [DefaultCategoryController::class, 'index']);
+Route::get('defaultCategories/{category}', [DefaultCategoryController::class, 'show']);
+
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('categories/{category}', [CategoryController::class, 'show']);
 
 
 
