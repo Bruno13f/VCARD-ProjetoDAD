@@ -83,12 +83,14 @@ class TransactionController extends Controller
         }
 
         $newTransaction = $vcard->transactions()->create($validatedRequest);
-        $createdTransaction['pair_transaction'] = $newTransaction->id;
-        $newTransaction['pair_transaction'] = $createdTransaction->id;
 
-        $createdTransaction->save();
-        $newTransaction->save();
-
+        if($validatedRequest['payment_type'] == 'VCARD'){
+            $createdTransaction['pair_transaction'] = $newTransaction->id;
+            $newTransaction['pair_transaction'] = $createdTransaction->id;
+            $createdTransaction->save();
+            $newTransaction->save();
+        }
+        
         return new TransactionResource($newTransaction);
     }
 

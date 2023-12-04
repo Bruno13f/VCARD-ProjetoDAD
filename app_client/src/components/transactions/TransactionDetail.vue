@@ -34,9 +34,9 @@ const flagUser = userStore.user.user_type == 'A' && !flagOperation ? false : tru
 //   description: '',
 // });
 
-props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user.id ;
+props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user.id;
 
-const editingTransaction = ref (props.transaction)
+const editingTransaction = ref(props.transaction)
 
 watch(
   () => props.transaction,
@@ -60,11 +60,22 @@ const cancel = () => {
     <h3 class="mt-5 mb-3"></h3>
     <hr>
 
-    <div class="mb-3">
-      <label for="inputName" class="form-label">Vcard *</label>
-      <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" 
-      required v-model="editingTransaction.vcard" :disabled=flagUser >
-      <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
+    <div class="mb-3" v-if="flagOperation">
+      <div class="mb-3">
+        <label for="inputName" class="form-label">Vcard *</label>
+        <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
+          v-model="editingTransaction.vcard.phone_number" :disabled=flagUser>
+        <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
+      </div>
+    </div>
+
+    <div class="mb-3" v-if="!flagOperation">
+      <div class="mb-3">
+        <label for="inputName" class="form-label">Vcard *</label>
+        <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
+          v-model="editingTransaction.vcard" :disabled=flagUser>
+        <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
+      </div>
     </div>
 
     <div class="d-flex flex-wrap justify-content-between">
@@ -73,7 +84,7 @@ const cancel = () => {
         <label for="inputValue" class="form-label">Value *</label>
         <input type="text" class="form-control" id="inputValue" placeholder="Value" required
           v-model="editingTransaction.value" :disabled=flagOperation>
-          <field-error-message :errors="errors" fieldName="value"></field-error-message>
+        <field-error-message :errors="errors" fieldName="value"></field-error-message>
       </div>
 
       <div class="mb-3 ms-xs-3 flex-grow-1">
@@ -92,12 +103,13 @@ const cancel = () => {
         <option v-show=flagOperation value="C" :selected=flagType>Credit</option>
         <field-error-message :errors="errors" fieldName="type"></field-error-message>
       </select>
-      
+
     </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectPaymentType" class="form-label">Payment Type: *</label>
-      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled=flagOperation required>
+      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled=flagOperation
+        required>
         <option :value="null"></option>
         <option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
