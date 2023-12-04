@@ -37,6 +37,8 @@ class TransactionController extends Controller
         if ($validatedRequest['payment_type'] == 'VCARD') {
             $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
             $validatedRequest['pair_vcard'] = $vcardReceiver->phone_number;
+
+            $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
         }
 
 
@@ -81,10 +83,33 @@ class TransactionController extends Controller
         }
 
         $newTransaction = $vcard->transactions()->create($validatedRequest);
+        $createdTransaction['pair_transaction'] = $newTransaction->id;
+        $newTransaction['pair_transaction'] = $createdTransaction->id;
+
+        $createdTransaction->save();
+        $newTransaction->save();
 
         return new TransactionResource($newTransaction);
     }
 
+    private function createAdditionalTransaction(Vcard $vcardReceiver, array $validatedRequest)
+    {
+        $additionalTransaction = new Transaction([
+            'vcard' => $validatedRequest['payment_reference'],
+            'value' => $validatedRequest['value'],
+            'type' => $validatedRequest['type'] == 'C' ? 'D' : 'C',
+            'payment_reference' => $validatedRequest['vcard'],
+            'old_balance' => $vcardReceiver->balance,
+            'date' => now()->toDateString(),
+            'datetime' => now(),
+            'new_balance' => $validatedRequest['type'] == 'C' ? $vcardReceiver->balance - $validatedRequest['value'] : $vcardReceiver->balance + $validatedRequest['value'],
+            'pair_vcard' => $validatedRequest['vcard'],
+            'payment_type' =>$validatedRequest['payment_type'],
+        ]);
+        $additionalTransaction->save();
+
+        return $additionalTransaction;
+    }
 
     public function update(UpdateTransactionRequest $request, Transaction $transaction)
     {

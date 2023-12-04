@@ -46,7 +46,6 @@ watch(
 )
 
 const save = () => {
-  console.log(props.transaction)
   emit('save', editingTransaction.value)
 }
 
