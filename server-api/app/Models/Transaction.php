@@ -13,7 +13,7 @@ class Transaction extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['type','vcard','date','datetime','value','old_balance','new_balance','payment_reference','description'];
+    protected $fillable = ['type','vcard','date','datetime','value','old_balance','new_balance','payment_reference','pair_vcard','pair_transaction','description'];
 
     public function getTypeOfTransactionAttribute(){
         return $this->type == 'C' ? 'Credit Transaction' : 'Debit Transaction';

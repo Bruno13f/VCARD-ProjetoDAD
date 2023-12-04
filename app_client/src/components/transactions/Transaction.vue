@@ -10,6 +10,7 @@ const router = useRouter()
 
 const newTransaction = () => {
   return {
+    id:null,
     vcard: '',
     date: '',
     datetime: '',
@@ -19,6 +20,13 @@ const newTransaction = () => {
     new_balance: '',
     payment_type: '',
     payment_reference: '',
+    pair_vcard:null,
+    pair_transaction:null,
+    category_id:null,
+    description:null,
+    created_at: null,
+    updated_at: null,
+    deleted_at: null,
   }
 }
 
