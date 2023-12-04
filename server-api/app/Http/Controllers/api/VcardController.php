@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\Vcard;
+use App\Models\DefaultCategory;
+use App\Models\Category;
 use App\Http\Resources\VcardResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\CategoryResource;
@@ -47,8 +49,23 @@ class VcardController extends Controller
 
         $newVcard = Vcard::create($validatedRequest); 
 
+        //associar categorias ao vcard 
+
         $newVcard->phone_number=$validatedRequest['phone_number'];
         // ate dar fix - resource aparece com number a 0
+
+        $defaultCategories = DefaultCategory::all();
+
+        foreach ($defaultCategories as $defaultCategory) {
+            // criar entrada na tabela category
+            $category = new Category([
+                'vcard' => $newVcard->phone_number,
+                'type' => $defaultCategory->type,
+                'name' => $defaultCategory->name
+            ]);
+            $category->save();
+        }
+        
         return new VcardResource($newVcard);
     }
 

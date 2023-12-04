@@ -152,6 +152,7 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'home' })
     return
   }
+//=============================================VERIFICAR COM STOR=======================================================================================
   if (to.name == 'Transactions') {
     if (userStore.user) {
       next()
@@ -175,6 +176,31 @@ router.beforeEach(async (to, from, next) => {
     return
   }
   if (to.name == 'NewTransaction') {
+    if (userStore.user) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'Categories') {
+    if (userStore.user) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'NewCategory') {
+    if (userStore.user) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'Category') {
+
     if (userStore.user) {
       next()
       return

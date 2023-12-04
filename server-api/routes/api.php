@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('vcards', [VcardController::class, 'store']);
 Route::middleware('auth:api')->group(function () {
     
     Route::post('logout', [AuthController::class, 'logout']);
@@ -43,7 +44,6 @@ Route::middleware('auth:api')->group(function () {
     
     //Vcards
     Route::get('vcards', [VcardController::class, 'index']);
-    Route::post('vcards', [VcardController::class, 'store']);
     Route::get('vcards/{vcard}', [VcardController::class, 'show']);
     Route::put('vcards/{vcard}', [VcardController::class, 'update']);
     Route::patch('vcards/{vcard}/maxDebit', [VcardController::class, 'updateMaxDebit']);
@@ -64,20 +64,21 @@ Route::middleware('auth:api')->group(function () {
 
     //Categorias
 
+    Route::get('defaultCategories', [DefaultCategoryController::class, 'index']);
+    Route::get('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'show']);
+    Route::post('defaultCategories', [DefaultCategoryController::class, 'store']);
+    Route::put('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'update']);
+    Route::delete('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'delete']);
+
+    Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories/{category}', [CategoryController::class, 'show']);
+    Route::post('categories', [CategoryController::class, 'store']);
+    Route::put('categories/{category}', [CategoryController::class, 'update']);
+    Route::delete('categories/{category}', [CategoryController::class, 'delete']);
+
     //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 });
 
-Route::get('defaultCategories', [DefaultCategoryController::class, 'index']);
-Route::get('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'show']);
-Route::post('defaultCategories', [DefaultCategoryController::class, 'store']);
-Route::put('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'update']);
-Route::delete('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'delete']);
-
-Route::get('categories', [CategoryController::class, 'index']);
-Route::get('categories/{category}', [CategoryController::class, 'show']);
-Route::post('categories', [CategoryController::class, 'store']);
-Route::put('categories/{category}', [CategoryController::class, 'update']);
-Route::delete('categories/{category}', [CategoryController::class, 'delete']);
 
 
 
