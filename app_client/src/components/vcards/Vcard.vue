@@ -123,15 +123,15 @@ const leaveConfirmed = () => {
 }
 
 onBeforeRouteLeave((to, from, next) => {
-  nextCallBack = null;
-  let newValueStr = JSON.stringify(vcard.value);
+  nextCallBack = null
+  let newValueStr = JSON.stringify(vcard.value)
   if (originalValueStr !== newValueStr) {
-    nextCallBack = next;
-    confirmationLeaveDialog.value.show();
+    nextCallBack = next
+    confirmationLeaveDialog.value.show()
   } else {
-    next();
+    next()
   }
-});
+})
 </script>
 
 

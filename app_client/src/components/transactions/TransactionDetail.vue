@@ -101,9 +101,8 @@ const cancel = () => {
         <option v-show=flagOperation value="null"></option>
         <option value="D" :selected=flagType>Debit</option>
         <option v-show=flagOperation value="C" :selected=flagType>Credit</option>
-        <field-error-message :errors="errors" fieldName="type"></field-error-message>
       </select>
-
+<field-error-message :errors="errors" fieldName="type"></field-error-message>
     </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1">

@@ -53,6 +53,7 @@ const editClick = (user) => {
         <th class="align-middle">Name</th>
         <th v-if="showEmail" class="align-middle">Email</th>
         <th v-if="showTypeOfUser" class="align-middle">Type of User</th>
+        <th v-if="showEditButton"></th>
       </tr>
     </thead>
     <tbody>

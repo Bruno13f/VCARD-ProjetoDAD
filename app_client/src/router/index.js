@@ -10,6 +10,7 @@ import Vcard from '../components/vcards/vcard.vue'
 import Transactions from '../components/transactions/transactions.vue'
 import Transaction from '../components/transactions/transaction.vue'
 import Categories from '../components/categories/categories.vue'
+import Category from '../components/categories/category.vue'
 import { useUserStore } from "../stores/user.js"
 import axios from 'axios'
 //import Transactions from "../components/transactions/Transactions.vue"
@@ -93,12 +94,17 @@ const router = createRouter({
       name: 'Categories',
       component: Categories
     },
-    /*{
+    {
       path: '/categories/:id',
-      name: 'Transaction',
+      name: 'Category',
       component: Category,
       props: route => ({ id: parseInt(route.params.id) })
-    },*/
+    },
+    {
+      path: '/categories/new',
+      name: 'NewCategory',
+      component: Category
+    },
   ]
 })
 

@@ -3,17 +3,22 @@
 import axios from 'axios'
 import { ref, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user.js'
+import {useRouter} from 'vue-router'
 import CategoryTable from "./CategoryTable.vue"
+import { useToast } from "vue-toastification"
+  
 
+const toast = useToast()
 const categories = ref([])
 const userStore = useUserStore()
+const router = useRouter()
+
+const flag = userStore.user.user_type == 'V' ? true : false
 
 const loadCategories = async () => {
     try{
-        const response1 = await axios.get(`vcards/${userStore.user.id}/categories`)
-        // const response2 = await axios.get("defaultCategories")
-        // const response = response1.data.data.concat(response2.data.data);
-        categories.value = response1.data.data
+        const response = flag ? await axios.get(`vcards/${userStore.user.id}/categories`) : await axios.get("defaultCategories")
+        categories.value = response.data.data
         console.log(categories)
         
     }catch(error){
@@ -21,7 +26,36 @@ const loadCategories = async () => {
     }
 }
 
-// falta edit, delete e filter
+const addVcard = () => {
+      router.push({ name: 'NewCategory'})
+      console.log("Navigate to New Category")
+  }
+
+const editCategory = async (category) => {
+  router.push({name: 'Category', params: { id: category.id }})
+}
+
+const deleteCategory = async (category) => {
+  try{
+      const response = flag ? await axios.delete('categories/' + category.id) : await axios.delete('defaultCategories/' + category.id)
+      let deletedCategory = response.data.data
+      let idx = categories.value.findIndex((t) => t.id === deletedCategory.id)
+      if (idx >= 0) {
+        categories.value.splice(idx, 1)
+      }
+      toast.success('Category #' + response.data.data.id + ' was deleted successfully.')
+    }catch(error){
+      if (error.response.status == 422){
+      toast.error("Can't delete Category - Balance different than 0")
+      }else {
+        toast.error("Category wasn't deleted due to unknown server error!")
+      }
+    }
+}
+
+const totalCategories = computed (()=>{
+  return categories.value.length
+})
 
 onMounted(() => {
     loadCategories()
@@ -35,28 +69,25 @@ onMounted(() => {
         <h3 class="mt-4">Categories</h3>
       </div>
       <div class="mx-2 total-filtro">
-        <h5 class="mt-4">Total: {{ }}</h5>
+        <h5 class="mt-4">Total: {{totalCategories}}</h5>
       </div>
     </div>
-    <hr>
-    <div class="mb-3 d-flex justify-content-between flex-wrap">
-      <div class="mx-2 mt-2 filter-div">
-        <label
-          for="selectType"
-          class="form-label"
-        >Filter by Type:</label>
-        <select
-          class="form-select"
-          id="selectType"
-        >
-          <option :value="null"></option>
-          <option value="U">User</option>
-          <option value="D">Default</option>
-        </select>
+    <div class="mb-3 d-flex justify-content-end flex-wrap">
+        <div class="mx-2 mt-2">
+          <button
+            type="button"
+            class="btn btn-success px-4 btn-addprj"
+            @click="addVcard"
+          ><i class="bi bi-xs bi-plus-circle"></i>&nbsp; Add Category</button>
+        </div>
       </div>
-    </div>
+    <hr> 
     <category-table
     :categories="categories"
+    :showVcardNumber="flag"
+    :showOwner="flag"
+    @edit="editCategory"
+    @delete="deleteCategory"
   ></category-table>
   </template>
   
