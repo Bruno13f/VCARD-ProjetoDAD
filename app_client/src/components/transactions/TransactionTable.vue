@@ -93,9 +93,10 @@
         <td>{{ transaction.vcard.phone_number}}</td>
         <td v-if="showDateTime">{{ transaction.datetime }}</td>
         <td v-if="showType">{{ transaction.type == 'C' ? 'Credit' : 'Debit'}}</td>
-        <td v-if="showValue">{{ transaction.value }}</td>
-        <td v-if="showOldBalance">{{ transaction.old_balance }}</td>
-        <td v-if="showNewBalance">{{ transaction.new_balance }}</td>
+        <td v-if="showValue" :class="transaction.type == 'C' ? 'text-success' : 'text-danger'">
+          {{ transaction.type == 'C' ? '+ ' + transaction.value : '- ' + transaction.value }}</td>
+        <td v-if="showOldBalance">{{ transaction.old_balance + ' €'}}</td>
+        <td v-if="showNewBalance">{{ transaction.new_balance + ' €'}}</td>
         <td v-if="showPaymentType">{{ transaction.payment_type }}</td>
         <td v-if="showPaymentReference">{{ transaction.payment_reference }}</td>
         <td v-if="showDescription">{{ transaction.description }}</td>
