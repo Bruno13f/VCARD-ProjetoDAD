@@ -33,7 +33,11 @@ class TransactionController extends Controller
         $validatedRequest = $request->validated();
 
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
-        $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
+
+        if($validatedRequest['payment_type'] == 'VCARD') {
+            $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
+            $targetRequest = $validatedRequest;
+        }
 
         if (($validatedRequest['vcard'] == $validatedRequest['payment_reference']) && $validatedRequest['payment_type'] == 'VCARD') {
             return response()->json(['error' => "You cant transfer money to yourself"], Response::HTTP_UNPROCESSABLE_ENTITY);
