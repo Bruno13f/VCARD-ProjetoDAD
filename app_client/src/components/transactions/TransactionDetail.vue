@@ -38,6 +38,19 @@ props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user
 
 const editingTransaction = ref(props.transaction)
 
+const categories = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await fetch(`http://server-api.test/api/vcards/${userStore.user.id}/categories`);
+    const data = await response.json();
+    categories.value = data.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+});
+
+
 watch(
   () => props.transaction,
   (newTransaction) => {
@@ -102,8 +115,17 @@ const cancel = () => {
         <option value="D" :selected=flagType>Debit</option>
         <option v-show=flagOperation value="C" :selected=flagType>Credit</option>
       </select>
-<field-error-message :errors="errors" fieldName="type"></field-error-message>
+      <field-error-message :errors="errors" fieldName="type"></field-error-message>
     </div>
+
+    <div class="mb-3 ms-xs-3 flex-grow-1">
+    <label for="selectCategory" class="form-label">Category: </label>
+    <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id">
+      <option :value="null"></option>
+      <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+    </select>
+    <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
+  </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectPaymentType" class="form-label">Payment Type: *</label>
