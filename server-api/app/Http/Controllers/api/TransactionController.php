@@ -35,6 +35,10 @@ class TransactionController extends Controller
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
         $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
 
+        if($validatedRequest['value'] > $vcard->max_debit) {
+            return response()->json(['error' => "The value of the transfer is greater that the vcard max_debit"], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         if ($validatedRequest['type'] == 'D') {
             if(($vcard->balance - $validatedRequest['value']) < 0){
                 return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
