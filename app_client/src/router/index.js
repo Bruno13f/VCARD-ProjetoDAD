@@ -11,6 +11,7 @@ import Transactions from '../components/transactions/transactions.vue'
 import Transaction from '../components/transactions/transaction.vue'
 import Categories from '../components/categories/categories.vue'
 import { useUserStore } from "../stores/user.js"
+import axios from 'axios'
 //import Transactions from "../components/transactions/Transactions.vue"
 
 const router = createRouter({
@@ -154,7 +155,13 @@ router.beforeEach(async (to, from, next) => {
     return
   }
   if (to.name == 'Transaction') {
-    if ((userStore.user.user_type == 'A')) {
+    const transactionId = parseInt(to.params.id);
+
+    const response = await axios.get(`http://server-api.test/api/transactions/${transactionId}`);
+    const transactionDetails = response.data;
+    const vcardOfTransaction = transactionDetails.data.vcard.phone_number;
+
+    if ((userStore.user.user_type == 'A') || (userStore.user.id ==vcardOfTransaction)) {
       next()
       return
     }
