@@ -35,19 +35,19 @@ class TransactionController extends Controller
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
         $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
 
-        if(($validatedRequest['vcard'] == $validatedRequest['payment_reference']) && $validatedRequest['payment_type'] == 'VCARD'){
+        if (($validatedRequest['vcard'] == $validatedRequest['payment_reference']) && $validatedRequest['payment_type'] == 'VCARD') {
             return response()->json(['error' => "You cant transfer money to yourself"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if($validatedRequest['value'] > $vcard->max_debit) {
+        if ($validatedRequest['value'] > $vcard->max_debit) {
             return response()->json(['error' => "The value of the transfer is greater that the vcard max_debit"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         if ($validatedRequest['type'] == 'D') {
-            if(($vcard->balance - $validatedRequest['value']) < 0){
+            if (($vcard->balance - $validatedRequest['value']) < 0) {
                 return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
-        }else if (($vcardReceiver->balance - $validatedRequest['value']) < 0){
+        } else if (($vcardReceiver->balance - $validatedRequest['value']) < 0) {
             return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -62,11 +62,17 @@ class TransactionController extends Controller
             $vcard->save();
             $vcardReceiver->save();
 
-        }else if($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'C'){
+        } else if ($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'C') {
             $vcardReceiver->balance -= $validatedRequest['value'];
             $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
             $vcard->save();
             $vcardReceiver->save();
+        } else if ($validatedRequest['type'] == 'D' && $validatedRequest['payment_type'] != 'VCARD') {
+            $validatedRequest['new_balance'] = $vcard->balance -= $validatedRequest['value'];
+            $vcard->save();
+        } else if ($validatedRequest['type'] == 'C' && $validatedRequest['payment_type'] != 'VCARD') {
+            $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
+            $vcard->save();
         }
 
         $newTransaction = $vcard->transactions()->create($validatedRequest);
