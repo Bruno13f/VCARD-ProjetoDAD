@@ -67,6 +67,7 @@ const save = async () => {
     }
   } else {
     try {
+      vcard.value.max_debit = parseInt(vcard.value.max_debit)
       const response = await axios.put('vcards/' + props.phone_number, vcard.value)
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)

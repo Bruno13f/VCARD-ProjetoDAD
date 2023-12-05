@@ -139,13 +139,13 @@
           class="form-label"
         >Balance</label>
         <input
-        type="text"
+        type="number"
         class="form-control"
         id="inputBalance"
-        placeholder=""
+        placeholder="Balance"
         required
         v-model="editingVcard.balance"
-        :disabled=flag>
+        disabled>
       </div>
 
       <div class="mb-3">
@@ -154,13 +154,13 @@
           class="form-label"
         >Max Debit</label>
         <input
-        type="text"
+        type="number"
         class="form-control"
         id="inputMaxDebit"
-        placeholder=""
+        placeholder="Max Debit"
         required
         v-model="editingVcard.max_debit"
-        disabled>
+        :disabled=flag>
       </div>
     </div>
 
