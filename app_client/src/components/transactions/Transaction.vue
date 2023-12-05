@@ -31,7 +31,6 @@ const newTransaction = () => {
     deleted_at: null,
   }
 }
-
 const categories = ref([])
 const transaction = ref(newTransaction())
 const errors = ref(null)
@@ -122,6 +121,8 @@ watch(
 )
 
 onMounted(async () => {
+  await loadTransaction(props.id);
+  console.log(transaction.value.vcard.phone_number);
   // post - user user.id / admin nada
   // put - user transaction.id / admin transaction.id
 
@@ -129,7 +130,7 @@ onMounted(async () => {
     return
 
   categories.value=[]
-  const id = operation.value == 'update' ? transaction.value.vcard : userStore.user.id  
+  const id = operation.value == 'update' ? transaction.value.vcard.phone_number : userStore.user.id  
   try {
     const response = await axios.get(`vcards/${id}/categories`)
     categories.value = response.data.data
