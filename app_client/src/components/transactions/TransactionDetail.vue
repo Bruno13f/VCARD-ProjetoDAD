@@ -105,7 +105,7 @@ const cancel = () => {
       <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled=flagOperation
         required>
         <option :value="null"></option>
-        <option value="VCARD">VCARD</option>
+        <option v-if="userStore.user.user_type == 'V'" option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
         <option value="PAYPAL">PAYPAL</option>
         <option value="IBAN">IBAN</option>
