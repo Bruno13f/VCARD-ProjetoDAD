@@ -24,4 +24,11 @@ class AdminController extends Controller
         $admin->save();
         return new AdminResource($admin);
     }
+
+    public function destroy (Admin $admin){
+
+        $admin->forceDelete();
+
+        return new AdminResource($admin);
+    }
 }

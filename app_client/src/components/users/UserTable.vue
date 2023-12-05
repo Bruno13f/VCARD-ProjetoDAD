@@ -29,9 +29,13 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  showDeleteButton: {
+    type: Boolean,
+    default: true,
+  },
 });
 
-const emit = defineEmits(["edit"]);
+const emit = defineEmits(["edit" , "delete"]);
 
 const photoFullUrl = (user) => {
   return user.photo_url
@@ -42,6 +46,11 @@ const photoFullUrl = (user) => {
 const editClick = (user) => {
   emit("edit", user);
 };
+
+const deleteClick = (user) => {
+  emit("delete", user);
+};
+
 </script>
 
 <template>
@@ -53,7 +62,7 @@ const editClick = (user) => {
         <th class="align-middle">Name</th>
         <th v-if="showEmail" class="align-middle">Email</th>
         <th v-if="showTypeOfUser" class="align-middle">Type of User</th>
-        <th v-if="showEditButton"></th>
+        <th v-if="showEditButton || showDeleteButton"></th>
       </tr>
     </thead>
     <tbody>
@@ -65,7 +74,7 @@ const editClick = (user) => {
         <td class="align-middle">{{ user.name }}</td>
         <td v-if="showEmail" class="align-middle">{{ user.email }}</td>
         <td v-if="showTypeOfUser" class="align-middle">{{ user.user_type == 'V' ? 'Vcard' : 'Admin'}}</td>
-        <td class="text-end align-middle" v-if="showEditButton">
+        <td class="text-end align-middle" v-if="showEditButton || showDeleteButton">
           <div class="d-flex justify-content-end">
             <button
               class="btn btn-xs btn-light"
@@ -73,6 +82,12 @@ const editClick = (user) => {
               v-if="showEditButton"
             >
               <i class="bi bi-xs bi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-xs btn-light"
+              @click="deleteClick(user)"
+              v-if="user.user_type == 'A'"
+            ><i class="bi bi-xs bi-x-square-fill"></i>
             </button>
           </div>
         </td>

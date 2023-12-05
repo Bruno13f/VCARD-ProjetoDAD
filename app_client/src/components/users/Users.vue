@@ -1,11 +1,13 @@
 <script setup>
   import axios from 'axios'
   import { ref, computed, onMounted } from 'vue'
+  import { useToast } from "vue-toastification"
   import {useRouter} from 'vue-router'
   import UserTable from "./UserTable.vue"
 
   const users = ref([])
   const router = useRouter()
+  const toast = useToast()
 
   const filterTypeOfUser = ref(null)
   const filterBlockedUser = ref(null)
@@ -41,6 +43,20 @@
   const editUser = (user) => {
       console.log('Navigate to Edit User with ID = ' + user.id)
       router.push({name: 'User', params: { id: user.id }})
+  }
+
+  const deleteUser = async (user) => {
+    try{
+      const response = await axios.delete('admins/' + user.id)
+      let deletedUser = response.data.data
+      let idx = users.value.findIndex((u) => u.id === deletedUser.id)
+      if (idx >= 0) {
+        users.value.splice(idx, 1)
+      }
+      toast.success('User #' + response.data.data.id + ' was deleted successfully.')
+    }catch(error){
+      toast.error("User wasn't deleted due to unknown server error!")
+    }
   }
 
   onMounted (() => {
@@ -94,6 +110,7 @@
     :users="filteredUsers"
     :showId="false"
     @edit="editUser"
+    @delete="deleteUser"
   ></user-table>
 </template>
 
