@@ -1,7 +1,9 @@
 <script setup>
 import { inject } from "vue";
 import avatarNoneUrl from '@/assets/avatar-none.png'
+import { useUserStore } from '../../stores/user.js'
 
+const userStore = useUserStore()
 const serverBaseUrl = inject("serverBaseUrl");
 
 const props = defineProps({
@@ -66,7 +68,7 @@ const deleteClick = (user) => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="user in users" :key="user.id">
+      <tr v-for="user in users" :key="user.id" v-show="user.id != userStore.user.id">
         <td v-if="showId" class="align-middle">{{ user.id }}</td>
         <td v-if="showPhoto" class="align-middle">
           <img :src="photoFullUrl(user)" class="rounded-circle img_photo" />
