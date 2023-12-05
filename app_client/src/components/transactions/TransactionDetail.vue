@@ -23,20 +23,9 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel'])
 const userStore = useUserStore()
-const flagType = props.transaction == 'D' ? true : false
 const flagOperation = props.operationType == 'insert' ? false : true
 const flagUser = userStore.user.user_type == 'A' && !flagOperation ? false : true
-
-// const editingTransaction = ref({
-//   vcard: userStore.user?.user_type === 'A'
-//       ? ''
-//       : userStore.user?.id || ''
-//   ,
-//   value: '',
-//   payment_reference: props.transaction.payment_type,
-//   type: props.transaction.type,
-//   description: '',
-// });
+const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
 
 props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user.id;
 
@@ -103,8 +92,8 @@ const cancel = () => {
       <label for="selectType" class="form-label">Type: *</label>
       <select class="form-select" id="selectType" v-model="editingTransaction.type" required :disabled=flagOperation>
         <option v-show=flagOperation value="null"></option>
-        <option value="D" :selected=flagType>Debit</option>
-        <option v-show=flagOperation value="C" :selected=flagType>Credit</option>
+        <option value="D">Debit</option>
+        <option v-show=flagOperation value="C">Credit</option>
       </select>
       <field-error-message :errors="errors" fieldName="type"></field-error-message>
     </div>
@@ -113,7 +102,7 @@ const cancel = () => {
     <label for="selectCategory" class="form-label">Category: </label>
     <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id">
       <option :value="null"></option>
-      <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+      <option v-for="category in filteredCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
     </select>
     <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
   </div>
