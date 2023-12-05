@@ -30,7 +30,7 @@ class StoreVcardRequest extends FormRequest
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',
             'password' => 'required|string|min:3|max:50',
-            'confirmation_code' => 'required|integer|digits:3'        
+            'confirmation_code' => 'required|integer|digits:4'        
         ];
     }
 }

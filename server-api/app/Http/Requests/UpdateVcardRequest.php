@@ -26,7 +26,7 @@ class UpdateVcardRequest extends FormRequest
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'password' => 'required|string|min:3|max:50',
-            'confirmation_code' => 'required|integer|digits:3',
+            'confirmation_code' => 'required|integer|digits:4',
             'max_debit' => 'nullable|integer|min:0'
         ];
     }

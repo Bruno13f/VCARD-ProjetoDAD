@@ -81,6 +81,24 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function changeConfirmationCode(credentials) {
+
+        if (userId.value < 0) {
+            throw 'Anonymous users cannot change the confirmation code!'
+        }
+
+        if (userType.value == 'A') {
+            throw 'Administrators do not have a confirmation code!'
+        }
+
+        try {
+            await axios.patch(`vcards/${user.value.id}/confirmationCode`, credentials)
+            return true
+        } catch (error) {
+            throw error
+        }
+    }
+
     async function restoreToken () {
         let storedToken = sessionStorage.getItem('token')
         if (storedToken) {
@@ -92,5 +110,5 @@ export const useUserStore = defineStore('user', () => {
         return false
     }
 
-    return { user, userId, userName, userPhotoUrl, loadUser, clearUser, login, logout, restoreToken, changePassword}
+    return { user, userId, userName, userPhotoUrl, loadUser, clearUser, login, logout, restoreToken, changePassword, changeConfirmationCode}
 })

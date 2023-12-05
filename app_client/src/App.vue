@@ -90,6 +90,14 @@ const clickMenuOption = () => {
                 </a>
               </li>
               <li>
+                <a class="dropdown-item" href="#" v-if="userStore.user?.user_type == 'V'">
+                  <router-link class="nav-link" :class="{active: $route.name === 'ChangeConfirmationCode'}" :to="{ name: 'ChangeConfirmationCode'}" @click="clickMenuOption">
+                    <i class="bi bi-key"></i>
+                    Change Confirmation Code
+                  </router-link>
+                </a>
+              </li>
+              <li>
                 <hr class="dropdown-divider">
               </li>
               <li>

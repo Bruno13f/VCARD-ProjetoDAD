@@ -5,6 +5,7 @@ import Users from "../components/users/Users.vue"
 import User from "../components/users/User.vue"
 import Login from "../components/auth/Login.vue"
 import ChangePassword from "../components/auth/ChangePassword.vue"
+import ChangeConfirmationCode from "../components/auth/ChangeConfirmationCode.vue"
 import Vcards from '../components/vcards/vcards.vue'
 import Vcard from '../components/vcards/vcard.vue'
 import Transactions from '../components/transactions/transactions.vue'
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/password',
       name: 'ChangePassword',
       component: ChangePassword 
+    },
+    {
+      path: '/confirmationCode',
+      name: 'ChangeConfirmationCode',
+      component: ChangeConfirmationCode 
     },
     {
       path: '/dashboard',
@@ -122,6 +128,14 @@ router.beforeEach(async (to, from, next) => {
   }
   if (!userStore.user) {
     next({ name: 'Login' })
+    return
+  }
+  if (to.name == 'ChangeConfirmationCode') {
+    if (userStore.user.user_type == 'V') {
+      next()
+      return
+    }
+    next({ name: 'home' })
     return
   }
   if (to.name == 'Users') {

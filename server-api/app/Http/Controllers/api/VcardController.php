@@ -15,6 +15,7 @@ use App\Http\Requests\UpdateVcardProfileRequest;
 use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use App\Http\Requests\UpdateUserConfirmationCodeRequest;
 use App\Http\Requests\UpdateMaxDebitVcardRequest;
 use Illuminate\Http\Response;
 use App\Services\Base64Services;
@@ -147,6 +148,13 @@ class VcardController extends Controller
     public function update_password (UpdateUserPasswordRequest $request, Vcard $vcard)
     {
         $vcard->password = bcrypt($request->validated()['password']);
+        $vcard->save();
+        return new VcardResource($vcard);
+    }
+
+    public function update_confirmation_code (UpdateUserConfirmationCodeRequest $request, Vcard $vcard)
+    {
+        $vcard->confirmation_code = bcrypt($request->validated()['confirmation_code']);
         $vcard->save();
         return new VcardResource($vcard);
     }

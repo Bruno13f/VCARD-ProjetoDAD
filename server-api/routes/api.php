@@ -53,6 +53,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password']);
+    Route::patch('vcards/{vcard}/confirmationCode', [VCardController::class, 'update_confirmation_code']);
     Route::get('vcards/{vcard}/categories', [VCardController::class, 'getCategoryOfVcard']);
 
 
