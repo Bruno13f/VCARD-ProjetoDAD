@@ -122,7 +122,6 @@ watch(
 
 onMounted(async () => {
   await loadTransaction(props.id);
-  console.log(transaction.value.vcard.phone_number);
   // post - user user.id / admin nada
   // put - user transaction.id / admin transaction.id
 

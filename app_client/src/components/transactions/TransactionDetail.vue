@@ -39,6 +39,7 @@ watch(
 )
 
 const save = () => {
+  console.log(editingTransaction)
   emit('save', editingTransaction.value)
 }
 
@@ -95,7 +96,7 @@ const cancel = () => {
       <select class="form-select" id="selectType" v-model="editingTransaction.type" required :disabled=flagOperation>
         <option v-show=flagOperation value="null"></option>
         <option value="D">Debit</option>
-        <option v-show=flagOperation value="C">Credit</option>
+        <option v-show=!flagUser value="C">Credit</option>
       </select>
       <field-error-message :errors="errors" fieldName="type"></field-error-message>
     </div>
