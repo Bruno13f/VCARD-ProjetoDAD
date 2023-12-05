@@ -4,9 +4,11 @@ import { ref, watch, computed, onMounted} from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import TransactionDetail from "./TransactionDetail.vue"
 import { useToast } from "vue-toastification"
+import { useUserStore } from '@/stores/user.js'
 
 const toast = useToast()
 const router = useRouter()
+const userStore = useUserStore()
 
 const newTransaction = () => {
   return {
@@ -120,12 +122,19 @@ watch(
 )
 
 onMounted(async () => {
+  // post - user user.id / admin nada
+  // put - user transaction.id / admin transaction.id
+
+  if (operation.value == 'insert' && userStore.user.user_type == 'A')
+    return
+
   categories.value=[]
+  const id = operation.value == 'update' ? transaction.value.vcard : userStore.user.id  
   try {
-    const response = await axios.get(`vcards/${transaction.value.vcard}/categories`);
-    categories.value = response.data.data;
+    const response = await axios.get(`vcards/${id}/categories`)
+    categories.value = response.data.data
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 });
 
