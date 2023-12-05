@@ -25,7 +25,7 @@ class UpdateTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // falta categoria
+            'category_id' => 'nullable|integer|exists:Categories,id',
             'description' => 'nullable|string|max:255',
         ];
     }

@@ -53,6 +53,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password']);
+    Route::get('vcards/{vcard}/categories', [VCardController::class, 'getCategoryOfVcard']);
 
 
     //Transactions
@@ -80,7 +81,7 @@ Route::middleware('auth:api')->group(function () {
     //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 });
 
-Route::get('vcards/{vcard}/categories', [VCardController::class, 'getCategoryOfVcard']);
+
 
 
 

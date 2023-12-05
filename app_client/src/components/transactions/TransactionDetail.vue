@@ -11,6 +11,10 @@ const props = defineProps({
     type: String,
     default: 'insert'  // insert / update
   },
+  categories:{
+    type:Array,
+    required: true
+  },
   errors: {
     type: Object,
     required: false,
@@ -37,19 +41,6 @@ const flagUser = userStore.user.user_type == 'A' && !flagOperation ? false : tru
 props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user.id;
 
 const editingTransaction = ref(props.transaction)
-
-const categories = ref([]);
-
-onMounted(async () => {
-  try {
-    const response = await fetch(`http://server-api.test/api/vcards/${userStore.user.id}/categories`);
-    const data = await response.json();
-    categories.value = data.data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
-});
-
 
 watch(
   () => props.transaction,

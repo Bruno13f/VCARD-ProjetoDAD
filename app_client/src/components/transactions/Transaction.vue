@@ -22,7 +22,7 @@ const newTransaction = () => {
     payment_reference: '',
     pair_vcard:null,
     pair_transaction:null,
-    category_id:null,
+    category_id:'',
     description:null,
     created_at: null,
     updated_at: null,
@@ -30,6 +30,7 @@ const newTransaction = () => {
   }
 }
 
+const categories = ref([])
 const transaction = ref(newTransaction())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
@@ -119,7 +120,14 @@ watch(
 )
 
 onMounted(async () => {
-})
+  categories.value=[]
+  try {
+    const response = await axios.get(`vcards/${transaction.value.vcard}/categories`);
+    categories.value = response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 
 let nextCallBack = null
@@ -154,6 +162,7 @@ onBeforeRouteLeave((to, from, next) => {
   :operationType="operation" 
   :transaction="transaction"
   :errors="errors" 
+  :categories="categories"
   @save="save"
   @cancel="cancel">
   </TransactionDetail>
