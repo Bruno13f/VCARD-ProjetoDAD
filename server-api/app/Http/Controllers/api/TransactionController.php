@@ -32,6 +32,8 @@ class TransactionController extends Controller {
 
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
 
+        $validatedRequest['old_balance'] = $vcard->balance;
+
         if($validatedRequest['payment_type'] == 'VCARD') {
             $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
             $validatedRequest['pair_vcard'] = $vcardReceiver->phone_number;
@@ -83,8 +85,6 @@ class TransactionController extends Controller {
         if($validatedRequest['value'] > $vcard->max_debit) {
             return response()->json(['error' => "The value of the transfer is greater that the vcard max_debit"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-        $validatedRequest['old_balance'] = $vcard->balance;
 
         $validatedRequest['date'] = now()->toDateString();
         $validatedRequest['datetime'] = now();
