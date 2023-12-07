@@ -24,8 +24,8 @@ const props = defineProps({
 const emit = defineEmits(['save', 'cancel'])
 const userStore = useUserStore()
 const flagOperation = props.operationType == 'insert' ? false : true
-const flagUser = userStore.user.user_type == 'A' && !flagOperation ? false : true
-props.transaction.vcard = userStore.user?.user_type == 'A' ? '' : userStore.user.id;
+const flagUser = userStore.user.user_type == 'A'? false : true
+props.transaction.vcard = userStore.user.user_type == 'A' ? '' : userStore.user.id;
 props.transaction.type = flagOperation ? '' : 'D' 
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
 
@@ -39,8 +39,10 @@ watch(
 )
 
 const save = () => {
-  console.log(editingTransaction)
-  emit('save', editingTransaction.value)
+  console.log("flag user" + flagUser)
+  console.log("operation type" + flagOperation)
+  console.log("Juntas" + (flagUser || flagOperation))
+  //emit('save', editingTransaction.value)
 }
 
 const cancel = () => {
@@ -58,7 +60,7 @@ const cancel = () => {
       <div class="mb-3">
         <label for="inputName" class="form-label">Vcard *</label>
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-          v-model="editingTransaction.vcard.phone_number" :disabled=flagUser>
+          v-model="editingTransaction.vcard.phone_number" :disabled=true>
         <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
       </div>
     </div>
@@ -69,7 +71,7 @@ const cancel = () => {
       <div class="mb-3">
         <label for="inputName" class="form-label">Vcard *</label>
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-          v-model="editingTransaction.vcard" :disabled=flagUser>
+          v-model="editingTransaction.vcard.phone_number" :disabled=flagUser>
         <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
       </div>
     </div>
@@ -106,7 +108,7 @@ const cancel = () => {
       <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled=flagOperation
         required>
         <option :value="null"></option>
-        <option v-if="userStore.user.user_type == 'V'" option value="VCARD">VCARD</option>
+        <option v-if="(flagUser || flagOperation)" option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
         <option value="PAYPAL">PAYPAL</option>
         <option value="IBAN">IBAN</option>
