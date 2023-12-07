@@ -3,17 +3,19 @@
   import { ref, computed, onMounted } from 'vue'
   import {useRouter} from 'vue-router'
   import VcardTable from "./VcardTable.vue"
+  import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
   import { useToast } from "vue-toastification"
   const toast = useToast()
 
-
+  const paginationData = ref({})
   const router = useRouter();
 
-  const loadVcards = async () => {
+  const loadVcards = async (page = 1) => {
     try{
-      const response = await axios.get('vcards')
+      const response = await axios.get(`vcards?page=${page}`)
       vcards.value = response.data.data
+      paginationData.value = response.data
     }catch(error){
       console.log(error)
     }
@@ -161,6 +163,11 @@
     @delete="deleteVcard"
     @block="blockVcard"
   ></vcard-table>
+  <Bootstrap5Pagination
+  :data="paginationData"
+  @pagination-change-page="loadVcards"
+  :limit="2">
+  </Bootstrap5Pagination>
 </template>
 
 <style scoped>

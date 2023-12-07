@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(){
-        return UserResource::collection(User::all()); 
+        return UserResource::collection(User::paginate(15)); 
     }
     
     public function show(User $user){
@@ -29,10 +29,5 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
     
-    /*public function update_password (Request $request , User $user)
-    {
-        $user->password = bcrypt($request->validated()['password']);
-        $user->save();
-        return new UserResource($user);
-    }*/
+
 }

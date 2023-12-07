@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Http;
 class TransactionController extends Controller {
 
     public function index() {
-        $transactions = Transaction::orderBy('created_at', 'desc')->get();
+        $transactions = Transaction::orderBy('created_at', 'desc')->paginate(15);
 
         return TransactionResource::collection($transactions);
     }

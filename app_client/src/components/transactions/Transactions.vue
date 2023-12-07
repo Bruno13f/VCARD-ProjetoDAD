@@ -5,24 +5,19 @@
   import TransactionTable from "./TransactionTable.vue"
   import { useToast } from "vue-toastification"
   import { useUserStore } from '@/stores/user.js'
+  import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
   const toast = useToast();
   const router = useRouter();
-
+  const paginationData = ref({})
   const userStore = useUserStore() 
   const flag = userStore.user.user_type == 'A' ? false : true
-  
 
-  const loadTransactions = async () => {
+  const loadTransactions = async (page = 1) => {
     try{
-      let apiUrl = 'transactions';
-
-      if (flag) {
-        apiUrl = `vcards/${userStore.user.id}/transactions`;
-      }
-
-      const response = await axios.get(apiUrl)
+      const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions?page=${page}`) : await axios.get(`transactions?page=${page}`)
       transactions.value = response.data.data
+      paginationData.value = response.data
     }catch(error){
       console.log(error)
     }
@@ -136,6 +131,11 @@
     @edit="editTransaction"
     @delete="deleteTransaction"
   ></transaction-table>
+  <Bootstrap5Pagination
+  :data="paginationData"
+  @pagination-change-page="loadTransactions"
+  :limit="2">
+  </Bootstrap5Pagination>
 </template>
 
 <style scoped>

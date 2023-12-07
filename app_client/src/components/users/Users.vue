@@ -4,36 +4,21 @@
   import { useToast } from "vue-toastification"
   import {useRouter} from 'vue-router'
   import UserTable from "./UserTable.vue"
+  import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
   const users = ref([])
+  const paginationData = ref({})
   const router = useRouter()
   const toast = useToast()
 
   const filterTypeOfUser = ref(null)
   const filterBlockedUser = ref(null)
 
-  const filteredUsers = computed(()=>{
-    return users.value.filter(user =>
-        (!filterTypeOfUser.value
-          || filterTypeOfUser.value == user.user_type
-        ) &&(!filterBlockedUser.value
-          || filterBlockedUser.value == user.blocked))
-  })
-
-  const totalUsers = computed(() => {
-    return users.value.reduce((c, user) =>
-        (!filterTypeOfUser.value
-          || filterTypeOfUser.value == user.user_type
-        ) &&
-          (!filterBlockedUser.value
-            || filterBlockedUser.value == user.blocked
-          ) ? c + 1 : c, 0)
-  })
-
-  const loadUsers = () => {
-    axios.get('users')
+  const loadUsers = (page = 1) => {
+    axios.get(`users?page=${page}`)
         .then((response) => {
           users.value = response.data.data
+          paginationData.value = response.data
         })
         .catch((error) => {
           console.log(error)
@@ -58,6 +43,24 @@
       toast.error("User wasn't deleted due to unknown server error!")
     }
   }
+
+  const filteredUsers = computed(()=>{
+    return users.value.filter(user =>
+        (!filterTypeOfUser.value
+          || filterTypeOfUser.value == user.user_type
+        ) &&(!filterBlockedUser.value
+          || filterBlockedUser.value == user.blocked))
+  })
+
+  const totalUsers = computed(() => {
+    return users.value.reduce((c, user) =>
+        (!filterTypeOfUser.value
+          || filterTypeOfUser.value == user.user_type
+        ) &&
+          (!filterBlockedUser.value
+            || filterBlockedUser.value == user.blocked
+          ) ? c + 1 : c, 0)
+  })
 
   onMounted (() => {
     loadUsers()
@@ -112,6 +115,11 @@
     @edit="editUser"
     @delete="deleteUser"
   ></user-table>
+  <Bootstrap5Pagination
+  :data="paginationData"
+  @pagination-change-page="loadUsers"
+  :limit="1">
+  </Bootstrap5Pagination>
 </template>
 
 <style scoped>
