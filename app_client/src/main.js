@@ -10,7 +10,10 @@ import ConfirmationDialog from './components/global/ConfirmationDialog.vue'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+<<<<<<< HEAD
+=======
 import { io } from "socket.io-client"
+>>>>>>> parent of 225ef59 (comentar sockets para n chatearem)
 import axios from 'axios'  
 
 import App from './App.vue'
@@ -23,8 +26,11 @@ app.provide('serverBaseUrl', serverBaseUrl)
 axios.defaults.baseURL = serverBaseUrl + '/api'
 axios.defaults.headers.common['Content-type'] = 'application/json'
 
+<<<<<<< HEAD
+=======
 app.provide('socket', io("http://localhost:8080"))
 
+>>>>>>> parent of 225ef59 (comentar sockets para n chatearem)
 app.use(Toast, {
     position: "top-center",
     timeout: 3000,
