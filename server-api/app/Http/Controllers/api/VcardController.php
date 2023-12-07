@@ -135,7 +135,7 @@ class VcardController extends Controller
 
     public function getTransactionsOfVcard(Vcard $vcard)
     {
-        $transactions = $vcard->transactions()->orderBy('date', 'desc')->get();
+        $transactions = $vcard->transactions()->orderBy('created_at', 'desc')->get();
 
         return TransactionResource::collection($transactions);
     }
