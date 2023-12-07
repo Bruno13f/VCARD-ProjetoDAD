@@ -22,9 +22,6 @@ app.provide('serverBaseUrl', serverBaseUrl)
 axios.defaults.baseURL = serverBaseUrl + '/api'
 axios.defaults.headers.common['Content-type'] = 'application/json'
 
-app.provide('socket', io("http://localhost:8080"))
-
->>>>>>> parent of 225ef59 (comentar sockets para n chatearem)
 app.use(Toast, {
     position: "top-center",
     timeout: 3000,
