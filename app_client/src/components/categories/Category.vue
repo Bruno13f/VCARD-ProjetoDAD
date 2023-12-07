@@ -18,8 +18,6 @@
       name: '',
       custom_options: '',
       custom_data: '',
-      created_at: null,
-      updated_at: null,
       deleted_at: null,
     }
   }

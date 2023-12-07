@@ -23,8 +23,11 @@ class CategoryController extends Controller
     }
 
     public function store(StoreCategoryRequest $request){
-        $newCategory = Category::create($request->validated()); 
-        return new CategoryResource($category)  ;
+        $validatedRequest = $request->validated();
+
+        $newCategory = Category::create($validatedRequest); 
+
+        return new CategoryResource($newCategory)  ;
     }
 
     public function update(UpdateCategoryRequest $request, Category $category){
