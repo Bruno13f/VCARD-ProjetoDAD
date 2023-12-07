@@ -39,10 +39,7 @@ watch(
 )
 
 const save = () => {
-  console.log("flag user" + flagUser)
-  console.log("operation type" + flagOperation)
-  console.log("Juntas" + (flagUser || flagOperation))
-  //emit('save', editingTransaction.value)
+  emit('save', editingTransaction.value)
 }
 
 const cancel = () => {
