@@ -1,6 +1,5 @@
 <script setup>
   import { ref, watch, computed } from 'vue'
-  import { useUserStore } from '@/stores/user.js'
 
   const props = defineProps({
     category: {
@@ -18,7 +17,6 @@
   })
 
   const emit = defineEmits(['save', 'cancel'])
-  const userStore = useUserStore() 
 
   const editingCategory = ref(props.category)
 

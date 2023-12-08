@@ -6,19 +6,21 @@ import { useUserStore } from '@/stores/user.js'
 import {useRouter} from 'vue-router'
 import CategoryTable from "./CategoryTable.vue"
 import { useToast } from "vue-toastification"
-  
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 const toast = useToast()
 const categories = ref([])
 const userStore = useUserStore()
 const router = useRouter()
+const paginationData = ref({})
 
 const flag = userStore.user.user_type == 'V' ? true : false
 
-const loadCategories = async () => {
+const loadCategories = async (page = 1) => {
     try{
-        const response = flag ? await axios.get(`vcards/${userStore.user.id}/categories`) : await axios.get("defaultCategories")
+        const response = flag ? await axios.get(`vcards/${userStore.user.id}/categories?page=${page}`) : await axios.get(`defaultCategories?page=${page}`)
         categories.value = response.data.data
+        paginationData.value = response.data
         console.log(categories)
         
     }catch(error){
@@ -89,6 +91,11 @@ onMounted(() => {
     @edit="editCategory"
     @delete="deleteCategory"
   ></category-table>
+  <Bootstrap5Pagination
+  :data="paginationData"
+  @pagination-change-page="loadCategories"
+  :limit="2">
+  </Bootstrap5Pagination>
   </template>
   
   <style scoped>

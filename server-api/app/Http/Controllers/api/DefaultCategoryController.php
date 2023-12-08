@@ -11,7 +11,7 @@ use App\Http\Resources\DefaultCategoryResource;
 class DefaultCategoryController extends Controller
 {
     public function index(){
-        return DefaultCategoryResource::collection(DefaultCategory::all());
+        return DefaultCategoryResource::collection(DefaultCategory::paginate(10));
     }
 
     public function show(DefaultCategory $defaultCategory){

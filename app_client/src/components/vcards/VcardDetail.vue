@@ -129,7 +129,7 @@
         :disabled=flag>
       </div>
 
-      <!-- <div class="mb-3 me-3 flex-grow-1">
+      <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'insert'">
         <label
           for="inputPassword"
           class="form-label"
@@ -145,7 +145,7 @@
       <field-error-message :errors="errors" fieldName="password"></field-error-message>
       </div>
 
-      <div class="mb-3 ms-xs-3 flex-grow-1 form-group">
+      <div class="mb-3 ms-xs-3 flex-grow-1 form-group" v-if="props.operationType == 'insert'">
         <label
           for="inputConfirmationCode"
           class="form-label"
@@ -159,7 +159,7 @@
         v-model="editingVcard.confirmation_code"
       >
       <field-error-message :errors="errors" fieldName="confirmation_code"></field-error-message>
-      </div> -->
+      </div>
     </div>
     
     <div class="mb-3 d-flex justify-content-center ">

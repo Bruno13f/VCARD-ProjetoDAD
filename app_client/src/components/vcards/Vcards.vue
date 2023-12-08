@@ -48,7 +48,7 @@
       if (idx >= 0) {
         vcards.value.splice(idx, 1)
       }
-      toast.success('Vcard #' + response.data.data.phone_number + ' was deleted successfully.')
+      toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
     }catch(error){
       if (error.response.status == 422){
       toast.error("Can't delete Vcard - Balance different than 0")
@@ -62,7 +62,7 @@
     let blocked = vcard.blocked ? 'unblocked' : 'blocked'
     try{
       const response = await axios.patch('vcards/' + vcard.phone_number + '/blocked', { blocked: vcard.blocked ? '0' : '1' })
-      toast.success('Vcard #' + response.data.data.phone_number + ' was ' + blocked + ' successfully.')
+      toast.success('Vcard ' + response.data.data.phone_number + ' was ' + blocked + ' successfully.')
 
     }catch(error){
       toast.error('Vcard was not ' + blocked + ' due to unknown server error!')
