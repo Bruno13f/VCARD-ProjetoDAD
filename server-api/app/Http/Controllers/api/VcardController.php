@@ -20,6 +20,7 @@ use App\Http\Requests\UpdateMaxDebitVcardRequest;
 use Illuminate\Http\Response;
 use App\Services\Base64Services;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\Paginator;
 
 class VcardController extends Controller
 {
@@ -135,15 +136,17 @@ class VcardController extends Controller
 
     public function getTransactionsOfVcard(Vcard $vcard)
     {
-        $transactions = $vcard->transactions()->orderBy('created_at', 'desc')->get();
+        $transactions = $vcard->transactions()->orderBy('created_at', 'desc')->paginate(15);
 
         return TransactionResource::collection($transactions);
     }
 
-    public function getCategoryOfVcard(Vcard $vcard){
-        return CategoryResource::collection($vcard->categories);
-    }
+    public function getCategoryOfVcard(Vcard $vcard) {
+    
+        $pagedCategories = $vcard->categories()->paginate(10);
 
+        return CategoryResource::collection($pagedCategories);
+    }
 
     public function update_password (UpdateUserPasswordRequest $request, Vcard $vcard)
     {
