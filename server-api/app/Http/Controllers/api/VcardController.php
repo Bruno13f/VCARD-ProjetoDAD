@@ -33,9 +33,22 @@ class VcardController extends Controller
         return $base64Service->saveFile($base64String, $targetDir, $newfilename);
     }
 
-    public function index()
-    {
-        return VcardResource::collection(VCard::orderBy('created_at','desc')->paginate(15));
+    public function index(Request $request)
+    {   
+        $vcardsQuery = Vcard::query();
+
+        $phone_number = $request->owner;
+        $blocked = $request->blocked;
+
+        $vcardsQuery->when($phone_number !== null, function($query, $phone_number){
+            $query->where('phone_number', 'LIKE', $phone_number);
+        });
+
+        $vcardsQuery->when($blocked !== null, function($query, $blocked){
+            $query->where('blocked' , $blocked);
+        });
+
+        return VcardResource::collection($vcardsQuery->paginate(15));
     }
 
     public function show (Vcard $vcard){

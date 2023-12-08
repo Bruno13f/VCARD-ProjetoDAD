@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios'
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, watchEffect, computed, onMounted } from 'vue'
   import {useRouter} from 'vue-router'
   import VcardTable from "./VcardTable.vue"
   import { Bootstrap5Pagination } from 'laravel-vue-pagination';
@@ -10,10 +10,21 @@
 
   const paginationData = ref({})
   const router = useRouter();
+  const vcards = ref([])
+  const users = ref([])
+  const filterByOwnerId = ref(null)
+  const filterByBlocked = ref(null)
 
   const loadVcards = async (page = 1) => {
     try{
-      const response = await axios.get(`vcards?page=${page}`)
+      console.log('Page:', page);
+      console.log('Filter by Owner:', filterByOwnerId.value);
+      console.log('Filter by Blocked:', filterByBlocked.value);
+      const response = await axios.get('vcards', {params: {
+        page: page,
+        owner: filterByOwnerId.value,
+        blocked: filterByBlocked.value,
+      }})
       vcards.value = response.data.data
       paginationData.value = response.data
     }catch(error){
@@ -23,8 +34,9 @@
 
   const loadUsers = async () => {
     try{
-      const response = await axios.get('users')
+      const response = await axios.get('users', {params:{paginate: 0}})
       users.value = response.data.data
+      console.log(users.value)
     }catch(error){
       console.log(error)
     }
@@ -63,28 +75,28 @@
     try{
       const response = await axios.patch('vcards/' + vcard.phone_number + '/blocked', { blocked: vcard.blocked ? '0' : '1' })
       toast.success('Vcard ' + response.data.data.phone_number + ' was ' + blocked + ' successfully.')
-
+      // let blockedVcard = response.data.data
+      // let idx = vcards.value.findIndex((t) => t.phone_number === blockedVcard.phone_number)
+      // if (idx >= 0){
+      //   console.log(vcard.blocked)
+      //   vcards.value[idx].blocked = vcard.blocked ? '0' : '1'
+      //   console.log(vcards.value[idx].blocked)
+      // }
     }catch(error){
       toast.error('Vcard was not ' + blocked + ' due to unknown server error!')
     }
     loadVcards()
   }
-  
 
-  const vcards = ref([])
-  const users = ref([])
-  const filterByOwnerId = ref(null)
-  const filterByBlocked = ref(null)
-
-  const filteredVcards = computed(()=>{
-    return vcards.value.filter(p =>
-        (!filterByOwnerId.value
-          || filterByOwnerId.value == p.phone_number
-        ) &&
-        (!filterByBlocked.value
-          || filterByBlocked.value == p.blocked
-        ))
-  })
+  // const filteredVcards = computed(()=>{
+  //   return vcards.value.filter(p =>
+  //       (!filterByOwnerId.value
+  //         || filterByOwnerId.value == p.phone_number
+  //       ) &&
+  //       (!filterByBlocked.value
+  //         || filterByBlocked.value == p.blocked
+  //       ))
+  // })
 
   const totalVcards = computed(()=>{
     return vcards.value.reduce((c, p) =>
@@ -94,6 +106,11 @@
           (!filterByBlocked.value
             || filterByBlocked.value == p.blocked
           ) ? c + 1 : c, 0)
+  })
+
+  watchEffect(
+  () => {
+    loadVcards()
   })
 
   onMounted(() => {
@@ -156,7 +173,7 @@
     </div>
   </div>
   <vcard-table
-    :vcards="filteredVcards"
+    :vcards="vcards"
     :showId="true"
     :showDates="true"
     @edit="editVcard"

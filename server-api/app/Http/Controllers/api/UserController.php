@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(){
-        return UserResource::collection(User::paginate(15)); 
+    public function index(Request $request){
+        if ($request->paginate)
+            return UserResource::collection(User::paginate(15));
+        
+        return UserResource::collection(User::all());
     }
     
     public function show(User $user){

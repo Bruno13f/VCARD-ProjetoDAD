@@ -15,7 +15,7 @@
   const filterBlockedUser = ref(null)
 
   const loadUsers = (page = 1) => {
-    axios.get(`users?page=${page}`)
+    axios.get('users', {params:{page: page, paginate: 1}})
         .then((response) => {
           users.value = response.data.data
           paginationData.value = response.data
