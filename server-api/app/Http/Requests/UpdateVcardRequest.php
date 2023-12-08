@@ -25,8 +25,8 @@ class UpdateVcardRequest extends FormRequest
             'phone_number' => "required|integer|digits:9|regex:/^9\d{8}$/|exists:Vcards,phone_number",
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
-            'password' => 'required|string|min:3|max:50',
-            'confirmation_code' => 'required|integer|digits:4',
+            // 'password' => 'required|string|min:3|max:50',
+            // 'confirmation_code' => 'required|integer|digits:4',
             'max_debit' => 'nullable|integer|min:0'
         ];
     }

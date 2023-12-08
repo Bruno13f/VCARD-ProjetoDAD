@@ -99,7 +99,37 @@
       <field-error-message :errors="errors" fieldName="phone_number"></field-error-message>
       </div>
 
-      <div class="mb-3 me-3 flex-grow-1">
+      <div class="mb-3 me-3 flex-grow 1" v-if="props.operationType == 'update'">
+        <label
+          for="inputBalance"
+          class="form-label"
+        >Balance</label>
+        <input
+        type="number"
+        class="form-control"
+        id="inputBalance"
+        placeholder="Balance"
+        required
+        v-model="editingVcard.balance"
+        disabled>
+      </div>
+
+      <div class="mb-3 me-3 flex-grow-1 form-group" v-if="props.operationType == 'update'">
+        <label
+          for="inputMaxDebit"
+          class="form-label"
+        >Max Debit</label>
+        <input
+        type="number"
+        class="form-control"
+        id="inputMaxDebit"
+        placeholder="Max Debit"
+        required
+        v-model="editingVcard.max_debit"
+        :disabled=flag>
+      </div>
+
+      <!-- <div class="mb-3 me-3 flex-grow-1">
         <label
           for="inputPassword"
           class="form-label"
@@ -129,44 +159,9 @@
         v-model="editingVcard.confirmation_code"
       >
       <field-error-message :errors="errors" fieldName="confirmation_code"></field-error-message>
-      </div>
+      </div> -->
     </div>
-
-    <div class="d-flex flex-wrap justify-content-start" v-if="props.operationType == 'update'">
-      <div class="mb-3 me-3">
-        <label
-          for="inputBalance"
-          class="form-label"
-        >Balance</label>
-        <input
-        type="number"
-        class="form-control"
-        id="inputBalance"
-        placeholder="Balance"
-        required
-        v-model="editingVcard.balance"
-        disabled>
-      </div>
-
-      <div class="mb-3">
-        <label
-          for="inputMaxDebit"
-          class="form-label"
-        >Max Debit</label>
-        <input
-        type="number"
-        class="form-control"
-        id="inputMaxDebit"
-        placeholder="Max Debit"
-        required
-        v-model="editingVcard.max_debit"
-        :disabled=flag>
-      </div>
-    </div>
-
-    <div class="d-flex flex-wrap justify-content-between">
-    </div>
-
+    
     <div class="mb-3 d-flex justify-content-center ">
       <button
         type="button"

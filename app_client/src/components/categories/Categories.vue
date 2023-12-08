@@ -43,10 +43,10 @@ const deleteCategory = async (category) => {
       if (idx >= 0) {
         categories.value.splice(idx, 1)
       }
-      toast.success('Category #' + response.data.data.id + ' was deleted successfully.')
+      toast.success('Category ' + response.data.data.name + ' was deleted successfully.')
     }catch(error){
       if (error.response.status == 422){
-      toast.error("Can't delete Category - Balance different than 0")
+      toast.error("Can't delete Category due to validation issues")
       }else {
         toast.error("Category wasn't deleted due to unknown server error!")
       }
