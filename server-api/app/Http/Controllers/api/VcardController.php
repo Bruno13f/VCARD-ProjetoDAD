@@ -40,13 +40,13 @@ class VcardController extends Controller
         $phone_number = $request->owner;
         $blocked = $request->blocked;
 
-        $vcardsQuery->when($phone_number !== null, function($query, $phone_number){
-            $query->where('phone_number', 'LIKE', $phone_number);
-        });
-
-        $vcardsQuery->when($blocked !== null, function($query, $blocked){
-            $query->where('blocked' , $blocked);
-        });
+        if ($phone_number != null){
+            $vcardsQuery->where('phone_number', 'LIKE', $phone_number);
+        }
+        
+        if ($blocked != null){
+            $vcardsQuery->where('blocked' , $blocked);
+        }
 
         return VcardResource::collection($vcardsQuery->paginate(15));
     }

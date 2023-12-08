@@ -14,12 +14,10 @@
   const users = ref([])
   const filterByOwnerId = ref(null)
   const filterByBlocked = ref(null)
+  const totalVcards = ref(null)
 
   const loadVcards = async (page = 1) => {
     try{
-      console.log('Page:', page);
-      console.log('Filter by Owner:', filterByOwnerId.value);
-      console.log('Filter by Blocked:', filterByBlocked.value);
       const response = await axios.get('vcards', {params: {
         page: page,
         owner: filterByOwnerId.value,
@@ -27,6 +25,7 @@
       }})
       vcards.value = response.data.data
       paginationData.value = response.data
+      totalVcards.value = paginationData.value.meta.total
     }catch(error){
       console.log(error)
     }
@@ -87,26 +86,6 @@
     }
     loadVcards()
   }
-
-  // const filteredVcards = computed(()=>{
-  //   return vcards.value.filter(p =>
-  //       (!filterByOwnerId.value
-  //         || filterByOwnerId.value == p.phone_number
-  //       ) &&
-  //       (!filterByBlocked.value
-  //         || filterByBlocked.value == p.blocked
-  //       ))
-  // })
-
-  const totalVcards = computed(()=>{
-    return vcards.value.reduce((c, p) =>
-        (!filterByOwnerId.value
-          || filterByOwnerId.value == p.phone_number
-        ) &&
-          (!filterByBlocked.value
-            || filterByBlocked.value == p.blocked
-          ) ? c + 1 : c, 0)
-  })
 
   watchEffect(
   () => {
