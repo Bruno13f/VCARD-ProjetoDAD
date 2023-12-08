@@ -1,7 +1,7 @@
 <script setup>
 
 import axios from 'axios'
-import { ref, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user.js'
 import {useRouter} from 'vue-router'
 import CategoryTable from "./CategoryTable.vue"
@@ -13,6 +13,7 @@ const categories = ref([])
 const userStore = useUserStore()
 const router = useRouter()
 const paginationData = ref({})
+const totalCategories = ref(null)
 
 const flag = userStore.user.user_type == 'V' ? true : false
 
@@ -21,8 +22,8 @@ const loadCategories = async (page = 1) => {
         const response = flag ? await axios.get(`vcards/${userStore.user.id}/categories?page=${page}`) : await axios.get(`defaultCategories?page=${page}`)
         categories.value = response.data.data
         paginationData.value = response.data
+        totalCategories.value = paginationData.value.meta.total
         console.log(categories)
-        
     }catch(error){
         console.log(error)
     }
@@ -34,7 +35,7 @@ const addVcard = () => {
   }
 
 const editCategory = async (category) => {
-  router.push({name: 'Category', params: { id: category.id }})
+  // router.push({name: 'Category', params: { id: category.id }})
 }
 
 const deleteCategory = async (category) => {
@@ -54,10 +55,6 @@ const deleteCategory = async (category) => {
       }
     }
 }
-
-const totalCategories = computed (()=>{
-  return categories.value.length
-})
 
 onMounted(() => {
     loadCategories()

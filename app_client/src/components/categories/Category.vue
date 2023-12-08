@@ -69,8 +69,6 @@ const save = async () => {
       const response = flag ? await axios.put('categories/' + props.id, category.value) : await axios.put('defaultCategories/' + props.id, category.value)
       category.value = response.data.data
       originalValueStr = JSON.stringify(category.value)
-      console.log('Category Updated')
-      console.dir(response.data.data)
       toast.success('Category #' + response.data.data.id + ' was edited successfully.')
       router.back()
     }catch(error){
