@@ -14,6 +14,7 @@
   const users = ref([])
   const filterByOwnerId = ref(null)
   const filterByBlocked = ref(null)
+  const orderBy = ref(null)
   const totalVcards = ref(null)
 
   const loadVcards = async (page = 1) => {
@@ -22,6 +23,7 @@
         page: page,
         owner: filterByOwnerId.value,
         blocked: filterByBlocked.value,
+        order: orderBy.value,
       }})
       vcards.value = response.data.data
       paginationData.value = response.data
@@ -110,7 +112,7 @@
   </div>
   <hr>
   <div class="mb-3 d-flex justify-content-between flex-wrap">
-    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+    <div class="mx-3 mt-3 flex-grow-1 filter-div">
       <label
         for="selectOwner"
         class="form-label"
@@ -128,7 +130,7 @@
         >{{user.name}}</option>
       </select>
     </div>
-    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+    <div class="mx-3 mt-3 flex-grow-1">
       <label
         for="selectStatus"
         class="form-label"
@@ -141,6 +143,21 @@
         <option :value="null"></option>
         <option value="1">Blocked</option>
         <option value="0">Not Blocked</option>
+      </select>
+    </div>
+    <div class="mx-3 mt-3 flex-grow-1">
+      <label
+        for="selectOrderBy"
+        class="form-label"
+      >Order by:</label>
+      <select
+        class="form-select"
+        id="selectOrderBy"
+        v-model="orderBy"
+      >
+        <option :value="null"></option>
+        <option value="desc">Recent</option>
+        <option value="asc">Oldest</option>
       </select>
     </div>
     <div class="mx-2 mt-2">

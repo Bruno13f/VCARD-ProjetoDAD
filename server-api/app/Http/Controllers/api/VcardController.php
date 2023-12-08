@@ -39,14 +39,19 @@ class VcardController extends Controller
 
         $phone_number = $request->owner;
         $blocked = $request->blocked;
+        $order = $request->order;
 
-        if ($phone_number != null){
+        if ($phone_number != null)
             $vcardsQuery->where('phone_number', 'LIKE', $phone_number);
+        
+        
+        if ($blocked != null)
+            $vcardsQuery->where('blocked' , $blocked);
+
+        if ($order != null){
+            $vcardsQuery->orderBy('created_at', $order);
         }
         
-        if ($blocked != null){
-            $vcardsQuery->where('blocked' , $blocked);
-        }
 
         return VcardResource::collection($vcardsQuery->paginate(15));
     }
