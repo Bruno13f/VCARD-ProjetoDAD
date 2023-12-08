@@ -68,7 +68,7 @@ const cancel = () => {
       <div class="mb-3">
         <label for="inputName" class="form-label">Vcard *</label>
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-          v-model="editingTransaction.vcard.phone_number" :disabled=flagUser>
+          v-model="editingTransaction.vcard" :disabled=flagUser>
         <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
       </div>
     </div>

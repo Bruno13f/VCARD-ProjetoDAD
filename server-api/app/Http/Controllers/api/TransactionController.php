@@ -31,6 +31,10 @@ class TransactionController extends Controller {
 
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
 
+        if(($vcard->balance - $validatedRequest['value']) < 0) {
+            return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $validatedRequest['old_balance'] = $vcard->balance;
 
         if($validatedRequest['payment_type'] == 'VCARD') {
@@ -39,12 +43,10 @@ class TransactionController extends Controller {
 
             $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
 
-            if($validatedRequest['type'] == 'D') {
-                if(($vcard->balance - $validatedRequest['value']) < 0) {
+            if($validatedRequest['type'] == 'C') {
+                if(($vcardReceiver->balance - $validatedRequest['value']) < 0) {
                     return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
                 }
-            } else if(($vcardReceiver->balance - $validatedRequest['value']) < 0) {
-                return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
         } else {
