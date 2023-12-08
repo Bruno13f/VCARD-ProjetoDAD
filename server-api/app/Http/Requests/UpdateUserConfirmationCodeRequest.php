@@ -23,15 +23,10 @@ class UpdateUserConfirmationCodeRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userPhoneNumber = $this->route('vcard');
+        
 
         return [
-            'current_confirmation_code' => ['required', 'digits:4',
-            function ($attribute, $value, $fail) use ($userPhoneNumber){
-                if (!$this->validateCurrentConfirmationCode($value, $userPhoneNumber)) {
-                    $fail('Invalid current confirmation code.');
-                }
-            }],
+            'current_password' => 'current_password:api',
             'confirmation_code' => 'required|integer|digits:4',
             'confirmation_code_confirm' => 'required|integer|digits:4|same:confirmation_code',
         ];
@@ -43,12 +38,4 @@ class UpdateUserConfirmationCodeRequest extends FormRequest
             'confirmation_code_confirm.same' => 'Confirmation Code Confirmation should match the Confirmation Code',
         ];
     }
-    
-    protected function validateCurrentConfirmationCode($currentConfirmationCode, $userPhoneNumber): bool
-    {
-        $user = Vcard::find($userPhoneNumber);
-
-        return Hash::check($currentConfirmationCode, $user[0]['confirmation_code']);
-    }
-
 }

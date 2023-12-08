@@ -9,7 +9,7 @@
   const userStore = useUserStore()
   
   const confirmationCodes = ref({
-        current_confirmation_code: '',
+        current_password: '',
         confirmation_code: '',
         confirmation_code_confirm: ''
     })
@@ -42,10 +42,10 @@
     <hr>
     <div class="mb-3">
       <div class="mb-3">
-        <label for="inputCurrentConfirmationCode" class="form-label">Current Confirmation Code</label>
-        <input type="password" class="form-control" id="inputCurrentConfirmationCode" required
-          v-model="confirmationCodes.current_confirmation_code">
-        <field-error-message :errors="errors" fieldName="current_confirmation_code"></field-error-message>
+        <label for="inputCurrentPassword" class="form-label">Current Password</label>
+        <input type="password" class="form-control" id="inputCurrentPassword" required
+          v-model="confirmationCodes.current_password">
+        <field-error-message :errors="errors" fieldName="current_password"></field-error-message>
       </div>
     </div>
     <div class="mb-3">

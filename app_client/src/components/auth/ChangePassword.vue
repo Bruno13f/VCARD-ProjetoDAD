@@ -11,7 +11,7 @@
   const passwords = ref({
         current_password: '',
         password: '',
-        password_confirm: ''
+        password_confirmation: ''
     })
 
   const errors = ref(null)
