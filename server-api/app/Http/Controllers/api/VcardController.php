@@ -35,7 +35,7 @@ class VcardController extends Controller
 
     public function index()
     {
-        return VcardResource::collection(VCard::paginate(15));
+        return VcardResource::collection(VCard::orderBy('created_at','desc')->paginate(15));
     }
 
     public function show (Vcard $vcard){
@@ -143,7 +143,7 @@ class VcardController extends Controller
 
     public function getCategoryOfVcard(Vcard $vcard) {
     
-        $pagedCategories = $vcard->categories()->paginate(10);
+        $pagedCategories = $vcard->categories()->orderBy('name', 'asc')->paginate(10);
 
         return CategoryResource::collection($pagedCategories);
     }
