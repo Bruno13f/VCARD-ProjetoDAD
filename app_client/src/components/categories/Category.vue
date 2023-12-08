@@ -58,14 +58,14 @@ const save = async () => {
       }catch(error){
         if (error.response.status == 422) {
           errors.value = error.response.data.errors
-          console.log(errors)
-          toast.error('Category was not created due to validation errors!')
+          toast.error('Category was not created - it already exists!')
         } else {
           toast.error('Category was not created due to unknown server error!')
         }
       }
   }else{
     try{
+      category.value.vcard = flag ? userStore.user.id : ''
       const response = flag ? await axios.put('categories/' + props.id, category.value) : await axios.put('defaultCategories/' + props.id, category.value)
       category.value = response.data.data
       originalValueStr = JSON.stringify(category.value)
@@ -76,8 +76,7 @@ const save = async () => {
     }catch(error){
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        console.log(errors)
-        toast.error('Category was not edited due to validation errors!')
+        toast.error('Category was not edited - it already exists!')
       } else {
         toast.error('Category was not edited due to unknown server error!')
       }
