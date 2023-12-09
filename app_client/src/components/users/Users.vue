@@ -75,7 +75,7 @@
   </div>
   <hr>
   <div class="mb-3 d-flex justify-content-start flex-wrap">
-    <div class="mx-2 mt-2 filter-div">
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label
         for="selectTypeOfUser"
         class="form-label"
@@ -90,7 +90,7 @@
         <option value="V">Vcard Owner</option>
       </select>
     </div>
-    <div class="mx-2 mt-2 filter-div">
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label
         for="selectBlockedUser"
         class="form-label"
