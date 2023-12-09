@@ -16,10 +16,37 @@ use Illuminate\Support\Facades\Http;
 
 class TransactionController extends Controller {
 
-    public function index() {
-        $transactions = Transaction::orderBy('created_at', 'desc')->paginate(15);
+    public function index(Request $request) 
+    {
+        $transactionsQuery = Transaction::query();
 
-        return TransactionResource::collection($transactions);
+        $type = $request->type;
+        $payment = $request->payment;
+        $order = $request->order;
+
+        if ($type != null)
+            $transactionsQuery->where('type', $type);
+
+        if ($payment != null)   
+            $transactionsQuery->where('payment_type', $payment);
+
+        switch($order){
+            case 'pasc':
+                $transactionsQuery->orderBy('value', 'asc');
+                break;
+            case 'pdesc':
+                $transactionsQuery->orderBy('value', 'desc');
+                break;
+            case 'asc';
+                $transactionsQuery->orderBy('created_at', 'asc');
+                break;
+            case 'desc':
+                $transactionsQuery->orderBy('created_at', 'desc');
+                break;
+            default:
+        }
+
+        return TransactionResource::collection($transactionsQuery->orderBy('created_at', 'desc')->paginate(15));
     }
 
     public function show(Transaction $transaction) {

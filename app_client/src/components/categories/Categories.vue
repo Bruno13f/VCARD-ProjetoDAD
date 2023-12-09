@@ -19,7 +19,8 @@ const flag = userStore.user.user_type == 'V' ? true : false
 
 const loadCategories = async (page = 1) => {
     try{
-        const response = flag ? await axios.get(`vcards/${userStore.user.id}/categories?page=${page}`) : await axios.get(`defaultCategories?page=${page}`)
+        const response = flag ? await axios.get(`vcards/${userStore.user.id}/categories`, {params: {page: page, paginate: 1}}) 
+        : await axios.get(`defaultCategories?page=${page}`)
         categories.value = response.data.data
         paginationData.value = response.data
         totalCategories.value = paginationData.value.meta.total

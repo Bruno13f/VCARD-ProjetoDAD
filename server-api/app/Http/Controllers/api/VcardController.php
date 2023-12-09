@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\Vcard;
 use App\Models\DefaultCategory;
 use App\Models\Category;
+use App\Models\Transaction;
 use App\Http\Resources\VcardResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\CategoryResource;
@@ -147,19 +148,59 @@ class VcardController extends Controller
         }else{
             $vcard->forceDelete();
         }
+
+        if (Storage::exists('public/fotos/' . $vcard->photo_url)) {
+            Storage::delete('public/fotos/' . $vcard->photo_url);
+        }
             
         return new VcardResource($vcard);
         
     }
 
-    public function getTransactionsOfVcard(Vcard $vcard)
+    public function getTransactionsOfVcard(Vcard $vcard, Request $request)
     {
-        $transactions = $vcard->transactions()->orderBy('created_at', 'desc')->paginate(15);
 
-        return TransactionResource::collection($transactions);
+        $transactionsQuery = Transaction::query();
+
+        $type = $request->type;
+        $payment = $request->payment;
+        $category = $request->category;
+        $order = $request->order;
+
+        if ($type != null)
+            $transactionsQuery->where('type', $type);
+
+        if ($payment != null)   
+            $transactionsQuery->where('payment_type', $payment);
+
+        if (strcmp($category,'none') == 0)
+            $transactionsQuery->whereNull('category_id');
+        else if ($category != null)   
+            $transactionsQuery->where('category_id', $category);
+
+        switch($order){
+            case 'pasc':
+                $transactionsQuery->orderBy('value', 'asc');
+                break;
+            case 'pdesc':
+                $transactionsQuery->orderBy('value', 'desc');
+                break;
+            case 'asc';
+                $transactionsQuery->orderBy('created_at', 'asc');
+                break;
+            case 'desc':
+                $transactionsQuery->orderBy('created_at', 'desc');
+                break;
+            default:
+        }
+
+        return TransactionResource::collection($transactionsQuery->orderBy('created_at', 'desc')->paginate(15));
     }
 
-    public function getCategoryOfVcard(Vcard $vcard) {
+    public function getCategoryOfVcard(Vcard $vcard, Request $request) {
+
+        if ($request->paginate == '0')
+            return CategoryResource::collection($vcard->categories()->orderBy('name', 'asc')->get());
     
         $pagedCategories = $vcard->categories()->orderBy('name', 'asc')->paginate(10);
 

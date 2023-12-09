@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index(Request $request){
         if ($request->paginate == '0')
-            return UserResource::collection(User::all());
+            return UserResource::collection(User::orderBy('name', 'asc')->get());
     
         $userQuery = User::query();
 

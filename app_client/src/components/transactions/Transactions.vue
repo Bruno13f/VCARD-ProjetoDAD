@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios'
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, watchEffect, computed, onMounted } from 'vue'
   import {useRouter} from 'vue-router'
   import TransactionTable from "./TransactionTable.vue"
   import { useToast } from "vue-toastification"
@@ -12,12 +12,41 @@
   const paginationData = ref({})
   const userStore = useUserStore() 
   const flag = userStore.user.user_type == 'A' ? false : true
+  const totalTransactions = ref(null)
+  const transactions = ref([])
+  const categories = ref([])
+  const filterByType = ref(null)
+  const filterByPaymentType = ref(null)
+  const filterByCategory = ref(null)
+  const orderBy = ref(null)
+
 
   const loadTransactions = async (page = 1) => {
     try{
-      const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions?page=${page}`) : await axios.get(`transactions?page=${page}`)
+      const params = {
+        page: page,
+        type: filterByType.value,
+        payment: filterByPaymentType.value,
+        category: filterByCategory.value,
+        order: orderBy.value
+      }
+      const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`, {params: params}) : await axios.get('transactions', {params: params})
       transactions.value = response.data.data
       paginationData.value = response.data
+      totalTransactions.value = paginationData.value.meta.total
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  const loadCategories = async () => {
+    if (!flag)
+      return
+
+    try{
+      const response = await axios.get(`vcards/${userStore.user.id}/categories?paginate=0`)
+      categories.value = response.data.data
+      console.log(categories)
     }catch(error){
       console.log(error)
     }
@@ -29,7 +58,6 @@
   }
 
   const deleteTransaction = async (transaction) => {
-    // nao implementado 
       axios.delete('transactions/' + transaction.id).then((response) => {
           let deletedTransaction = response.data.data
           let idx = transactions.value.findIndex((t) => t.id === deletedTransaction.id)
@@ -47,33 +75,14 @@
       });
   }
 
-
-  const transactions = ref([])
-  const filterByType = ref(null)
-  const filterByPaymentType = ref(null)
-
-  const filteredTransactions = computed(()=>{
-    return transactions.value.filter(t =>
-        (!filterByType.value
-          || filterByType.value == t.type
-        ) &&
-        (!filterByPaymentType.value
-          || filterByPaymentType.value == t.payment_type
-        ))
-  })
-
-  const totalTransactions = computed(()=>{
-    return transactions.value.reduce((c, t) =>
-    (!filterByType.value
-          || filterByType.value == t.type
-        ) &&
-        (!filterByPaymentType.value
-          || filterByPaymentType.value == t.payment_type
-        ) ? c + 1 : c, 0)
+  watchEffect(
+  () => {
+    loadTransactions()
   })
 
   onMounted(() => {
     loadTransactions()
+    loadCategories()
   })
 
 </script>
@@ -123,9 +132,45 @@
         <option value="VISA">VISA</option>
       </select>
     </div>
+    <div class="mx-2 mt-2 flex-grow-1 filter-div" v-if="flag">
+      <label
+        for="selectCategory"
+        class="form-label"
+      >Filter by Category:</label>
+      <select
+        class="form-select"
+        id="selectCategory"
+        v-model="filterByCategory"
+      >
+        <option :value="null"></option>
+        <option value='none'>No Category</option>
+        <option
+          v-for="category in categories"
+          :key="category.id"
+          :value="category.id"
+        >{{category.name}}</option>
+      </select>
+    </div>
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+      <label
+        for="selectOrderBy"
+        class="form-label"
+      >Order by:</label>
+      <select
+        class="form-select"
+        id="selectOrderBy"
+        v-model="orderBy"
+      >
+        <option :value="null"></option>
+        <option value="desc">Recent</option>
+        <option value="asc">Oldest</option>
+        <option value="pasc">Price - Asc</option>
+        <option value="pdesc">Price - Desc</option>
+      </select>
+    </div>
   </div>
   <transaction-table
-    :transactions="filteredTransactions"
+    :transactions="transactions"
     :showId="true"
     :showDates="true"
     @edit="editTransaction"
