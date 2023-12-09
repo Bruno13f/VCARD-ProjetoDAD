@@ -112,7 +112,7 @@
   </div>
   <hr>
   <div class="mb-3 d-flex justify-content-between flex-wrap">
-    <div class="mx-3 mt-3 flex-grow-1 filter-div">
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label
         for="selectOwner"
         class="form-label"
@@ -130,7 +130,7 @@
         >{{user.name}}</option>
       </select>
     </div>
-    <div class="mx-3 mt-3 flex-grow-1">
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label
         for="selectStatus"
         class="form-label"
@@ -145,7 +145,7 @@
         <option value="0">Not Blocked</option>
       </select>
     </div>
-    <div class="mx-3 mt-3 flex-grow-1">
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
       <label
         for="selectOrderBy"
         class="form-label"

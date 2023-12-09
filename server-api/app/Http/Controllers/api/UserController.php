@@ -11,10 +11,26 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(Request $request){
-        if ($request->paginate)
-            return UserResource::collection(User::paginate(15));
+        if ($request->paginate == '0')
+            return UserResource::collection(User::all());
+    
+        $userQuery = User::query();
+
+        $userType = $request->userType;
+        $blocked = $request->blocked;
+        $order = $request->order;
+
+        if ($userType != null)
+            $userQuery->where('user_type', $userType);
+
+        if ($blocked != null)
+            $userQuery->where('blocked', $blocked);
+
+        if ($order != null)
+            $userQuery->orderBy('name', $order);
         
-        return UserResource::collection(User::all());
+        
+        return UserResource::collection($userQuery->paginate(15));
     }
     
     public function show(User $user){

@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios'
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, watchEffect, computed, onMounted } from 'vue'
   import { useToast } from "vue-toastification"
   import {useRouter} from 'vue-router'
   import UserTable from "./UserTable.vue"
@@ -13,17 +13,26 @@
 
   const filterTypeOfUser = ref(null)
   const filterBlockedUser = ref(null)
+  const totalUsers = ref(null)
+  const orderBy = ref(null)
 
-  const loadUsers = (page = 1) => {
-    axios.get('users', {params:{page: page, paginate: 1}})
-        .then((response) => {
-          users.value = response.data.data
-          paginationData.value = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+  const loadUsers = async (page = 1) => {
+
+    try{
+      const response = await axios.get('users', {params:{
+        page: page, 
+        paginate: 1,
+        userType: filterTypeOfUser.value,
+        blocked: filterBlockedUser.value,
+        order: orderBy.value
+      }})
+      users.value = response.data.data
+      paginationData.value = response.data
+      totalUsers.value = paginationData.value.meta.total
+    }catch(error){
+      console.log(error)
     }
+  }
 
   const editUser = (user) => {
       console.log('Navigate to Edit User with ID = ' + user.id)
@@ -44,27 +53,15 @@
     }
   }
 
-  const filteredUsers = computed(()=>{
-    return users.value.filter(user =>
-        (!filterTypeOfUser.value
-          || filterTypeOfUser.value == user.user_type
-        ) &&(!filterBlockedUser.value
-          || filterBlockedUser.value == user.blocked))
-  })
-
-  const totalUsers = computed(() => {
-    return users.value.reduce((c, user) =>
-        (!filterTypeOfUser.value
-          || filterTypeOfUser.value == user.user_type
-        ) &&
-          (!filterBlockedUser.value
-            || filterBlockedUser.value == user.blocked
-          ) ? c + 1 : c, 0)
+  watchEffect(
+  () => {
+    loadUsers()
   })
 
   onMounted (() => {
     loadUsers()
   })
+
 </script>
 
 <template>
@@ -108,9 +105,24 @@
         <option value="0">Not Blocked</option>
       </select>
     </div>
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+      <label
+        for="selectOrderBy"
+        class="form-label"
+      >Order by:</label>
+      <select
+        class="form-select"
+        id="selectOrderBy"
+        v-model="orderBy"
+      >
+        <option :value="null"></option>
+        <option value="asc">Alphabetically - Asc</option>
+        <option value="desc">Alphabetically - Desc</option>
+      </select>
+    </div>
   </div>
   <user-table
-    :users="filteredUsers"
+    :users="users"
     :showId="false"
     @edit="editUser"
     @delete="deleteUser"
