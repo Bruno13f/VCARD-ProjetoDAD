@@ -48,7 +48,8 @@ class StoreTransactionRequest extends FormRequest {
             'type' => 'required|in:C,D',
             'payment_type' => 'required|in:VCARD,MBWAY,PAYPAL,IBAN,MB,VISA',
             'payment_reference' => ['required', ...$rulesRef],
-            'description' => 'nullable|string|max:255',
+            'category_id' => 'nullable|integer',
+            'description' => 'nullable|string|max:255'
         ];
     }
 }
