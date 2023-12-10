@@ -44,12 +44,11 @@ class StoreTransactionRequest extends FormRequest {
 
         return [
             'vcard' => 'required|integer|digits:9|regex:/^9\d{8}$/',
-            'value' => 'required|numeric|regex:/^\d{0,9}(.\d{1,2})?$/',
+            'value' => 'required|numeric|regex:/^\d{0,9}(\.\d{1,2})?$/',
             'type' => 'required|in:C,D',
             'payment_type' => 'required|in:VCARD,MBWAY,PAYPAL,IBAN,MB,VISA',
             'payment_reference' => ['required', ...$rulesRef],
-            'category_id' => 'nullable|integer',
-            'description' => 'nullable|string|max:255'
+            'description' => 'nullable|string|max:255',
         ];
     }
 }
