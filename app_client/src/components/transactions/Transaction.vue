@@ -78,6 +78,7 @@ const save = async () => {
   } else {
     try {
       console.log(transaction.value)
+      transaction.value.category_id = transaction.value.category_id.id
       const response = await axios.put('transactions/' + props.id, transaction.value)
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)

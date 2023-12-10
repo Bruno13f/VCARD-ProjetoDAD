@@ -175,14 +175,22 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'home' })
     return
   }
+  // if (to.name == 'Transaction') {
+  //   const transactionId = parseInt(to.params.id);
+
+  //   const response = await axios.get(`http://server-api.test/api/transactions/${transactionId}`);
+  //   const transactionDetails = response.data;
+  //   const vcardOfTransaction = transactionDetails.data.vcard.phone_number;
+
+  //   if ((userStore.user.user_type == 'A') || (userStore.user.id ==vcardOfTransaction)) {
+  //     next()
+  //     return
+  //   }
+  //   next({ name: 'home' })
+  //   return
+  // }
   if (to.name == 'Transaction') {
-    const transactionId = parseInt(to.params.id);
-
-    const response = await axios.get(`http://server-api.test/api/transactions/${transactionId}`);
-    const transactionDetails = response.data;
-    const vcardOfTransaction = transactionDetails.data.vcard.phone_number;
-
-    if ((userStore.user.user_type == 'A') || (userStore.user.id ==vcardOfTransaction)) {
+    if (userStore.user) {
       next()
       return
     }

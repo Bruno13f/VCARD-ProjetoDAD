@@ -37,6 +37,8 @@ watch(
 )
 
 const save = () => {
+  console.log(editingTransaction)
+  console.log(filteredCategories)
   emit('save', editingTransaction.value)
 }
 
@@ -107,7 +109,7 @@ const cancel = () => {
         <option value="MBWAY">MBWAY</option>
         <option value="PAYPAL">PAYPAL</option>
         <option value="IBAN">IBAN</option>
-        <option value="MB">MB</option>
+        <option value="Multibanco">MB</option>
         <option value="VISA">VISA</option>
       </select>
       <field-error-message :errors="errors" fieldName="payment_type"></field-error-message>
@@ -116,9 +118,9 @@ const cancel = () => {
     
     <div class="mb-3 ms-xs-3 flex-grow-1">
     <label for="selectCategory" class="form-label">Category: </label>
-    <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id" :disabled=!flagUser>
+    <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id.id" :disabled=!flagUser>
       <option :value="null"></option>
-      <option v-for="category in filteredCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
+      <option v-for="category in filteredCategories" :key="category.id" :value="category.id" >{{ category.name }}</option>
     </select>
     <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
   </div>
