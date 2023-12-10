@@ -26,9 +26,7 @@ const userStore = useUserStore()
 const flagOperation = props.operationType == 'insert' ? false : true
 const flagUser = userStore.user.user_type == 'A'? false : true
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
-const flagCategory = computed(() => props.transaction.category_id === null);
 const editingTransaction = ref(props.transaction)
-
 
 watch(
   () => props.transaction,
@@ -105,11 +103,10 @@ const cancel = () => {
       <field-error-message :errors="errors" fieldName="payment_type"></field-error-message>
     </div>
 
-    
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectCategory" class="form-label">Category: </label>
-      <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id.id" :disabled="!flagUser">
-        <option :value="null"></option>
+      <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id" :disabled="!flagUser">
+        <option :value="null">No Category</option>
         <option v-for="category in filteredCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
       </select>
       <field-error-message :errors="errors" fieldName="category_id"></field-error-message>

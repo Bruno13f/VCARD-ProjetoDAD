@@ -50,6 +50,8 @@ const loadTransaction = async (id) => {
     try {
       const response = await axios.get('transactions/' + id)
       transaction.value = response.data.data
+      transaction.value.category_id = transaction.value.category_id?.id == null ? null : transaction.value.category_id.id 
+      console.log(transaction.value.category_id)
       originalValueStr = JSON.stringify(transaction.value)
     } catch (error) {
       console.log(error)
@@ -78,7 +80,6 @@ const save = async () => {
   } else {
     try {
       console.log(transaction.value)
-      transaction.value.category_id = transaction.value.category_id.id
       const response = await axios.put('transactions/' + props.id, transaction.value)
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)
