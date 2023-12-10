@@ -58,9 +58,8 @@
       const response = await axios.delete('vcards/' + vcard.phone_number)
       let deletedVcard = response.data.data
       let idx = vcards.value.findIndex((t) => t.phone_number === deletedVcard.phone_number)
-      if (idx >= 0) {
+      if (idx >= 0) 
         vcards.value.splice(idx, 1)
-      }
       toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
     }catch(error){
       if (error.response.status == 422){
@@ -76,17 +75,13 @@
     try{
       const response = await axios.patch('vcards/' + vcard.phone_number + '/blocked', { blocked: vcard.blocked ? '0' : '1' })
       toast.success('Vcard ' + response.data.data.phone_number + ' was ' + blocked + ' successfully.')
-      // let blockedVcard = response.data.data
-      // let idx = vcards.value.findIndex((t) => t.phone_number === blockedVcard.phone_number)
-      // if (idx >= 0){
-      //   console.log(vcard.blocked)
-      //   vcards.value[idx].blocked = vcard.blocked ? '0' : '1'
-      //   console.log(vcards.value[idx].blocked)
-      // }
+      let blockedVcard = response.data.data
+      let idx = vcards.value.findIndex((t) => t.phone_number === blockedVcard.phone_number)
+      if (idx >= 0)
+        vcards.value[idx].blocked = vcard.blocked ? 0 : 1
     }catch(error){
       toast.error('Vcard was not ' + blocked + ' due to unknown server error!')
     }
-    loadVcards()
   }
 
   watchEffect(
