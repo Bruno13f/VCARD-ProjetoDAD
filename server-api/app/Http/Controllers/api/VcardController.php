@@ -160,7 +160,7 @@ class VcardController extends Controller
     public function getTransactionsOfVcard(Vcard $vcard, Request $request)
     {
 
-        $transactionsQuery = Transaction::query();
+        $transactionsQuery = $vcard->transactions();
 
         $type = $request->type;
         $payment = $request->payment;

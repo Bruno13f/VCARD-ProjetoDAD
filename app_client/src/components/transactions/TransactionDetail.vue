@@ -26,8 +26,9 @@ const userStore = useUserStore()
 const flagOperation = props.operationType == 'insert' ? false : true
 const flagUser = userStore.user.user_type == 'A'? false : true
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
-
+const flagCategory = computed(() => props.transaction.category_id === null);
 const editingTransaction = ref(props.transaction)
+
 
 watch(
   () => props.transaction,
@@ -37,8 +38,6 @@ watch(
 )
 
 const save = () => {
-  console.log(editingTransaction)
-  console.log(filteredCategories)
   emit('save', editingTransaction.value)
 }
 
@@ -53,22 +52,13 @@ const cancel = () => {
     <h3 class="mt-5 mb-3"></h3>
     <hr>
 
-    <div class="mb-3" v-if="flagOperation">
+    <div class="mb-3">
       <div class="mb-3">
         <label for="inputName" class="form-label">Vcard *</label>
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-          v-model="editingTransaction.vcard.phone_number" :disabled=true>
-        <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
-      </div>
-    </div>
-
-    <!-- VER COM O STOR -->
-
-    <div class="mb-3" v-if="!flagOperation">
-      <div class="mb-3">
-        <label for="inputName" class="form-label">Vcard *</label>
+        v-if="flagUser && !flagOperation" v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-          v-model="editingTransaction.vcard" :disabled=flagUser>
+        v-else v-model="editingTransaction.vcard.phone_number" :disabled="flagUser || flagOperation">
         <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
       </div>
     </div>
@@ -117,13 +107,13 @@ const cancel = () => {
 
     
     <div class="mb-3 ms-xs-3 flex-grow-1">
-    <label for="selectCategory" class="form-label">Category: </label>
-    <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id.id" :disabled=!flagUser>
-      <option :value="null"></option>
-      <option v-for="category in filteredCategories" :key="category.id" :value="category.id" >{{ category.name }}</option>
-    </select>
-    <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
-  </div>
+      <label for="selectCategory" class="form-label">Category: </label>
+      <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id.id" :disabled="!flagUser">
+        <option :value="null"></option>
+        <option v-for="category in filteredCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
+      </select>
+      <field-error-message :errors="errors" fieldName="category_id"></field-error-message>
+    </div>
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="inputDescription" class="form-label">Description </label>

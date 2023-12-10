@@ -83,7 +83,6 @@ const save = async () => {
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)
       console.log('Transaction Updated')
-      console.dir(response.data.data)
       toast.success('Transaction #' + response.data.data.id + ' was edited successfully.')
       router.back()
     } catch (error) {
@@ -135,7 +134,7 @@ onMounted(async () => {
   categories.value=[]
   const id = operation.value == 'update' ? transaction.value.vcard.phone_number : userStore.user.id  
   try {
-    const response = await axios.get(`vcards/${id}/categories`)
+    const response = await axios.get(`vcards/${id}/categories?paginate=0`)
     categories.value = response.data.data
   } catch (error) {
     console.log(error)
