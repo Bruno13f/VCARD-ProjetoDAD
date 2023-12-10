@@ -128,7 +128,7 @@
         <option value="MBWAY">MBWAY</option>
         <option value="PAYPAL">PAYPAL</option>
         <option value="IBAN">IBAN</option>
-        <option value="Multibanco">MB</option>
+        <option value="MB">MB</option>
         <option value="VISA">VISA</option>
       </select>
     </div>
