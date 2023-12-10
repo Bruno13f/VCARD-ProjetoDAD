@@ -4,7 +4,9 @@ import { ref, watch, computed, onMounted} from 'vue'
 import VcardDetail from "./VcardDetail.vue"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useToast } from "vue-toastification"
+import { useUserStore } from '../../stores/user'
 
+const userStore = useUserStore()
 const toast = useToast()
 const router = useRouter()
 
@@ -29,7 +31,6 @@ const newVcard = () => {
   const errors = ref(null)
   const confirmationLeaveDialog = ref(null)
   let originalValueStr = ''
-
 
 const loadVcard = async (phone_number) => {
   originalValueStr = ''
@@ -74,6 +75,8 @@ const save = async () => {
       console.log('Vcard Updated')
       console.dir(response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
+      if (userStore.user.user_type == 'V')
+        userStore.user.name = vcard.value.name
       router.back()
     } catch (error) {
       if (error.response.status == 422) {
