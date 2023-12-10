@@ -31,7 +31,7 @@
   )
 
   const save = () => {
-      emit('save', editingVcard.value)
+    emit('save', editingVcard.value)
   }
 
   const cancel = () => {

@@ -35,6 +35,7 @@ const categories = ref([])
 const transaction = ref(newTransaction())
 const errors = ref(null)
 const confirmationLeaveDialog = ref(null)
+const flagUser = userStore.user.user_type == 'V' ? true : false
 let originalValueStr = ''
 
 const loadTransaction = async (id) => {
@@ -42,6 +43,8 @@ const loadTransaction = async (id) => {
   errors.value = null
   if (!id || id < 0) {
     transaction.value = newTransaction()
+    transaction.value.vcard = flagUser ? userStore.user.id : '' 
+    transaction.value.type = operation.value == 'insert' && flagUser ? 'D' : ''
     originalValueStr = JSON.stringify(transaction.value)
   } else {
     try {

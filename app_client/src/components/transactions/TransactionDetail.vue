@@ -25,8 +25,6 @@ const emit = defineEmits(['save', 'cancel'])
 const userStore = useUserStore()
 const flagOperation = props.operationType == 'insert' ? false : true
 const flagUser = userStore.user.user_type == 'A'? false : true
-props.transaction.vcard = userStore.user.user_type == 'A' ? '' : userStore.user.id;
-props.transaction.type = flagOperation ? '' : 'D' 
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
 
 const editingTransaction = ref(props.transaction)

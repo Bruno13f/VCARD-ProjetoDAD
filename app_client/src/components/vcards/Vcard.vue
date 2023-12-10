@@ -56,7 +56,7 @@ const save = async () => {
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)
       toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
-      router.back();
+      router.back()
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
