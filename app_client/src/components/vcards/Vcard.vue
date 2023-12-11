@@ -61,7 +61,7 @@ const save = async () => {
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        toast.error('Vcard was not created due to validation errors!')
+        toast.error(error.response.data.error === undefined ? 'Vcard was not created due to validation errors!' : error.response.data.error )
       } else {
         toast.error('Vcard was not created due to unknown server error!')
       }

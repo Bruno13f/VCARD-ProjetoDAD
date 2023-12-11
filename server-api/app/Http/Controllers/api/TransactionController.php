@@ -61,21 +61,36 @@ class TransactionController extends Controller {
         if(($vcard->balance - $validatedRequest['value']) < 0) {
             return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+        
+        if($validatedRequest['value'] > $vcard->max_debit) {
+            return response()->json(['error' => "The value of the transfer is greater that the max debit of the vcard"], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $validatedRequest['old_balance'] = $vcard->balance;
-
+        
         if($validatedRequest['payment_type'] == 'VCARD') {
             $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
             $validatedRequest['pair_vcard'] = $vcardReceiver->phone_number;
 
             $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
 
-            if($validatedRequest['type'] == 'C') {
-                if(($vcardReceiver->balance - $validatedRequest['value']) < 0) {
-                    return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
-                }
+            if($validatedRequest['vcard'] == $validatedRequest['payment_reference']) {
+                return response()->json(['error' => "You cant transfer money to yourself"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
+            if($validatedRequest['type'] == 'D') {
+                $vcardReceiver->balance += $validatedRequest['value'];
+                $validatedRequest['new_balance'] = $vcard->balance -= $validatedRequest['value'];
+                $vcard->save();
+                $vcardReceiver->save();
+    
+            } else{
+                $vcardReceiver->balance -= $validatedRequest['value'];
+                $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
+                $vcard->save();
+                $vcardReceiver->save();
+            }
+            
         } else {
             $paymentServiceUrl = 'https://dad-202324-payments-api.vercel.app';
             $paymentServiceEndpoint = '/api/'.($validatedRequest['type'] == 'C' ? 'debit' : 'credit');
@@ -101,34 +116,12 @@ class TransactionController extends Controller {
                 }
 
             } else {
-                $errorResponse = $paymentServiceUrl;
-                return response()->json(['error' => $errorResponse], $paymentServiceResponse->status());
+                return response()->json(['error' =>'Payment Reference doesn`t exist for the Payment Type'], $paymentServiceResponse->status());
             }
-        }
-
-        if(($validatedRequest['vcard'] == $validatedRequest['payment_reference']) && $validatedRequest['payment_type'] == 'VCARD') {
-            return response()->json(['error' => "You cant transfer money to yourself"], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        if($validatedRequest['value'] > $vcard->max_debit) {
-            return response()->json(['error' => "The value of the transfer is greater that the vcard max_debit"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $validatedRequest['date'] = now()->toDateString();
         $validatedRequest['datetime'] = now();
-
-        if($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'D') {
-            $vcardReceiver->balance += $validatedRequest['value'];
-            $validatedRequest['new_balance'] = $vcard->balance -= $validatedRequest['value'];
-            $vcard->save();
-            $vcardReceiver->save();
-
-        } else if($validatedRequest['payment_type'] == 'VCARD' && $validatedRequest['type'] == 'C') {
-            $vcardReceiver->balance -= $validatedRequest['value'];
-            $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
-            $vcard->save();
-            $vcardReceiver->save();
-        }
 
         $newTransaction = $vcard->transactions()->create($validatedRequest);
 
