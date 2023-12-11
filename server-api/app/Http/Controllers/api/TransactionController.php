@@ -97,7 +97,7 @@ class TransactionController extends Controller {
             $paymentServicePayload = [
                 'type' => $validatedRequest['payment_type'],
                 'reference' => $validatedRequest['payment_reference'],
-                'value' => (int)$validatedRequest['value'],
+                'value' => (float)$validatedRequest['value'],
             ];
 
             $paymentServiceResponse = Http::withHeaders([

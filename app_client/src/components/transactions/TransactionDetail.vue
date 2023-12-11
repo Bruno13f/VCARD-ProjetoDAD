@@ -98,7 +98,7 @@ const cancel = () => {
         <option value="MBWAY">MBWAY</option>
         <option value="PAYPAL">PAYPAL</option>
         <option value="IBAN">IBAN</option>
-        <option value="MB">MB</option>
+        <option value="MB">Multibanco</option>
         <option value="VISA">VISA</option>
       </select>
       <field-error-message :errors="errors" fieldName="payment_type"></field-error-message>
