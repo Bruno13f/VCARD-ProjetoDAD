@@ -58,10 +58,14 @@ class TransactionController extends Controller {
 
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
 
+        if($vcard->blocked == 1) {
+            return response()->json(['error' => "The Vcard is blocked can`t do transfers"], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         $validatedRequest['value'] = round($validatedRequest['value'], 2);
 
         if(($vcard->balance - $validatedRequest['value']) < 0) {
-            return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json(['error' => "The Vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $validatedRequest['old_balance'] = $vcard->balance;
@@ -71,6 +75,10 @@ class TransactionController extends Controller {
             $validatedRequest['pair_vcard'] = $vcardReceiver->phone_number;
 
             $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
+
+            if($vcardReceiver->blocked == 1) {
+                return response()->json(['error' => "The Vcard Receiver is blocked can`t do transfers"], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
 
             if($validatedRequest['vcard'] == $validatedRequest['payment_reference']) {
                 return response()->json(['error' => "You cant transfer money to yourself"], Response::HTTP_UNPROCESSABLE_ENTITY);
