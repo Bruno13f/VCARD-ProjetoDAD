@@ -76,8 +76,7 @@ const editTransaction = (transaction) => {
   }
 
   socket.on('newTransaction', (transaction) => {
-    transactions.value.push(transaction)
-    toast.success(`A new Transaction was created (#${transaction.id} by ${transaction.id})`)
+    loadTransactions()
   })
 
 watchEffect(

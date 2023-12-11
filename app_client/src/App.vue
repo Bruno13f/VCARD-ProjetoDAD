@@ -33,6 +33,9 @@ const clickMenuOption = () => {
   }
 }
 
+socket.on('newTransaction', (transaction) => {
+    toast.success(`A new Transaction was made for you ! Value:${transaction.value} $ (#${transaction.id} by ${transaction.vcard.phone_number})`)
+})
 
 </script>
 
