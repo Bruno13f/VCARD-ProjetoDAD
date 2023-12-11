@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, watch, computed, onMounted} from 'vue'
+import { ref, watch, computed, onMounted, inject} from 'vue'
 import VcardDetail from "./VcardDetail.vue"
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useToast } from "vue-toastification"
@@ -9,6 +9,7 @@ import { useUserStore } from '../../stores/user'
 const userStore = useUserStore()
 const toast = useToast()
 const router = useRouter()
+const socket = inject("socket")
 
 const newVcard = () => {
   return {
@@ -56,6 +57,8 @@ const save = async () => {
       const response = await axios.post('vcards', vcard.value)
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)
+      console.log(response.data.data)
+      socket.emit('insertVcard', response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
       router.back()
     } catch (error) {
@@ -74,6 +77,7 @@ const save = async () => {
       originalValueStr = JSON.stringify(vcard.value)
       console.log('Vcard Updated')
       console.dir(response.data.data)
+      socket.emit('updateVcard', response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
       if (userStore.user.user_type == 'V')
         userStore.user.name = vcard.value.name

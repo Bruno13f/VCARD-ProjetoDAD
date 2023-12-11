@@ -15,9 +15,18 @@ io.on('connection', (socket) => {
     socket.on('newTransaction', (transaction) => {
         socket.in(transaction.pair_vcard).emit('newTransaction', transaction)
     })
+    socket.on('insertVcard', function (vcard) {
+        socket.in('administrator').emit('insertVcard', vcard)
+    })
+    socket.on('updateVcard', function (vcard) {
+        socket.in('administrator').except(vcard.id).emit('updateVcard', vcard)
+        socket.in(vcard.id).emit('updateVcard', vcard)
+    })
     socket.on('loggedIn', function (user) {
+        console.log(user)
         socket.join(user.id)
-        if (user.type == 'A') {
+        if (user.user_type == 'A') {
+            console.log("admin")
             socket.join('administrator')
         }
     })

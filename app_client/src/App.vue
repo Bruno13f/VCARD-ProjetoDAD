@@ -35,7 +35,20 @@ const clickMenuOption = () => {
 }
 
 socket.on('newTransaction', (transaction) => {
-    toast.success(`A new Transaction was made for you ! Value:${transaction.value} $ (#${transaction.id} by ${transaction.vcard.phone_number})`)
+    toast.success(`A new Transaction was made for you ! Value:${transaction.value} € (#${transaction.id} by ${transaction.vcard.phone_number})`)
+})
+
+socket.on('insertVcard', (vcard) => {
+    toast.success(`A new Vcard was create ! #${vcard.id} (${vcard.name})`)
+})
+
+socket.on('updateVcard', (vcard) => {
+  if (userStore.userId == vcard.id) {
+    userStore.value = vcard
+    toast.info('Your user profile has been changed!')
+  } else {
+    toast.info(`User profile #${vcard.id} (${vcard.name}) has changed!`)
+  }
 })
 
 </script>
