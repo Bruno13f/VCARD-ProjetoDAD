@@ -8,6 +8,7 @@ import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeConfirmationCode from "../components/auth/ChangeConfirmationCode.vue"
 import Vcards from '../components/vcards/vcards.vue'
 import Vcard from '../components/vcards/vcard.vue'
+import VcardConfirmation from '../components/vcards/VcardConfirmation.vue'
 import Transactions from '../components/transactions/transactions.vue'
 import Transaction from '../components/transactions/transaction.vue'
 import Categories from '../components/categories/categories.vue'
@@ -77,6 +78,12 @@ const router = createRouter({
       path: '/vcards/:phone_number',
       name: 'Vcard',
       component: Vcard,
+      props: route => ({ phone_number: parseInt(route.params.phone_number) })
+    },
+    {
+      path: '/vcards/:phone_number/delete',
+      name: 'VcardConfirmation',
+      component: VcardConfirmation,
       props: route => ({ phone_number: parseInt(route.params.phone_number) })
     },
     {
@@ -159,6 +166,14 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   if (to.name == 'Vcard') {
+    if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.phone_number)) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'VcardConfirmation') {
     if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.phone_number)) {
       next()
       return

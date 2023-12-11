@@ -12,6 +12,7 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreVcardRequest;
+use App\Http\Requests\DeleteVcardRequest;
 use App\Http\Requests\UpdateVcardProfileRequest;
 use App\Http\Requests\UpdateVcardRequest;
 use App\Http\Requests\UpdateBlockVcardRequest;
@@ -22,6 +23,8 @@ use Illuminate\Http\Response;
 use App\Services\Base64Services;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class VcardController extends Controller
 {
@@ -137,7 +140,25 @@ class VcardController extends Controller
     }
 
 
-    public function destroy (Vcard $vcard){
+    public function destroy (Request $request, Vcard $vcard){
+         
+        $validator = Validator::make($request->json()->all()['body'], [
+            'password' => ['required',function ($attribute, $value, $fail) use ($vcard){
+                if (!$this->validateCurrentPassword($value, $vcard)) {
+                    $fail('Invalid Password.');
+                }
+            }],
+            'confirmation_code' => ['required',function ($attribute, $value, $fail) use ($vcard){
+                if (!$this->validateCurrentConfirmationCode($value, $vcard)) {
+                    $fail('Invalid Confirmation Code.');
+                }
+            }],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
         if ($vcard->balance != 0)
             return response()->json(['error' => "Can't delete the Vcard - Balance different than 0"], Response::HTTP_UNPROCESSABLE_ENTITY); // nao e possivel eliminar 
 
@@ -154,7 +175,16 @@ class VcardController extends Controller
         }
             
         return new VcardResource($vcard);
-        
+    }
+
+    protected function validateCurrentConfirmationCode($currentConfirmationCode, Vcard $vcard): bool
+    {
+        return Hash::check($currentConfirmationCode, $vcard->confirmation_code);
+    }
+
+    protected function validateCurrentPassword($currentPassword, Vcard $vcard): bool
+    {
+        return Hash::check($currentPassword, $vcard->password);
     }
 
     public function getTransactionsOfVcard(Vcard $vcard, Request $request)

@@ -57,29 +57,28 @@ const editTransaction = (transaction) => {
   console.log('Navigate to Edit Transaction with id = ' + transaction.id)
 }
 
-const deleteTransaction = async (transaction) => {
-  axios.delete('transactions/' + transaction.id).then((response) => {
-    let deletedTransaction = response.data.data
-    let idx = transactions.value.findIndex((t) => t.id === deletedTransaction.id)
-    if (idx >= 0) {
-      transactions.value.splice(idx, 1)
-    }
-    toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
-  })
-    .catch((error) => {
-      if (error.response.status == 422) {
+  const deleteTransaction = async (transaction) => {
+    try{
+      const response = await axios.delete('transactions/' + transaction.id)
+      let deletedTransaction = response.data.data
+      let idx = transactions.value.findIndex((t) => t.id === deletedTransaction.id)
+      if (idx >= 0) {
+        transactions.value.splice(idx, 1)
+      }
+      toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
+    }catch(error){
+      if (error.response.status == 422){
         toast.error("Can't delete Transaction - Vcard exists")
-      } else {
+      }else {
         toast.error("Transaction wasn't deleted due to unknown server error!")
       }
-    });
-}
+    }
+  }
 
-socket.on('newTransaction', (transaction) => {
-  transactions.value.push(transaction)
-  toast.success(`A new Transaction was created (#${transaction.id} by ${transaction.id})`)
-})
-
+  socket.on('newTransaction', (transaction) => {
+    transactions.value.push(transaction)
+    toast.success(`A new Transaction was created (#${transaction.id} by ${transaction.id})`)
+  })
 
 watchEffect(
   () => {
