@@ -34,6 +34,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('users/me', [UserController::class, 'show_me']);
 
     //Admins
+    Route::post('admins', [AdminController::class,'store']);
     Route::put('admins/{admin}', [AdminController::class,'update']);
     Route::delete('admins/{admin}', [AdminController::class,'destroy']);
     Route::patch('admins/{admin}/password', [AdminController::class,'update_password']);
