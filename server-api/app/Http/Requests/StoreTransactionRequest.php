@@ -24,27 +24,33 @@ class StoreTransactionRequest extends FormRequest {
                 break;
             case 'MBWAY':
                 $rulesRef = ['regex:/^9\d{8}$/'];
+                $limitRules = ['max:50'];
                 break;
             case 'PAYPAL':
                 $rulesRef = ['email'];
+                $limitRules = ['max:100'];
                 break;
             case 'IBAN':
                 $rulesRef = ['regex:/^[A-Za-z]{2}\d{23}$/'];
+                $limitRules = ['max:1000'];
                 break;
             case 'MB':
                 $rulesRef = ['regex:/^\d{5}-\d{9}$/'];
+                $limitRules = ['max:500'];
                 break;
             case 'VISA':
                 $rulesRef = ['regex:/^4\d{15}$/'];
+                $limitRules = ['max:200'];
                 break;
             default:
                 $rulesRef = [];
+                $limitRules = [];
                 break;
         }
 
         return [
             'vcard' => 'required|integer|digits:9|regex:/^9\d{8}$/',
-            'value' => 'required|numeric|regex:/^\d{0,9}(\.\d{1,2})?$/',
+            'value' => ['required', 'numeric', 'regex:/^\d{0,9}(\.\d{1,2})?$/', ...$limitRules],
             'type' => 'required|in:C,D',
             'payment_type' => 'required|in:VCARD,MBWAY,PAYPAL,IBAN,MB,VISA',
             'payment_reference' => ['required', ...$rulesRef],
