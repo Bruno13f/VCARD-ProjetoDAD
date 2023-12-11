@@ -11,6 +11,7 @@ import ConfirmationDialog from './components/global/ConfirmationDialog.vue'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'  
+import { io } from "socket.io-client"
 
 import App from './App.vue'
 import router from './router'
@@ -21,6 +22,8 @@ const serverBaseUrl = 'http://server-api.test'
 app.provide('serverBaseUrl', serverBaseUrl) 
 axios.defaults.baseURL = serverBaseUrl + '/api'
 axios.defaults.headers.common['Content-type'] = 'application/json'
+
+app.provide('socket', io("http://localhost:8080"))
 
 app.use(Toast, {
     position: "top-center",
