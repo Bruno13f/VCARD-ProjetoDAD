@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Vcard;
 
 class StoreTransactionRequest extends FormRequest {
     /**
@@ -21,6 +22,8 @@ class StoreTransactionRequest extends FormRequest {
         switch($this->payment_type) {
             case 'VCARD':
                 $rulesRef = ['regex:/^9\d{8}$/', 'exists:Vcards,phone_number'];
+                $maxDebit = Vcard::where('phone_number', '=', $this->vcard)->value('max_debit');
+                $limitRules = ['max:' . $maxDebit];
                 break;
             case 'MBWAY':
                 $rulesRef = ['regex:/^9\d{8}$/'];
