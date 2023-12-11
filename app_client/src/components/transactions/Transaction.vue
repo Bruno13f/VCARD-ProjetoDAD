@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, watch, computed, onMounted} from 'vue'
+import { ref, watch, computed, onMounted, inject } from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import TransactionDetail from "./TransactionDetail.vue"
 import { useToast } from "vue-toastification"
@@ -9,10 +9,11 @@ import { useUserStore } from '@/stores/user.js'
 const toast = useToast()
 const router = useRouter()
 const userStore = useUserStore()
+const socket = inject("socket")
 
 const newTransaction = () => {
   return {
-    id:null,
+    id: null,
     vcard: '',
     date: '',
     datetime: '',
@@ -22,10 +23,10 @@ const newTransaction = () => {
     new_balance: '',
     payment_type: '',
     payment_reference: '',
-    pair_vcard:null,
-    pair_transaction:null,
-    category_id:'',
-    description:null,
+    pair_vcard: null,
+    pair_transaction: null,
+    category_id: '',
+    description: null,
     created_at: null,
     updated_at: null,
     deleted_at: null,
@@ -43,14 +44,14 @@ const loadTransaction = async (id) => {
   errors.value = null
   if (!id || id < 0) {
     transaction.value = newTransaction()
-    transaction.value.vcard = flagUser ? userStore.user.id : '' 
+    transaction.value.vcard = flagUser ? userStore.user.id : ''
     transaction.value.type = operation.value == 'insert' && flagUser ? 'D' : ''
     originalValueStr = JSON.stringify(transaction.value)
   } else {
     try {
       const response = await axios.get('transactions/' + id)
       transaction.value = response.data.data
-      transaction.value.category_id = transaction.value.category_id?.id == null ? null : transaction.value.category_id.id 
+      transaction.value.category_id = transaction.value.category_id?.id == null ? null : transaction.value.category_id.id
       console.log(transaction.value.category_id)
       originalValueStr = JSON.stringify(transaction.value)
     } catch (error) {
@@ -67,12 +68,13 @@ const save = async () => {
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)
       console.log(response)
+      socket.emit('newTransaction', response.data.data)
       toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
       router.back();
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        toast.error(error.response.data.error === undefined ? 'Transaction was not created due to validation errors!' : error.response.data.error )
+        toast.error(error.response.data.error === undefined ? 'Transaction was not created due to validation errors!' : error.response.data.error)
       } else {
         toast.error('Transaction was not created due to unknown server error!')
       }
@@ -100,7 +102,7 @@ const save = async () => {
 
 
 const cancel = () => {
-  originalValueStr = JSON.stringify(transaction.value)  
+  originalValueStr = JSON.stringify(transaction.value)
   router.back()
 }
 
@@ -132,8 +134,8 @@ onMounted(async () => {
   if (operation.value == 'insert' && userStore.user.user_type == 'A')
     return
 
-  categories.value=[]
-  const id = operation.value == 'update' ? transaction.value.vcard.phone_number : userStore.user.id  
+  categories.value = []
+  const id = operation.value == 'update' ? transaction.value.vcard.phone_number : userStore.user.id
   try {
     const response = await axios.get(`vcards/${id}/categories?paginate=0`)
     categories.value = response.data.data
@@ -164,19 +166,10 @@ onBeforeRouteLeave((to, from, next) => {
 
 
 <template>
-  <confirmation-dialog
-    ref="confirmationLeaveDialog"
-    confirmationBtn="Discard changes and leave"
-    msg="Do you really want to leave? You have unsaved changes!"
-    @confirmed="leaveConfirmed"
-  >
-  </confirmation-dialog>  
-  <TransactionDetail 
-  :operationType="operation" 
-  :transaction="transaction"
-  :errors="errors" 
-  :categories="categories"
-  @save="save"
-  @cancel="cancel">
+  <confirmation-dialog ref="confirmationLeaveDialog" confirmationBtn="Discard changes and leave"
+    msg="Do you really want to leave? You have unsaved changes!" @confirmed="leaveConfirmed">
+  </confirmation-dialog>
+  <TransactionDetail :operationType="operation" :transaction="transaction" :errors="errors" :categories="categories"
+    @save="save" @cancel="cancel">
   </TransactionDetail>
 </template>

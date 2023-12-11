@@ -1,89 +1,95 @@
 <script setup>
-  import axios from 'axios'
-  import { ref, watchEffect, computed, onMounted } from 'vue'
-  import {useRouter} from 'vue-router'
-  import TransactionTable from "./TransactionTable.vue"
-  import { useToast } from "vue-toastification"
-  import { useUserStore } from '@/stores/user.js'
-  import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+import axios from 'axios'
+import { ref, watchEffect, computed, onMounted, inject } from 'vue'
+import { useRouter } from 'vue-router'
+import TransactionTable from "./TransactionTable.vue"
+import { useToast } from "vue-toastification"
+import { useUserStore } from '@/stores/user.js'
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
-  const toast = useToast();
-  const router = useRouter();
-  const paginationData = ref({})
-  const userStore = useUserStore() 
-  const flag = userStore.user.user_type == 'A' ? false : true
-  const totalTransactions = ref(null)
-  const transactions = ref([])
-  const categories = ref([])
-  const filterByType = ref(null)
-  const filterByPaymentType = ref(null)
-  const filterByCategory = ref(null)
-  const orderBy = ref(null)
+const toast = useToast();
+const router = useRouter();
+const paginationData = ref({})
+const userStore = useUserStore()
+const flag = userStore.user.user_type == 'A' ? false : true
+const totalTransactions = ref(null)
+const transactions = ref([])
+const categories = ref([])
+const filterByType = ref(null)
+const filterByPaymentType = ref(null)
+const filterByCategory = ref(null)
+const orderBy = ref(null)
+const socket = inject("socket")
 
+const loadTransactions = async (page = 1) => {
+  try {
+    const params = {
+      page: page,
+      type: filterByType.value,
+      payment: filterByPaymentType.value,
+      category: filterByCategory.value,
+      order: orderBy.value
+    }
+    const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`, { params: params }) : await axios.get('transactions', { params: params })
+    transactions.value = response.data.data
+    paginationData.value = response.data
+    totalTransactions.value = paginationData.value.meta.total
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-  const loadTransactions = async (page = 1) => {
-    try{
-      const params = {
-        page: page,
-        type: filterByType.value,
-        payment: filterByPaymentType.value,
-        category: filterByCategory.value,
-        order: orderBy.value
+const loadCategories = async () => {
+  if (!flag)
+    return
+
+  try {
+    const response = await axios.get(`vcards/${userStore.user.id}/categories?paginate=0`)
+    categories.value = response.data.data
+    console.log(categories)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const editTransaction = (transaction) => {
+  router.push({ name: 'Transaction', params: { id: transaction.id } })
+  console.log('Navigate to Edit Transaction with id = ' + transaction.id)
+}
+
+const deleteTransaction = async (transaction) => {
+  axios.delete('transactions/' + transaction.id).then((response) => {
+    let deletedTransaction = response.data.data
+    let idx = transactions.value.findIndex((t) => t.id === deletedTransaction.id)
+    if (idx >= 0) {
+      transactions.value.splice(idx, 1)
+    }
+    toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
+  })
+    .catch((error) => {
+      if (error.response.status == 422) {
+        toast.error("Can't delete Transaction - Vcard exists")
+      } else {
+        toast.error("Transaction wasn't deleted due to unknown server error!")
       }
-      const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`, {params: params}) : await axios.get('transactions', {params: params})
-      transactions.value = response.data.data
-      paginationData.value = response.data
-      totalTransactions.value = paginationData.value.meta.total
-    }catch(error){
-      console.log(error)
-    }
-  }
+    });
+}
 
-  const loadCategories = async () => {
-    if (!flag)
-      return
+socket.on('newTransaction', (transaction) => {
+  transactions.value.push(transaction)
+  toast.success(`A new Transaction was created (#${transaction.id} by ${transaction.id})`)
+})
 
-    try{
-      const response = await axios.get(`vcards/${userStore.user.id}/categories?paginate=0`)
-      categories.value = response.data.data
-      console.log(categories)
-    }catch(error){
-      console.log(error)
-    }
-  }
-  
-  const editTransaction = (transaction) => {
-      router.push({name: 'Transaction', params: { id: transaction.id }})
-      console.log('Navigate to Edit Transaction with id = ' + transaction.id)
-  }
 
-  const deleteTransaction = async (transaction) => {
-      axios.delete('transactions/' + transaction.id).then((response) => {
-          let deletedTransaction = response.data.data
-          let idx = transactions.value.findIndex((t) => t.id === deletedTransaction.id)
-          if (idx >= 0) {
-            transactions.value.splice(idx, 1)
-          }
-          toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
-        })
-        .catch((error) => {
-          if (error.response.status == 422){
-            toast.error("Can't delete Transaction - Vcard exists")
-          }else {
-            toast.error("Transaction wasn't deleted due to unknown server error!")
-          }
-      });
-  }
-
-  watchEffect(
+watchEffect(
   () => {
     loadTransactions()
   })
 
-  onMounted(() => {
-    loadTransactions()
-    loadCategories()
-  })
+onMounted(() => {
+  loadTransactions()
+  loadCategories()
+})
 
 </script>
 
@@ -99,30 +105,16 @@
   <hr>
   <div class="mb-3 d-flex justify-content-between flex-wrap">
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
-      <label
-        for="selectType"
-        class="form-label"
-      >Filter by Type:</label>
-      <select
-        class="form-select"
-        id="selectType"
-        v-model="filterByType"
-      >
+      <label for="selectType" class="form-label">Filter by Type:</label>
+      <select class="form-select" id="selectType" v-model="filterByType">
         <option :value="null"></option>
         <option value="C">Credit</option>
         <option value="D">Debit</option>
       </select>
     </div>
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
-      <label
-        for="selectStatus"
-        class="form-label"
-      >Filter by Payment Type:</label>
-      <select
-        class="form-select"
-        id="selectStatus"
-        v-model="filterByPaymentType"
-      >
+      <label for="selectStatus" class="form-label">Filter by Payment Type:</label>
+      <select class="form-select" id="selectStatus" v-model="filterByPaymentType">
         <option :value="null"></option>
         <option value="VCARD">VCARD</option>
         <option value="MBWAY">MBWAY</option>
@@ -133,34 +125,16 @@
       </select>
     </div>
     <div class="mx-2 mt-2 flex-grow-1 filter-div" v-if="flag">
-      <label
-        for="selectCategory"
-        class="form-label"
-      >Filter by Category:</label>
-      <select
-        class="form-select"
-        id="selectCategory"
-        v-model="filterByCategory"
-      >
+      <label for="selectCategory" class="form-label">Filter by Category:</label>
+      <select class="form-select" id="selectCategory" v-model="filterByCategory">
         <option :value="null"></option>
         <option value='none'>No Category</option>
-        <option
-          v-for="category in categories"
-          :key="category.id"
-          :value="category.id"
-        >{{category.name}}</option>
+        <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
       </select>
     </div>
     <div class="mx-2 mt-2 flex-grow-1 filter-div">
-      <label
-        for="selectOrderBy"
-        class="form-label"
-      >Order by:</label>
-      <select
-        class="form-select"
-        id="selectOrderBy"
-        v-model="orderBy"
-      >
+      <label for="selectOrderBy" class="form-label">Order by:</label>
+      <select class="form-select" id="selectOrderBy" v-model="orderBy">
         <option :value="null"></option>
         <option value="desc">Recent</option>
         <option value="asc">Oldest</option>
@@ -169,17 +143,9 @@
       </select>
     </div>
   </div>
-  <transaction-table
-    :transactions="transactions"
-    :showId="true"
-    :showDates="true"
-    @edit="editTransaction"
-    @delete="deleteTransaction"
-  ></transaction-table>
-  <Bootstrap5Pagination
-  :data="paginationData"
-  @pagination-change-page="loadTransactions"
-  :limit="2">
+  <transaction-table :transactions="transactions" :showId="true" :showDates="true" @edit="editTransaction"
+    @delete="deleteTransaction"></transaction-table>
+  <Bootstrap5Pagination :data="paginationData" @pagination-change-page="loadTransactions" :limit="2">
   </Bootstrap5Pagination>
 </template>
 
@@ -187,9 +153,11 @@
 .filter-div {
   min-width: 12rem;
 }
+
 .total-filtro {
   margin-top: 0.35rem;
 }
+
 .btn-addprj {
   margin-top: 1.85rem;
 }
