@@ -191,14 +191,15 @@ socket.on('newTransaction', (transaction) => {
           </ul>
 
           <div class="d-block d-md-none">
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>User</span>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" v-if="userStore.user">
+              <span>User {{ userStore.user.name }}</span>
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item" v-show="!userStore.user">
-                <a class="nav-link" href="#"><i class="bi bi-person-check-fill"></i>
+                <router-link class="nav-link" :class="{active: $route.name === 'NewVcard'}" :to="{ name: 'NewVcard' }" aria-label="Add a new Vcard" @click="clickMenuOption">
+                  <i class="bi bi-person-check-fill"></i>
                   Register
-                </a>
+                </router-link>
               </li>
               <li class="nav-item" v-show="!userStore.user">
                 <router-link class="nav-link" :class="{active: $route.name === 'Login'}" :to="{ name: 'Login'}" @click="clickMenuOption">
@@ -206,7 +207,7 @@ socket.on('newTransaction', (transaction) => {
                     Login
                 </router-link>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown" v-show="userStore.user">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
                   data-bs-toggle="dropdown" aria-expanded="false">
                   <img :src="userStore.userPhotoUrl" class="rounded-circle z-depth-0 avatar-img" alt="avatar image">
