@@ -201,6 +201,15 @@ socket.on('updateVcard', (vcard) => {
                   </router-link>
                 </a>
             </li>
+            <li class="nav-item" v-if="userStore.user?.user_type =='V'">
+              <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'VcardConfirmation' && $route.params.phone_number == userStore.userId}" 
+                  :to="{ name: 'VcardConfirmation', params: { phone_number: userStore.userId }}" @click="clickMenuOption">
+                    <i class="bi bi-trash"></i>
+                    Delete
+                  </router-link>
+                </a>
+            </li>
           </ul>
 
           <div class="d-block d-md-none">

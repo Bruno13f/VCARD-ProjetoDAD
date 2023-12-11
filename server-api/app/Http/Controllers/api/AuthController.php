@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController as BaseAccessTokenController;
 
@@ -21,10 +22,17 @@ class AuthController extends BaseAccessTokenController
     }   
 
     public function login(Request $request) {
+        $username = $request->username;
         try {
             request()->request->add($this->passportAuthenticationData($request->username, $request->password));
             $request = Request::create(env('PASSPORT_SERVER_URL') . '/oauth/token', 'POST');
             $response = Route::dispatch($request);
+
+            $user = User::where('username', $username)->first();
+            if ($user && $user->blocked == 1) {
+                return response()->json(['error' => 'User is blocked.'], 403);
+            }
+
             $errorCode = $response->getStatusCode();
             $auth_server_response = json_decode((string) $response->content(), true);
             return response()->json($auth_server_response, $errorCode);

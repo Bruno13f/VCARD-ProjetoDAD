@@ -46,7 +46,7 @@
     novalidate
     @submit.prevent="save"
   >
-    <h3 class="mt-5 mb-3"></h3>
+    <h3 class="mt-5 mb-3">Vcard Details</h3>
     <hr>
 
     <div class="d-flex flex-wrap justify-content-between">
@@ -99,7 +99,7 @@
       <field-error-message :errors="errors" fieldName="phone_number"></field-error-message>
       </div>
 
-      <div class="mb-3 me-3 flex-grow 1" v-if="props.operationType == 'update'">
+      <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'update'">
         <label
           for="inputBalance"
           class="form-label"
@@ -114,7 +114,7 @@
         disabled>
       </div>
 
-      <div class="mb-3 me-3 flex-grow-1 form-group" v-if="props.operationType == 'update'">
+      <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'update'">
         <label
           for="inputMaxDebit"
           class="form-label"
@@ -129,7 +129,7 @@
         :disabled=flag>
       </div>
 
-      <div class="mb-3 me-3 flex-grow-1" v-if="props.operationType == 'insert'">
+      <div class="mb-3 me-3 flex-grow-1 form-group" v-if="props.operationType == 'insert'">
         <label
           for="inputPassword"
           class="form-label"

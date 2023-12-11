@@ -4,10 +4,10 @@
   import axios from 'axios'
 
   import { useToast } from "vue-toastification"
+  import { useUserStore } from '../../stores/user'
+
   const toast = useToast()
-
   const router = useRouter()
-
   const errors = ref(null)
 
   const credentials = ref({
@@ -24,10 +24,15 @@
 
   const destroy = async () => {
     try{
+      const current_user = useUserStore()
       const body = credentials.value
       const response = await axios.delete(`vcards/${props.phone_number}`, { data: { body } })
       toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
-      router.back()
+      if (current_user.user.user_type == 'A'){
+        router.back()
+      }else{
+        router.push({ name: 'login' })
+      }
     }catch(error){
       if (error.response.status == 422){
         if (error.response.data.error.password !== undefined || error.response.data.error.confirmation_code !== undefined){
