@@ -65,6 +65,11 @@ const router = createRouter({
       props: route => ({ id: parseInt(route.params.id) })
     },
     {
+      path: '/users/new',
+      name: 'NewUser',
+      component: User,
+    },
+    {
       path: '/vcards',
       name: 'Vcards',
       component: Vcards 
@@ -153,6 +158,14 @@ router.beforeEach(async (to, from, next) => {
   }
   if (to.name == 'User') {
     if ((userStore.user.user_type == 'A') || (userStore.user.id == to.params.id)) {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
+  if (to.name == 'NewUser') {
+    if ((userStore.user.user_type == 'A')) {
       next()
       return
     }

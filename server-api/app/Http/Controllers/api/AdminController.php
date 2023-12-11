@@ -6,11 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Http\Resources\AdminResource;
 use App\Http\Requests\UpdateAdminRequest;
+use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+
+    public function store(StoreAdminRequest $request)
+    {
+        $newAdmin = Admin::create($request->validated());
+        return new AdminResource($newAdmin);
+    }
 
     public function update(UpdateAdminRequest $request, Admin $admin)
     {

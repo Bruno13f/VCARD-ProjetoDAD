@@ -3,7 +3,7 @@ import axios from 'axios'
 import UserDetail from "./UserDetail.vue"
 import { useToast } from "vue-toastification"
 import { useUserStore } from '../../stores/user.js'
-import { ref, watch} from 'vue'
+import { ref, watch, computed} from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
 const toast = useToast()
@@ -25,6 +25,7 @@ const newUser = () => {
     id: null,
     name: '',
     email: '',
+    password: '',
     photo_url: null
   }
 }
@@ -34,6 +35,8 @@ const loadUser = async (id) => {
   errors.value = null
   if (!id || (id < 0)) {
     user.value = newUser()
+    // so se pode criar admins
+    user.value.user_type = 'A'
   } else {
       try {
         const response = await axios.get('users/' + id)
@@ -48,44 +51,48 @@ const loadUser = async (id) => {
 const save = async () => {
   errors.value = null;
 
-  try {
-
-    if (user.value.user_type == 'A'){
-
-      const response = await axios.put('admins/' + props.id, user.value) 
-
+  if (operation.value == 'insert'){
+    try {
+      const response = await axios.post('admins', user.value)
       user.value = response.data.data;
       originalValueStr = JSON.stringify(user.value);
-      toast.success('User #' + user.value.id + ' was updated successfully.');
-
+      toast.success('Admin ' + user.value.name + ' was created successfully.');
       if (user.value.id == userStore.userId) {
         await userStore.loadUser();
       }
       router.back();
-    }else{
-
-      const response = await axios.patch('vcards/' + props.id + '/profile', user.value)
-
-      console.log(response.data.data);
-
+      
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        errors.value = error.response.data.errors;
+        toast.error('Admin was not created due to validation errors!');
+      } else {
+        toast.error('Admin was not created due to an unknown server error!');
+      }
+    }
+  }else{
+    try {
+      const response = user.value.user_type == 'A' ? await axios.put('admins/' + props.id, user.value) : await axios.patch('vcards/' + props.id + '/profile', user.value)
       user.value = response.data.data;
       originalValueStr = JSON.stringify(user.value);
-      toast.success('User #' + user.value.phone_number + ' was updated successfully.');
+      toast.success('User ' + user.value.name + ' was updated successfully.');
 
-      if (user.value.phone_number == userStore.userId) {
+      if (user.value.id == userStore.userId) {
         await userStore.loadUser();
       }
-      router.back();
-    }
     
-  } catch (error) {
-    if (error.response && error.response.status === 422) {
-      errors.value = error.response.data.errors;
-      toast.error('User #' + props.id + ' was not updated due to validation errors!');
-    } else {
-      toast.error('User #' + props.id + ' was not updated due to an unknown server error!');
+      router.back();
+      
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        errors.value = error.response.data.errors;
+        toast.error('User #' + props.id + ' was not updated due to validation errors!');
+      } else {
+        toast.error('User #' + props.id + ' was not updated due to an unknown server error!');
+      }
     }
   }
+  
 };
 
 const cancel = () => {
@@ -94,6 +101,11 @@ const cancel = () => {
 }
 
 const user = ref(newUser())
+
+const operation = computed(() => {
+  return (!props.id || (props.id < 0)) ? 'insert' : 'update'
+})
+
 
 watch(
   () => props.id,
@@ -109,8 +121,6 @@ const leaveConfirmed = () => {
     nextCallBack()
   }
 }
-
-
 
 onBeforeRouteLeave((to, from, next) => {
   nextCallBack = null
@@ -134,6 +144,7 @@ onBeforeRouteLeave((to, from, next) => {
   </confirmation-dialog>  
   <user-detail 
   :user="user" 
+  :operation="operation"
   :errors="errors"
   @save="save" 
   @cancel="cancel">

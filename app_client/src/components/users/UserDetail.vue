@@ -9,9 +9,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  inserting: {
-    type: Boolean,
-    default: false,
+  operation: {
+    type: String,
+    default: 'insert',
   },
   errors: {
     type: Object,
@@ -22,7 +22,6 @@ const props = defineProps({
 const emit = defineEmits(["save", "cancel"]);
 
 const editingUser = ref(props.user)
-
 const inputPhotoFile = ref(null)
 const editingImageAsBase64 = ref(null)
 const deletePhotoOnTheServer = ref(false)
@@ -102,7 +101,7 @@ const cleanPhoto = () => {
     <div class="d-flex flex-wrap justify-content-between">
       <div class="w-75 pe-4">
         <div class="mb-3">
-          <label for="inputName" class="form-label">Name</label>
+          <label for="inputName" class="form-label">Name *</label>
           <input
             type="text"
             class="form-control"
@@ -114,8 +113,8 @@ const cleanPhoto = () => {
           <field-error-message :errors="errors" fieldName="name"></field-error-message>
         </div>
 
-        <div class="mb-3 px-1">
-          <label for="inputEmail" class="form-label">Email</label>
+        <div class="mb-3">
+          <label for="inputEmail" class="form-label">Email *</label>
           <input
             type="email"
             class="form-control"
@@ -125,6 +124,21 @@ const cleanPhoto = () => {
             v-model="editingUser.email"
           />
           <field-error-message :errors="errors" fieldName="email"></field-error-message>
+        </div>
+        <div class="mb-3">
+          <label
+            for="inputPassword"
+            class="form-label"
+          >Password *</label>
+          <input
+          type="password"
+          class="form-control"
+          id="inputPassword"
+          placeholder="Password"
+          required
+          v-model="editingUser.password"
+        >
+        <field-error-message :errors="errors" fieldName="password"></field-error-message>
         </div>
         <div class="d-flex ms-1 mt-4 flex-wrap justify-content-between">
           <div class="mb-3 me-3 flex-grow-1">
@@ -163,7 +177,7 @@ const cleanPhoto = () => {
       </div>
     </div>
     <div class="mb-3 d-flex justify-content-center">
-      <button type="button" class="btn btn-success px-5 mx-2" @click="save">Save</button>
+      <button type="button" class="btn btn-success px-5 mx-2" @click="save">{{ props.operation == 'update' ? 'Save' : 'Create'}}</button>
       <button type="button" class="btn btn-dark px-5" @click="cancel">Cancel</button>
     </div>
   </form>
