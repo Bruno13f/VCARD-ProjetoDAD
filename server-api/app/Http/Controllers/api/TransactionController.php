@@ -58,6 +58,8 @@ class TransactionController extends Controller {
 
         $vcard = Vcard::findOrFail($validatedRequest['vcard']);
 
+        $validatedRequest['value'] = round($validatedRequest['value'], 2);
+
         if(($vcard->balance - $validatedRequest['value']) < 0) {
             return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
