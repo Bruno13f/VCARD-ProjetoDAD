@@ -76,6 +76,7 @@ const editTransaction = (transaction) => {
   }
 
   socket.on('newTransaction', (transaction) => {
+    // MUDAR 
     loadTransactions()
   })
 
