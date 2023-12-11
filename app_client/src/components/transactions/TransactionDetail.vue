@@ -55,10 +55,10 @@ const cancel = () => {
       <div class="mb-3">
         <label for="inputName" class="form-label">Vcard *</label>
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-        v-if="flagUser && !flagOperation" v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
-        <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
+        v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
+        <!-- <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
         v-else v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
-        <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
+        <field-error-message :errors="errors" fieldName="vcard"></field-error-message> -->
       </div>
     </div>
 
