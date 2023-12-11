@@ -24,7 +24,7 @@ class UpdateVcardProfileRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|max:255',
             'base64ImagePhoto' => 'nullable|string',
             'deletePhotoOnServer' => 'nullable|boolean'
             //'photo_url' => 'nullable|file|image'
