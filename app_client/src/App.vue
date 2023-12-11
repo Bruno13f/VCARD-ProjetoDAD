@@ -4,10 +4,12 @@ import axios from 'axios'
 import { useToast } from "vue-toastification"
 import { useUserStore } from './stores/user.js'
 import { onMounted} from 'vue'
+import { onMounted , inject} from 'vue'
 
 const userStore = useUserStore() 
 const toast = useToast()
 const router = useRouter()
+const socket = inject("socket")
 
 const logout = async () => {
   if (await userStore.logout()) {
