@@ -61,10 +61,6 @@ class TransactionController extends Controller {
         if(($vcard->balance - $validatedRequest['value']) < 0) {
             return response()->json(['error' => "The vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        
-        if($validatedRequest['value'] > $vcard->max_debit) {
-            return response()->json(['error' => "The value of the transfer is greater that the max debit of the vcard"], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
 
         $validatedRequest['old_balance'] = $vcard->balance;
         
