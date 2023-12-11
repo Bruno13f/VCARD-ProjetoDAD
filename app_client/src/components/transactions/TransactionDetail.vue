@@ -57,7 +57,7 @@ const cancel = () => {
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
         v-if="flagUser && !flagOperation" v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-        v-else v-model="editingTransaction.vcard.phone_number" :disabled="flagUser || flagOperation">
+        v-else v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
         <field-error-message :errors="errors" fieldName="vcard"></field-error-message>
       </div>
     </div>
