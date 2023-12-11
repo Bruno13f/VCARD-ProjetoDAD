@@ -35,7 +35,7 @@
 
   const loadUsers = async () => {
     try{
-      const response = await axios.get('users', {params:{paginate: 0}})
+      const response = await axios.get('users', {params:{paginate: 0, userType: 'V',}})
       users.value = response.data.data
       console.log(users.value)
     }catch(error){

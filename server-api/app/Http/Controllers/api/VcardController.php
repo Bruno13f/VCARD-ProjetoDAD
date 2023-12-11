@@ -173,6 +173,16 @@ class VcardController extends Controller
         if (Storage::exists('public/fotos/' . $vcard->photo_url)) {
             Storage::delete('public/fotos/' . $vcard->photo_url);
         }
+
+        // soft delete categorias e transactions
+
+        foreach ($vcard->transactions as $transaction) {
+            $transaction->delete();
+        }
+
+        foreach ($vcard->categories as $category) {
+            $category->delete();
+        }
             
         return new VcardResource($vcard);
     }

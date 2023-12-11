@@ -11,17 +11,18 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(Request $request){
-        if ($request->paginate == '0')
-            return UserResource::collection(User::orderBy('name', 'asc')->get());
-    
-        $userQuery = User::query();
 
         $userType = $request->userType;
-        $blocked = $request->blocked;
-        $order = $request->order;
+        $userQuery = User::query();
 
         if ($userType != null)
             $userQuery->where('user_type', $userType);
+
+        if ($request->paginate == '0')
+            return UserResource::collection($userQuery->orderBy('name', 'asc')->get());
+
+        $blocked = $request->blocked;
+        $order = $request->order;
 
         if ($blocked != null)
             $userQuery->where('blocked', $blocked);
