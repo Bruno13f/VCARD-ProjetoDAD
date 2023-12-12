@@ -186,9 +186,6 @@ class VcardController extends Controller
 
         // se for o proprio owner do vcard limpar token login
         if ($request->sameUser){
-            $response = Http::post(url('/api/logout'), [
-                'access_token' => $request->user->token()->id,
-            ]);    
         }
             
         return new VcardResource($vcard);
