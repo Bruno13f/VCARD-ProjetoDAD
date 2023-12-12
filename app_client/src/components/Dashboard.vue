@@ -1,14 +1,16 @@
 <script setup>
 import Chart from 'chart.js/auto'
 import { onMounted, ref} from 'vue'
+import axios from 'axios'
 import { useUserStore } from '@/stores/user.js'
 
 const transactions = ref([])
 const userStore = useUserStore()
+const flag = userStore.user.user_type == 'A' ? false : true
 
 const loadTransactions = async () => {
     try {
-        const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`, { params: params }) : await axios.get('transactions', { params: params })
+        const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`) : await axios.get('transactions')
         transactions.value = response.data.data
     } catch (error) {
         console.log(error)
@@ -23,10 +25,10 @@ onMounted(() => {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: transactions.value.date,
+            labels: transactions.date,
             datasets: [{
                 label: 'transactions por ...',
-                data: transactions.value.id,
+                data: transactions.id,
                 borderWidth: 1
             }]
         },
