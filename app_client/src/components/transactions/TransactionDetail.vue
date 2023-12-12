@@ -53,7 +53,7 @@ const cancel = () => {
 
     <div class="mb-3">
       <div class="mb-3">
-        <label for="inputName" class="form-label">Vcard *</label>
+        <label for="inputName" class="form-label">{{ editingTransaction.type == 'D' ? 'Sender Vcard *' : 'Receiver Vcard *'}}</label>
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
         v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
         <!-- <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
@@ -72,7 +72,7 @@ const cancel = () => {
       </div>
 
       <div class="mb-3 ms-xs-3 flex-grow-1">
-        <label for="inputPaymentReference" class="form-label">Payment Reference *</label>
+        <label for="inputPaymentReference" class="form-label">{{ editingTransaction.type == 'C' ? 'Sender Payment Reference *' : 'Receiver Payment Reference *'}}</label>
         <input type="text" class="form-control" id="inputPaymentReference" placeholder="Payment Reference" required
           v-model="editingTransaction.payment_reference" :disabled=flagOperation>
         <field-error-message :errors="errors" fieldName="payment_reference"></field-error-message>
