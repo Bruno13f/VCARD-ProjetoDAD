@@ -39,15 +39,15 @@ socket.on('newTransaction', (transaction) => {
 })
 
 socket.on('insertVcard', (vcard) => {
-    toast.success(`A new Vcard was create ! #${vcard.id} (${vcard.name})`)
+    toast.success(`A new Vcard was create ! # ${vcard.phone_number} (${vcard.name})`)
 })
 
 socket.on('updateVcard', (vcard) => {
-  if (userStore.userId == vcard.id) {
+  if (userStore.userId == vcard.phone_number) {
     userStore.value = vcard
     toast.info('Your user profile has been changed!')
   } else {
-    toast.info(`User profile #${vcard.id} (${vcard.name}) has changed!`)
+    toast.info(`User profile #${vcard.phone_number} (${vcard.name}) has changed!`)
   }
 })
 

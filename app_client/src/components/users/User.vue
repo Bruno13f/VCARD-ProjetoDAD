@@ -3,9 +3,10 @@ import axios from 'axios'
 import UserDetail from "./UserDetail.vue"
 import { useToast } from "vue-toastification"
 import { useUserStore } from '../../stores/user.js'
-import { ref, watch, computed} from 'vue'
+import { ref, watch, inject, computed} from 'vue'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 
+const socket = inject("socket")
 const toast = useToast()
 const router = useRouter()
 const errors = ref([]) 
@@ -75,8 +76,8 @@ const save = async () => {
       const response = user.value.user_type == 'A' ? await axios.put('admins/' + props.id, user.value) : await axios.patch('vcards/' + props.id + '/profile', user.value)
       user.value = response.data.data;
       originalValueStr = JSON.stringify(user.value);
+      socket.emit('updateVcard', response.data.data)
       toast.success('User ' + user.value.name + ' was updated successfully.');
-
       if (user.value.id == userStore.userId) {
         await userStore.loadUser();
       }

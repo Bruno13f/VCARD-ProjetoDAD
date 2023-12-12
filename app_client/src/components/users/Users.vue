@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios'
-  import { ref, watchEffect, computed, onMounted } from 'vue'
+  import { ref, watchEffect, computed, onMounted, inject } from 'vue'
   import { useToast } from "vue-toastification"
   import {useRouter} from 'vue-router'
   import UserTable from "./UserTable.vue"
@@ -10,6 +10,7 @@
   const paginationData = ref({})
   const router = useRouter()
   const toast = useToast()
+  const socket = inject("socket")
 
   const filterTypeOfUser = ref(null)
   const filterBlockedUser = ref(null)

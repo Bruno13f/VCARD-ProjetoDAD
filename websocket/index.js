@@ -19,14 +19,13 @@ io.on('connection', (socket) => {
         socket.in('administrator').emit('insertVcard', vcard)
     })
     socket.on('updateVcard', function (vcard) {
-        socket.in('administrator').except(vcard.id).emit('updateVcard', vcard)
-        socket.in(vcard.id).emit('updateVcard', vcard)
+        console.log(vcard)
+        socket.in('administrator').except(vcard.phone_number).emit('updateVcard', vcard)
+        socket.in(vcard.phone_number).emit('updateVcard', vcard)
     })
     socket.on('loggedIn', function (user) {
-        console.log(user)
         socket.join(user.id)
         if (user.user_type == 'A') {
-            console.log("admin")
             socket.join('administrator')
         }
     })
