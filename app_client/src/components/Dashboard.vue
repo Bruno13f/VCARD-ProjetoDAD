@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/user.js'
 
 const transactions = ref([])
+const categories = ref([])
 const userStore = useUserStore()
 const flag = userStore.user.user_type == 'A' ? false : true
 
@@ -15,6 +16,15 @@ const loadTransactions = async () => {
     try {
         const response = await axios.get(`vcards/${userStore.user.id}/transactions`)
         transactions.value = response.data.data
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+const loadCategories = async () => {
+    try {
+        const response = await axios.get(`transactions/${userStore.user.id}/categories`)
+        categories.value = response.data
     } catch (error) {
         console.log(error)
     }
@@ -85,72 +95,34 @@ const createChartLine = () => {
 }
     
 const createChartPie = () => {
+
     const ctx = document.getElementById('myChartPie')
 
-    // Ensure dates are properly formatted for time scale
-    const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
+    const categoriesName = categories.value.map((categorie) => categorie.name)
 
-    const newBalances = transactions.value.map((transaction) => transaction.new_balance)
-
-    const minBalance = Math.min(...newBalances)
-    const maxBalance = Math.max(...newBalances);
+    const categoriesNumbers = categories.value.map((categorie) => categorie.count)
 
     new Chart(ctx, {
-        type: 'Pie',
+        type: 'pie',
         data: {
-            labels: formattedDates,
+            labels: categoriesName,
             datasets: [
                 {
                     label: 'New Balances',
-                    data: newBalances,
+                    data: categoriesNumbers,
                     borderWidth: 1,
                     fill: false,
                 },
             ],
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        tooltipFormat: 'YYYY-MM-DD HH:mm:ss', // Adjust the format as needed
-                    },
-                    title: {
-                        display: true,
-                        text: 'Date',
-                    },
-                },
-                y: {
-                    min: minBalance,
-                    max: maxBalance,
-                    beginAtZero: false,
-                    title: {
-                        display: true,
-                        text: 'New Balance',
-                    },
-                },
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                },
-            },
-            layout: {
-                padding: {
-                    left: 10,
-                    right: 10,
-                    top: 10,
-                    bottom: 10,
-                },
-            },
-        },
+        }
     })
 }
 
 onMounted(async () => {
     await loadTransactions()
+    await loadCategories()
     console.log(transactions)
+    console.log(categories)
     if (flag) {
         createChartLine()
         createChartPie()
