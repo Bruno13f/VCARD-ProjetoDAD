@@ -53,6 +53,21 @@ class TransactionController extends Controller {
         return new TransactionResource($transaction);
     }
 
+    public function getCategoriesOfTransactions(Request $request, Vcard $vcard) {
+        if (!$vcard) {
+            return response()->json(['error' => 'Vcard not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        $categoryCounts = Transaction::select('categories.name', \DB::raw('COUNT(*) as count'))
+            ->join('categories', 'transactions.category_id', '=', 'categories.id')
+            ->where('transactions.vcard', $vcard->phone_number)
+            ->groupBy('categories.name')
+            ->get();
+    
+        return response()->json($categoryCounts);
+    }
+    
+
     public function store(StoreTransactionRequest $request) {
         $validatedRequest = $request->validated();
 
