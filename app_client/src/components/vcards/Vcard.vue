@@ -54,13 +54,24 @@ const save = async () => {
   errors.value = null
   if (operation.value == 'insert') {
     try {
+      const credentials = {
+        username: vcard.value.phone_number,
+        password: vcard.value.password
+      }
       const response = await axios.post('vcards', vcard.value)
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)
       console.log(response.data.data)
       socket.emit('insertVcard', response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
-      router.back()
+      if (userStore.user == null){
+        await userStore.login(credentials)
+        router.push('/dashboard')
+        toast.success(userStore.user.name + ' has entered the application.')
+      }else{
+        router.back()
+      } 
+      
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
