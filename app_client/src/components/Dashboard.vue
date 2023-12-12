@@ -68,8 +68,8 @@ const createChartLine = () => {
                     },
                 },
                 y: {
-                    min: minBalance,
-                    max: maxBalance,
+                    min: minBalance - 50,
+                    max: maxBalance + 50,
                     beginAtZero: false,
                     title: {
                         display: true,
@@ -93,7 +93,7 @@ const createChartLine = () => {
         },
     })
 }
-    
+
 const createChartPie = () => {
 
     const ctx = document.getElementById('myChartPie')
@@ -103,18 +103,35 @@ const createChartPie = () => {
     const categoriesNumbers = categories.value.map((categorie) => categorie.count)
 
     new Chart(ctx, {
-        type: 'pie',
+        type: 'radar',
         data: {
             labels: categoriesName,
             datasets: [
                 {
-                    label: 'New Balances',
+                    label: 'Categories',
                     data: categoriesNumbers,
                     borderWidth: 1,
                     fill: false,
+                    backgroundColor: [
+                        'rgb(0,0,0)',
+                        'rgb(255,0,0)',
+                        'rgb(0,255,0)',
+                        'rgb(0,0,255)',
+                        'rgb(255,255,0)',
+                        'rgb(0,255,255)',
+                        'rgb(255,0,255)',
+                        'rgb(192,192,192)',
+                        'rgb(128,128,128)',
+                        'rgb(128,0,0)',
+                        'rgb(128,128,0)',
+                        'rgb(0,128,0)',
+                        'rgb(128,0,128)',
+                        'rgb(0,128,128)',
+                        'rgb(0,0,128)'
+                    ]
                 },
-            ],
-        }
+            ]
+        },
     })
 }
 
