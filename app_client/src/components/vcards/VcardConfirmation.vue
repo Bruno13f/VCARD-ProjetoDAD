@@ -22,19 +22,20 @@
   const credentials = ref({
     password: '',
     confirmation_code: '',
-    sameUser: props.phone_number == userStore.user.id ? true : false
+    sameUser: props.phone_number == userStore.user.id ? true : false,
   })
 
   const destroy = async () => {
     try{
       const body = credentials.value
       const response = await axios.delete(`vcards/${props.phone_number}`, { data: { body } })
-      userStore = []
-      toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
       if (user_type == 'A'){
+        toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
         router.back()
       }else{
-        router.push({ name: 'login' })
+        // dar reload à pagina
+        // push ao login
+        toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
       }
     }catch(error){
       if (error.response.status == 422){

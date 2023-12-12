@@ -125,7 +125,7 @@ const cleanPhoto = () => {
           />
           <field-error-message :errors="errors" fieldName="email"></field-error-message>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" v-if=" props.operation == 'insert'">
           <label
             for="inputPassword"
             class="form-label"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Models\User;
 use App\Models\Vcard;
 use App\Models\DefaultCategory;
 use App\Models\Category;
@@ -155,6 +156,13 @@ class VcardController extends Controller
             }],
         ]);
 
+        // se for o proprio owner do vcard limpar token login
+        if ($request['body']['sameUser']){
+            // invalidate token -> logout
+            $request->user()->token()->revoke();
+            $request->user()->token()->delete();
+        }
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -163,7 +171,7 @@ class VcardController extends Controller
             return response()->json(['error' => "Can't delete the Vcard - Balance different than 0"], Response::HTTP_UNPROCESSABLE_ENTITY); // nao e possivel eliminar 
 
         // soft delete se tiver transacoes senao forceDelete
-        
+
         if (count($vcard->transactions)){
             $vcard->delete();
         }else{
@@ -182,10 +190,6 @@ class VcardController extends Controller
 
         foreach ($vcard->categories as $category) {
             $category->delete();
-        }
-
-        // se for o proprio owner do vcard limpar token login
-        if ($request->sameUser){
         }
             
         return new VcardResource($vcard);
