@@ -33,8 +33,8 @@
         toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
         router.back()
       }else{
-        // dar reload à pagina
-        // push ao login
+        userStore.user = null
+        router.push('/login')
         toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
       }
     }catch(error){

@@ -59,10 +59,18 @@
       console.log("Navigate to New User")
   }
 
+  socket.on('updateVcard', () => {
+    loadUsers()
+  })
+
+  socket.on('insertVcard', () => {
+    loadUsers()
+  })
+
   watchEffect(
   () => {
     loadUsers()
-  })
+  })  
 
   onMounted (() => {
     loadUsers()

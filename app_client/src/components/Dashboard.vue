@@ -47,7 +47,7 @@ const createChartLine = () => {
             labels: formattedDates,
             datasets: [
                 {
-                    label: 'New Balances',
+                    label: 'New Balance',
                     data: newBalances,
                     borderWidth: 1,
                     fill: false,
@@ -108,7 +108,7 @@ const createChartPie = () => {
             labels: categoriesName,
             datasets: [
                 {
-                    label: 'Categories',
+                    label: 'Uses',
                     data: categoriesNumbers,
                     borderWidth: 1,
                     fill: false,
