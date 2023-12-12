@@ -163,26 +163,28 @@ class VcardController extends Controller
         if ($vcard->balance != 0)
             return response()->json(['error' => "Can't delete the Vcard - Balance different than 0"], Response::HTTP_UNPROCESSABLE_ENTITY); // nao e possivel eliminar 
 
-        // soft delete se tiver transacoes senao forceDelete
-
-        if (count($vcard->transactions)){
-            $vcard->delete();
-        }else{
-            $vcard->forceDelete();
-        }
-
         if (Storage::exists('public/fotos/' . $vcard->photo_url)) {
             Storage::delete('public/fotos/' . $vcard->photo_url);
         }
 
         // soft delete categorias e transactions
 
-        foreach ($vcard->transactions as $transaction) {
-            $transaction->delete();
+
+        if (count($vcard->categories) != 0){
+            foreach ($vcard->categories as $category) {
+                $category->forceDelete();
+            }
         }
 
-        foreach ($vcard->categories as $category) {
-            $category->delete();
+        // soft delete se tiver transacoes senao forceDelete
+
+        if (count($vcard->transactions)){
+            $vcard->delete();
+            foreach ($vcard->transactions as $transaction) {
+                $transaction->delete();
+            }
+        }else{
+            $vcard->forceDelete();
         }
 
         // se for o proprio owner do vcard limpar token login
