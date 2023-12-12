@@ -1,46 +1,96 @@
 <script setup>
-import Chart from 'chart.js/auto'
-import { onMounted, ref} from 'vue'
-import axios from 'axios'
-import { useUserStore } from '@/stores/user.js'
+import Chart from 'chart.js/auto';
+import moment from 'moment';
+import 'chart.js';
+import 'chartjs-adapter-moment';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import { useUserStore } from '@/stores/user.js';
 
-const transactions = ref([])
-const userStore = useUserStore()
-const flag = userStore.user.user_type == 'A' ? false : true
+const transactions = ref([]);
+const userStore = useUserStore();
+const flag = userStore.user.user_type == 'A' ? false : true;
 
 const loadTransactions = async () => {
     try {
-        const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`) : await axios.get('transactions')
-        transactions.value = response.data.data
+        const response = await axios.get(`vcards/${userStore.user.id}/transactions`);
+        transactions.value = response.data.data;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
+};
 
-onMounted(() => {
-    loadTransactions()
-    console.log(transactions.value)
+const createChart = () => {
     const ctx = document.getElementById('myChart');
-    const src = "https://cdn.jsdelivr.net/npm/chart.js"
+
+    // Ensure dates are properly formatted for time scale
+    const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime));
+
+    const newBalances = transactions.value.map((transaction) => transaction.new_balance);
+
+    const minBalance = Math.min(...newBalances);
+    const maxBalance = Math.max(...newBalances);
+
     new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
-            labels: transactions.date,
-            datasets: [{
-                label: 'transactions por ...',
-                data: transactions.id,
-                borderWidth: 1
-            }]
+            labels: formattedDates,
+            datasets: [
+                {
+                    label: 'New Balances',
+                    data: newBalances,
+                    borderWidth: 1,
+                    fill: false,
+                },
+            ],
         },
         options: {
             scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        tooltipFormat: 'YYYY-MM-DD HH:mm:ss', // Adjust the format as needed
+                    },
+                    title: {
+                        display: true,
+                        text: 'Date',
+                    },
+                },
                 y: {
-                    beginAtZero: true
-                }
-            }
-        }
+                    min: minBalance,
+                    max: maxBalance,
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'New Balance',
+                    },
+                },
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                },
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                },
+            },
+        },
     });
-})
+};
+
+onMounted(async () => {
+    await loadTransactions();
+    console.log(transactions);
+    if (flag) {
+        createChart();
+    }
+});
 </script>
 
 <template>
@@ -51,4 +101,3 @@ onMounted(() => {
         <canvas id="myChart"></canvas>
     </div>
 </template>
-
