@@ -134,14 +134,14 @@ router.beforeEach(async (to, from, next) => {
       handlingFirstRoute = false
       await userStore.restoreToken()
   }
-  if (to.name == 'Login'){
-      if (userStore.user){
-        next({name: 'Dashboard'})
-      }
+  if ((to.name == 'NewVcard') || (to.name == 'home')) {
     next()
     return
   }
-  if ((to.name == 'home') || (to.name == 'NewVcard')) {
+  if ((to.name == 'Login')){
+    if (userStore.user){
+      next({name: 'Dashboard'})
+    }
     next()
     return
   }

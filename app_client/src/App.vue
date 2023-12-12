@@ -60,10 +60,10 @@ socket.on('updateVcard', (vcard) => {
   <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top flex-md-nowrap p-0 shadow-lg">
     <div class="container-fluid">
       
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark shadow-none" :to="{ name: 'home' }">
+      <router-link class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark shadow-none" :to="{ name: 'home' }">
         <img src="@/assets/logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
         Vcards
-      </a>
+      </router-link>
       <button id="buttonSidebarExpandId" class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

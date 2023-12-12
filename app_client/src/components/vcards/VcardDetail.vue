@@ -95,7 +95,7 @@
         placeholder="Phone Number"
         required
         v-model="editingVcard.phone_number"
-        disabled>
+        :disabled="operationType != 'insert'">
       <field-error-message :errors="errors" fieldName="phone_number"></field-error-message>
       </div>
 
