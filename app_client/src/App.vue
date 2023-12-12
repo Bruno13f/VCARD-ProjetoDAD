@@ -44,12 +44,14 @@ socket.on('insertVcard', (vcard) => {
 
 socket.on('updateVcard', (vcard) => {
   if (userStore.userId == vcard.phone_number) {
-    userStore.value = vcard
+    userStore.loadUser()
     toast.info('Your user profile has been changed!')
   } else {
     toast.info(`User profile #${vcard.phone_number} (${vcard.name}) has changed!`)
   }
 })
+
+
 
 </script>
 
