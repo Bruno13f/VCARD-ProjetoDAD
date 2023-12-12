@@ -156,13 +156,6 @@ class VcardController extends Controller
             }],
         ]);
 
-        // se for o proprio owner do vcard limpar token login
-        if ($request['body']['sameUser']){
-            // invalidate token -> logout
-            $request->user()->token()->revoke();
-            $request->user()->token()->delete();
-        }
-
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -190,6 +183,15 @@ class VcardController extends Controller
 
         foreach ($vcard->categories as $category) {
             $category->delete();
+        }
+
+        // se for o proprio owner do vcard limpar token login
+        if ($request['body']['sameUser']){
+            // invalidate token -> logout
+            $accessToken = $request->user()->token();
+            $token = $request->user()->tokens->find($accessToken);
+            $token->revoke();
+            $token->delete();
         }
             
         return new VcardResource($vcard);
