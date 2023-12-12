@@ -9,11 +9,8 @@
   const toast = useToast()
   const router = useRouter()
   const errors = ref(null)
-
-  const credentials = ref({
-    password: '',
-    confirmation_code: '',
-  })
+  const userStore = useUserStore()
+  const user_type = userStore.user.user_type
 
   const props = defineProps({
     phone_number: {
@@ -22,13 +19,19 @@
     }
   })
 
+  const credentials = ref({
+    password: '',
+    confirmation_code: '',
+    sameUser: props.phone_number == userStore.user.id ? true : false
+  })
+
   const destroy = async () => {
     try{
-      const current_user = useUserStore()
       const body = credentials.value
       const response = await axios.delete(`vcards/${props.phone_number}`, { data: { body } })
+      userStore = []
       toast.success('Vcard ' + response.data.data.phone_number + ' was deleted successfully.')
-      if (current_user.user.user_type == 'A'){
+      if (user_type == 'A'){
         router.back()
       }else{
         router.push({ name: 'login' })

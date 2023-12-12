@@ -156,7 +156,7 @@ class VcardController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            return response()->json(['error' => $validator->errors()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         if ($vcard->balance != 0)
@@ -182,6 +182,10 @@ class VcardController extends Controller
 
         foreach ($vcard->categories as $category) {
             $category->delete();
+        }
+
+        // se for o proprio owner do vcard limpar token login
+        if ($request->sameUser){
         }
             
         return new VcardResource($vcard);
