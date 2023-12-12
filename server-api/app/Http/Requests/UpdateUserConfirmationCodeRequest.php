@@ -27,8 +27,8 @@ class UpdateUserConfirmationCodeRequest extends FormRequest
 
         return [
             'current_password' => 'current_password:api',
-            'confirmation_code' => 'required|integer|digits:4',
-            'confirmation_code_confirm' => 'required|integer|digits:4|same:confirmation_code',
+            'confirmation_code' => 'required|integer|digits:3',
+            'confirmation_code_confirm' => 'required|integer|digits:3|same:confirmation_code',
         ];
     }
 
