@@ -77,19 +77,17 @@ class TransactionController extends Controller {
             return response()->json(['error' => "The Vcard is blocked can`t do transfers"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $validatedRequest['value'] = round($validatedRequest['value'], 2);
-
-        if(($vcard->balance - $validatedRequest['value']) < 0) {
+        if((($vcard->balance - $validatedRequest['value']) < 0) && $validatedRequest['type'] == 'D') {
             return response()->json(['error' => "The Vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        $validatedRequest['value'] = round($validatedRequest['value'], 2);
 
         $validatedRequest['old_balance'] = $vcard->balance;
         
         if($validatedRequest['payment_type'] == 'VCARD') {
             $vcardReceiver = Vcard::findOrFail($validatedRequest['payment_reference']);
             $validatedRequest['pair_vcard'] = $vcardReceiver->phone_number;
-
-            $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
 
             if($vcardReceiver->blocked == 1) {
                 return response()->json(['error' => "The Vcard Receiver is blocked can`t do transfers"], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -111,6 +109,8 @@ class TransactionController extends Controller {
                 $vcard->save();
                 $vcardReceiver->save();
             }
+
+            $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
             
         } else {
             $paymentServiceUrl = 'https://dad-202324-payments-api.vercel.app';
@@ -131,7 +131,7 @@ class TransactionController extends Controller {
                 if($validatedRequest['type'] == 'D') {
                     $validatedRequest['new_balance'] = $vcard->balance -= $validatedRequest['value'];
                     $vcard->save();
-                } else if($validatedRequest['type'] == 'C') {
+                } else {
                     $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
                     $vcard->save();
                 }
