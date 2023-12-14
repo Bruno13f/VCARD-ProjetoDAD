@@ -40,7 +40,6 @@ const createChartLine = () => {
 
     const minBalance = Math.floor(Math.min(...newBalances) / 10) * 10;
     const maxBalance = Math.ceil(Math.max(...newBalances) / 10) * 10;
-    console.log(minBalance)
 
     new Chart(ctx, {
         type: 'line',
@@ -69,7 +68,7 @@ const createChartLine = () => {
                     },
                 },
                 y: {
-                    min: minBalance - 50,
+                    min: minBalance +0,
                     max: maxBalance + 50,
                     beginAtZero: false,
                     title: {
