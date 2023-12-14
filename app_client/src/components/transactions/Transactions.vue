@@ -141,7 +141,7 @@ onMounted(() => {
       </select>
     </div>
   </div>
-  <transaction-table :transactions="transactions" :showId="true" :showDates="true" @edit="editTransaction"
+  <transaction-table :transactions="transactions" :showId="true" :showDates="true" :showEditButton="flag" :showDeleteButton="flag" @edit="editTransaction"
     @delete="deleteTransaction"></transaction-table>
   <Bootstrap5Pagination :data="paginationData" @pagination-change-page="loadTransactions" :limit="2">
   </Bootstrap5Pagination>

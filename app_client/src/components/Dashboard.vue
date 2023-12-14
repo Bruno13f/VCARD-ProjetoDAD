@@ -319,7 +319,7 @@ onMounted(async () => {
             <div class="col-md-6" v-show="numberOfTransactions">
                 <canvas id="myChartBartChart"></canvas>
             </div>
-            <div class="col-md-12 d-flex justify-content-center mt-5" v-show="!numberOfTransactions">
+            <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">
                 <h2>No Data</h2>
             </div>
         </div>
