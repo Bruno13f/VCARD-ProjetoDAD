@@ -38,8 +38,9 @@ const createChartLine = () => {
 
     const newBalances = transactions.value.map((transaction) => transaction.new_balance)
 
-    const minBalance = Math.min(...newBalances)
-    const maxBalance = Math.max(...newBalances);
+    const minBalance = Math.floor(Math.min(...newBalances) / 10) * 10;
+    const maxBalance = Math.ceil(Math.max(...newBalances) / 10) * 10;
+    console.log(minBalance)
 
     new Chart(ctx, {
         type: 'line',
