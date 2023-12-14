@@ -284,19 +284,14 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
-
-        <div class="row mt-5">
-            <div class="col-md-12" v-show="numberOfTransactions">
+        <div class="charts">
+            <div class="chart" v-show="numberOfTransactions">
                 <canvas id="myChartLine"></canvas>
             </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-12" v-show="numberOfTransactions">
+            <div class="chart" v-show="numberOfTransactions">
                 <canvas id="myChartBarHorizontal"></canvas>
             </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-12" v-show="numberOfTransactions">
+            <div class="chart2" v-show="numberOfTransactions">
                 <canvas id="myChartPie"></canvas>
             </div>
         </div>
@@ -307,10 +302,22 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.chartSize {
+.charts {
     display: flex;
-    align-items: center;
-    width: 50%;
-    height: 50%;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+}
+.chart {
+    width: 80%;
+    height: auto;
+    margin: 30px;
+}
+
+.chart2 {
+    width: 40%;
+    height: auto;
+    margin: 30px;
 }
 </style>

@@ -52,7 +52,6 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('vcards/{vcard}/blocked', [VCardController::class, 'updateBlocked']);
     Route::patch('vcards/{vcard}/profile', [VCardController::class, 'updateProfile']);
     Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactionsOfVcard']);
-    Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy']);
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password']);
     Route::patch('vcards/{vcard}/confirmationCode', [VCardController::class, 'update_confirmation_code']);
@@ -64,7 +63,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::post('transactions', [TransactionController::class, 'store']);
     Route::get('transactions/{vcard}/categories', [TransactionController::class, 'getCategoriesOfTransactions']);
-    
+    Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
     // Route::get('transactions/paymentMethod', [TransactionController::class, 'getPaymentMethodsOfTransaction']);
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);
