@@ -70,7 +70,7 @@
   watchEffect(
   () => {
     loadUsers()
-  })  
+  })
 
   onMounted (() => {
     loadUsers()
