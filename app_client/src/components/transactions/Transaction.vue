@@ -68,7 +68,12 @@ const save = async () => {
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)
       console.log(response)
-      socket.emit('newTransaction', response.data.data)
+      const params = {
+        transaction: response.data.data,
+        user_type: userStore.user.user_type
+      }
+      console.log(params)
+      socket.emit('newTransaction', params)
       toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
       router.back();
     } catch (error) {

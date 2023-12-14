@@ -18,7 +18,7 @@ const filterByBlocked = ref(null)
 
 const loadTransactions = async () => {
     try {
-        const response = await axios.get(`vcards/${userStore.user.id}/transactions`)
+        const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`) : ''
         transactions.value = response.data.data
     } catch (error) {
         console.log(error)
@@ -27,7 +27,7 @@ const loadTransactions = async () => {
 
 const loadCategories = async () => {
     try {
-        const response = await axios.get(`transactions/${userStore.user.id}/categories`)
+        const response = flag ? await axios.get(`transactions/${userStore.user.id}/categories`) : ''
         categories.value = response.data
     } catch (error) {
         console.log(error)
@@ -184,10 +184,12 @@ onMounted(async () => {
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
     </div>
-    <div>
-        <canvas id="myChartLine"></canvas>
-    </div>
-    <div>
-        <canvas id="myChartPie"></canvas>
+    <div class="d-flex">
+        <div>
+            <canvas id="myChartLine"></canvas>
+        </div>
+        <div>
+            <canvas id="myChartPie"></canvas>
+        </div>
     </div>
 </template>
