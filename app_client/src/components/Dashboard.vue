@@ -122,15 +122,12 @@ const createChartLine = () => {
 }
 
 const createChartPie = () => {
-
-    const ctx = document.getElementById('myChartPie')
-
-    const categoriesName = categories.value.map((categorie) => categorie.name)
-
-    const categoriesNumbers = categories.value.map((categorie) => categorie.count)
+    const ctx = document.getElementById('myChartPie');
+    const categoriesName = categories.value.map((categorie) => categorie.name);
+    const categoriesNumbers = categories.value.map((categorie) => categorie.count);
 
     new Chart(ctx, {
-        type: 'radar',
+        type: 'bar',
         data: {
             labels: categoriesName,
             datasets: [
@@ -139,41 +136,32 @@ const createChartPie = () => {
                     data: categoriesNumbers,
                     borderWidth: 1,
                     fill: false,
-                    backgroundColor: [
-                        'rgb(0,0,0)',
-                        'rgb(255,0,0)',
-                        'rgb(0,255,0)',
-                        'rgb(0,0,255)',
-                        'rgb(255,255,0)',
-                        'rgb(0,255,255)',
-                        'rgb(255,0,255)',
-                        'rgb(192,192,192)',
-                        'rgb(128,128,128)',
-                        'rgb(128,0,0)',
-                        'rgb(128,128,0)',
-                        'rgb(0,128,0)',
-                        'rgb(128,0,128)',
-                        'rgb(0,128,128)',
-                        'rgb(0,0,128)'
-                    ]
                 },
             ]
         },
         options: {
-            scale: {
-                pointLabels: {
-                    fontSize: 12,
+            responsive : true,
+            indexAxis :'y',
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
                 },
-                ticks: {
-                    //beginAtZero: true,
-                    //min: 0,
-                    stepSize: 1,
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
                 },
-
+                y: {
+                    pointLabels: {
+                        fontSize: 12,
+                    },
+                }
             }
         },
-    })
-}
+    });
+};
+
 
 const loadVcards = async () => {
     try{
