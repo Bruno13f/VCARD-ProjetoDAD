@@ -27,7 +27,7 @@ const loadTransactions = async () => {
         const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`) : ''
         transactions.value = response.data.data
         numberOfTransactions.value = response.data.meta.total
-        balance.value = transactions.value[0]['new_balance']
+        balance.value = numberOfTransactions.value ? transactions.value[0]['new_balance'] : 0
     } catch (error) {
         console.log(error)
     }
@@ -315,14 +315,17 @@ onMounted(async () => {
         </div>
         <div class="row mt-5">
             <!-- First Row -->
-            <div class="col-md-6">
+            <div class="col-md-6" v-show="numberOfTransactions">
                 <canvas id="myChartLine"></canvas>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" v-show="numberOfTransactions">
                 <canvas id="myChartPie"></canvas>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" v-show="numberOfTransactions">
                 <canvas id="myChartBartChart"></canvas>
+            </div>
+            <div class="col-md-12 d-flex justify-content-center mt-5" v-show="!numberOfTransactions">
+                <h2>No Data</h2>
             </div>
         </div>
     </div>
