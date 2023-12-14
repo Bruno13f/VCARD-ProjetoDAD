@@ -66,6 +66,19 @@ class TransactionController extends Controller {
     
         return response()->json($categoryCounts);
     }
+
+    public function getPaymentTypesOfTransactions(Request $request, Vcard $vcard) {
+        if (!$vcard) {
+            return response()->json(['error' => 'Vcard not found'], Response::HTTP_NOT_FOUND);
+        }
+    
+        $categoryCounts = Transaction::select('payment_type', \DB::raw('COUNT(*) as count'))
+            ->where('transactions.vcard', $vcard->phone_number)
+            ->groupBy('payment_type')
+            ->get();
+    
+        return response()->json($categoryCounts);
+    }
     
 
     public function store(StoreTransactionRequest $request) {
