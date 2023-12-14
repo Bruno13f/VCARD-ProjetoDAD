@@ -60,6 +60,8 @@ const createChartLine = () => {
                     label: 'Balance',
                     data: newBalances,
                     borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 0, 1)',
+                    backgroundColor: 'rgba(255, 255, 0, 1)',
                     fill: false,
                 },
             ],
@@ -137,11 +139,11 @@ const createChartPie = () => {
                     borderWidth: 1,
                     fill: false,
                 },
-            ]
+            ],
         },
         options: {
-            responsive : true,
-            indexAxis :'y',
+            responsive: true,
+            indexAxis: 'y',
             plugins: {
                 datalabels: {
                     anchor: 'end',
@@ -153,11 +155,14 @@ const createChartPie = () => {
                     beginAtZero: true,
                 },
                 y: {
+                    ticks: {
+                        stepSize: 1,
+                    },
                     pointLabels: {
                         fontSize: 12,
                     },
-                }
-            }
+                },
+            },
         },
     });
 };
@@ -198,28 +203,28 @@ onMounted(async () => {
     <div class="container-fluid">
         <div class="row mt-5">
             <!-- Second Row -->
-            <div class="col-md-3 d-flex justify-content-center">
+            <div class="col-md-3 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-success" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Vcard Balance: {{ balance }} €</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 d-flex justify-content-center">
+            <div class="col-md-3 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-warning" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Transactions: {{ numberOfTransactions }}</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 d-flex justify-content-center">
+            <div class="col-md-3 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-primary" style="width: 18rem;">
                     <div class="card-body text-center">
-                        <h5 class="card-title">X: {{  }}</h5>
+                        <h5 class="card-title">: {{  }} </h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 d-flex justify-content-center">
+            <div class="col-md-3 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-danger" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Used Categories: {{ numberOfCategories }}</h5>

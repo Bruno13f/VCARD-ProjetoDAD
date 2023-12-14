@@ -173,12 +173,6 @@ socket.on('updateVcard', (vcard) => {
                   </router-link>
                 </a>
             </li>
-            <li class="nav-item" v-if="userStore.user">
-              <a class="nav-link" href="#">
-                <i class="bi bi-bar-chart-line"></i>
-                Reports
-              </a>
-            </li>
           </ul>
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" v-if="userStore.user?.user_type =='V'">
