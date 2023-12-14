@@ -12,6 +12,9 @@ const categories = ref([])
 const userStore = useUserStore()
 
 const flag = userStore.user.user_type == 'A' ? false : true
+const numberOfTransactions = ref(null)
+const balance = ref(null)
+const numberOfCategories = ref(null)
 
 const vcards = ref([])
 const filterByBlocked = ref(null)
@@ -20,6 +23,8 @@ const loadTransactions = async () => {
     try {
         const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`) : ''
         transactions.value = response.data.data
+        numberOfTransactions.value = response.data.meta.total
+        balance.value = transactions.value[0]['new_balance']
     } catch (error) {
         console.log(error)
     }
@@ -29,6 +34,7 @@ const loadCategories = async () => {
     try {
         const response = flag ? await axios.get(`transactions/${userStore.user.id}/categories`) : ''
         categories.value = response.data
+        numberOfCategories.value = categories.value.length
     } catch (error) {
         console.log(error)
     }
@@ -51,7 +57,7 @@ const createChartLine = () => {
             labels: formattedDates,
             datasets: [
                 {
-                    label: 'New Balance',
+                    label: 'Balance',
                     data: newBalances,
                     borderWidth: 1,
                     fill: false,
@@ -77,14 +83,31 @@ const createChartLine = () => {
                     beginAtZero: false,
                     title: {
                         display: true,
-                        text: 'New Balance',
+                        text: 'Balance',
                     },
+                    ticks: {
+                    callback: function (value, index, values) {
+                        return value + '€'  
+                    },
+                },
                 },
             },
             plugins: {
                 legend: {
                     display: true,
                 },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            var label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y.toFixed(2) + ' €'; // Add the € symbol to tooltip values
+                            return label;
+                            }
+                    }
+                }
             },
             layout: {
                 padding: {
@@ -112,7 +135,7 @@ const createChartPie = () => {
             labels: categoriesName,
             datasets: [
                 {
-                    label: 'Uses',
+                    label: 'Transactions per Category',
                     data: categoriesNumbers,
                     borderWidth: 1,
                     fill: false,
@@ -184,12 +207,46 @@ onMounted(async () => {
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
     </div>
-    <div class="d-flex">
-        <div>
-            <canvas id="myChartLine"></canvas>
+    <div class="container-fluid">
+        <div class="row mt-5">
+            <!-- Second Row -->
+            <div class="col-md-3 d-flex justify-content-center">
+                <div class="card text-white bg-success" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Vcard Balance: {{ balance }} €</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex justify-content-center">
+                <div class="card text-white bg-warning" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Transactions: {{ numberOfTransactions }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex justify-content-center">
+                <div class="card text-white bg-primary" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">X: {{  }}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex justify-content-center">
+                <div class="card text-white bg-danger" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Used Categories: {{ numberOfCategories }}</h5>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <canvas id="myChartPie"></canvas>
+        <div class="row mt-5">
+            <!-- First Row -->
+            <div class="col-md-6">
+                <canvas id="myChartLine"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="myChartPie"></canvas>
+            </div>
         </div>
     </div>
 </template>
