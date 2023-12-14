@@ -10,7 +10,11 @@ import { useUserStore } from '@/stores/user.js'
 const transactions = ref([])
 const categories = ref([])
 const userStore = useUserStore()
+
 const flag = userStore.user.user_type == 'A' ? false : true
+
+const vcards = ref([])
+const filterByBlocked = ref(null)
 
 const loadTransactions = async () => {
     try {
@@ -138,8 +142,8 @@ const createChartPie = () => {
                     fontSize: 12,
                 },
                 ticks: {
-                    beginAtZero: true,
-                    min: 0,
+                    //beginAtZero: true,
+                    //min: 0,
                     stepSize: 1,
                 },
 
@@ -148,11 +152,27 @@ const createChartPie = () => {
     })
 }
 
+const loadVcards = async () => {
+    try{
+      const response = await axios.get('vcards', {params: {
+        blocked: filterByBlocked.value,
+      }})
+      vcards.value = response.data.data
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+
+
+
 onMounted(async () => {
     await loadTransactions()
     await loadCategories()
+    await loadVcards()
     console.log(transactions)
     console.log(categories)
+    console.log(vcards)
     if (flag) {
         createChartLine()
         createChartPie()
