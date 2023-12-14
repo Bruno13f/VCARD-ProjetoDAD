@@ -127,6 +127,7 @@
         required
         v-model="editingVcard.max_debit"
         :disabled=flag>
+        <field-error-message :errors="errors" fieldName="max_debit"></field-error-message>
       </div>
 
       <div class="mb-3 me-3 flex-grow-1 form-group" v-if="props.operationType == 'insert'">
