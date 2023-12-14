@@ -15,6 +15,9 @@ const flag = userStore.user.user_type == 'A' ? false : true
 const numberOfTransactions = ref(null)
 const balance = ref(null)
 const numberOfCategories = ref(null)
+const activeVcards = ref(null)
+const numberofAllTransactions = ref(null)
+const vcardsBalances = ref(null)
 
 const vcards = ref([])
 const filterByBlocked = ref(null)
@@ -285,25 +288,27 @@ onMounted(async () => {
     </div>
     <div class="container-fluid">
         <div class="row mt-5">
-            <!-- Second Row -->
             <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-success" style="width: 18rem;">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Vcard Balance: {{ balance }} €</h5>
+                        <h5 v-if="flag" class="card-title">Vcard Balance: {{ balance }} €</h5>
+                        <h5 v-else class="card-title">Active Vcards: {{ activeVcards }}</h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-warning" style="width: 18rem;">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Transactions: {{ numberOfTransactions }}</h5>
+                        <h5 v-if="flag" class="card-title">Transactions: {{ numberOfTransactions }}</h5>
+                        <h5 v-else class="card-title">Active Vcards Balance: {{ vcardsBalances }}</h5>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-danger" style="width: 18rem;">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Used Categories: {{ numberOfCategories }}</h5>
+                        <h5 v-if="flag" class="card-title">Used Categories: {{ numberOfCategories }}</h5>
+                        <h5 v-else class="card-title">Transactions: {{ numberofAllTransactions }}</h5>
                     </div>
                 </div>
             </div>
