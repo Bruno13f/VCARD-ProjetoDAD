@@ -172,30 +172,28 @@ class VcardController extends Controller
 
         // soft delete se tiver transacoes senao forceDelete
 
-        $flag = 0;
-
-        if (count($vcard->transactions)){
-            $vcard->delete();
-            foreach ($vcard->transactions as $transaction) {
-                $transaction->delete();
-            }
-        }else{
-            $flag = 1;
-            $vcard->forceDelete();
-        }
+        $countTransactions = count($vcard->transactions);
 
         if (count($vcard->categories) != 0){   
             
-            if ($flag){
+            if ($countTransactions == 0){
                 foreach ($vcard->categories as $category) {
                     $category->forceDelete();
                 }
-
             }else{
                 foreach ($vcard->categories as $category) {
                     $category->delete();
                 }
             }
+        }
+
+        if ($countTransactions){
+            $vcard->delete();
+            foreach ($vcard->transactions as $transaction) {
+                $transaction->delete();
+            }
+        }else{
+            $vcard->forceDelete();
         }
 
         // se for o proprio owner do vcard limpar token login
