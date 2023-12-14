@@ -68,7 +68,7 @@ const createChartLine = () => {
                     },
                 },
                 y: {
-                    min: minBalance +0,
+                    min: minBalance + 0,
                     max: maxBalance + 50,
                     beginAtZero: false,
                     title: {
@@ -131,6 +131,19 @@ const createChartPie = () => {
                     ]
                 },
             ]
+        },
+        options: {
+            scale: {
+                pointLabels: {
+                    fontSize: 12,
+                },
+                ticks: {
+                    beginAtZero: true,
+                    min: 0,
+                    stepSize: 1,
+                },
+
+            }
         },
     })
 }
