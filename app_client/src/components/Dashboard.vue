@@ -121,6 +121,88 @@ const createChartLine = () => {
     })
 }
 
+
+const createChartBarChart = () => {
+    const ctx = document.getElementById('myChartBartChart')
+
+    // Ensure dates are properly formatted for time scale
+    const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
+
+    const newBalances = transactions.value.map((transaction) => transaction.new_balance)
+
+    const minBalance = Math.floor(Math.min(...newBalances) / 10) * 10;
+    const maxBalance = Math.ceil(Math.max(...newBalances) / 10) * 10;
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: formattedDates,
+            datasets: [
+                {
+                    label: 'Balance',
+                    data: newBalances,
+                    borderWidth: 1,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        tooltipFormat: 'YYYY-MM-DD HH:mm:ss', // Adjust the format as needed
+                    },
+                    title: {
+                        display: true,
+                        text: 'Date',
+                    },
+                },
+                y: {
+                    min: minBalance + 0,
+                    max: maxBalance + 50,
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Balance',
+                    },
+                    ticks: {
+                    callback: function (value, index, values) {
+                        return value + '€'  
+                    },
+                },
+                },
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            var label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y.toFixed(2) + ' €'; // Add the € symbol to tooltip values
+                            return label;
+                            }
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                },
+            },
+        },
+    })
+}
+
 const createChartPie = () => {
     const ctx = document.getElementById('myChartPie');
     const categoriesName = categories.value.map((categorie) => categorie.name);
@@ -187,6 +269,7 @@ onMounted(async () => {
     if (flag) {
         createChartLine()
         createChartPie()
+        createChartBarChart()
     }
 });
 </script>
@@ -234,6 +317,9 @@ onMounted(async () => {
             </div>
             <div class="col-md-6">
                 <canvas id="myChartPie"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="myChartBartChart"></canvas>
             </div>
         </div>
     </div>
