@@ -9,6 +9,7 @@ import { useUserStore } from '@/stores/user.js'
 
 const transactions = ref([])
 const categories = ref([])
+const paymentTypes = ref([])
 const userStore = useUserStore()
 
 const flag = userStore.user.user_type == 'A' ? false : true
@@ -38,6 +39,15 @@ const loadCategories = async () => {
         const response = flag ? await axios.get(`transactions/${userStore.user.id}/categories`) : ''
         categories.value = response.data
         numberOfCategories.value = categories.value.length
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+const loadPaymentTypes = async () => {
+    try {
+        const response = flag ? await axios.get(`transactions/${userStore.user.id}/paymentTypes`) : ''
+        paymentTypes.value = response.data
     } catch (error) {
         console.log(error)
     }
@@ -89,10 +99,10 @@ const createChartLine = () => {
                         text: 'Balance',
                     },
                     ticks: {
-                    callback: function (value, index, values) {
-                        return value + '€'  
+                        callback: function (value, index, values) {
+                            return value + '€'
+                        },
                     },
-                },
                 },
             },
             plugins: {
@@ -108,7 +118,7 @@ const createChartLine = () => {
                             }
                             label += context.parsed.y.toFixed(2) + ' €'; // Add the € symbol to tooltip values
                             return label;
-                            }
+                        }
                     }
                 }
             },
@@ -129,82 +139,37 @@ const createChartPie = () => {
     const ctx = document.getElementById('myChartPie')
 
     // Ensure dates are properly formatted for time scale
-    const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
+    const paymentsMethod = paymentTypes.value.map((transaction) => transaction.payment_type)
 
-    const newBalances = transactions.value.map((transaction) => transaction.new_balance)
+    const newCounts = paymentTypes.value.map((transaction) => transaction.count)
 
-    const minBalance = Math.floor(Math.min(...newBalances) / 10) * 10;
-    const maxBalance = Math.ceil(Math.max(...newBalances) / 10) * 10;
+
 
     new Chart(ctx, {
-        type: 'bar',
+        type: 'pie',
         data: {
-            labels: formattedDates,
+            labels: paymentsMethod,
             datasets: [
                 {
-                    label: 'Balance',
-                    data: newBalances,
+                    label: 'Payment Methods',
+                    data: newCounts,
                     borderWidth: 1,
                     fill: false,
                 },
             ],
         },
         options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day',
-                        tooltipFormat: 'YYYY-MM-DD HH:mm:ss', // Adjust the format as needed
-                    },
-                    title: {
-                        display: true,
-                        text: 'Date',
-                    },
-                },
-                y: {
-                    min: minBalance + 0,
-                    max: maxBalance + 50,
-                    beginAtZero: false,
-                    title: {
-                        display: true,
-                        text: 'Balance',
-                    },
-                    ticks: {
-                    callback: function (value, index, values) {
-                        return value + '€'  
-                    },
-                },
-                },
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            var label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            label += context.parsed.y.toFixed(2) + ' €'; // Add the € symbol to tooltip values
-                            return label;
-                            }
-                    }
-                }
-            },
-            layout: {
-                padding: {
-                    left: 10,
-                    right: 10,
-                    top: 10,
-                    bottom: 10,
-                },
-            },
-        },
+            //responsive: false,
+            //maintainAspectRatio: false,
+            // layout: {
+            //     padding: {
+            //         left: 50
+            //     }
+            // }
+        }
+
     })
-}
+};
 
 const createChartBarHorizontal = () => {
     const ctx = document.getElementById('myChartBarHorizontal');
@@ -257,15 +222,17 @@ const createChartBarHorizontal = () => {
 
 
 const loadVcards = async () => {
-    try{
-      const response = await axios.get('vcards', {params: {
-        blocked: filterByBlocked.value,
-      }})
-      vcards.value = response.data.data
-    }catch(error){
-      console.log(error)
+    try {
+        const response = await axios.get('vcards', {
+            params: {
+                blocked: filterByBlocked.value,
+            }
+        })
+        vcards.value = response.data.data
+    } catch (error) {
+        console.log(error)
     }
-  }
+}
 
 
 
@@ -274,6 +241,7 @@ onMounted(async () => {
     await loadTransactions()
     await loadCategories()
     await loadVcards()
+    await loadPaymentTypes()
     console.log(transactions)
     console.log(categories)
     console.log(vcards)
@@ -316,20 +284,33 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
+
         <div class="row mt-5">
-            <!-- First Row -->
-            <div class="col-md-6" v-show="numberOfTransactions">
+            <div class="col-md-12" v-show="numberOfTransactions">
                 <canvas id="myChartLine"></canvas>
             </div>
-            <div class="col-md-6" v-show="numberOfTransactions">
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12" v-show="numberOfTransactions">
                 <canvas id="myChartBarHorizontal"></canvas>
             </div>
-            <div class="col-md-6" v-show="numberOfTransactions">
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12" v-show="numberOfTransactions">
                 <canvas id="myChartPie"></canvas>
             </div>
-            <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">
-                <h2>No Data</h2>
-            </div>
+        </div>
+        <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">
+            <h2>No Data</h2>
         </div>
     </div>
 </template>
+
+<style scoped>
+.chartSize {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    height: 50%;
+}
+</style>
