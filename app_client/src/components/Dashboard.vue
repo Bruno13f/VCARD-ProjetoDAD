@@ -125,8 +125,8 @@ const createChartLine = () => {
 }
 
 
-const createChartBarChart = () => {
-    const ctx = document.getElementById('myChartBartChart')
+const createChartPie = () => {
+    const ctx = document.getElementById('myChartPie')
 
     // Ensure dates are properly formatted for time scale
     const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
@@ -206,8 +206,8 @@ const createChartBarChart = () => {
     })
 }
 
-const createChartPie = () => {
-    const ctx = document.getElementById('myChartPie');
+const createChartBarHorizontal = () => {
+    const ctx = document.getElementById('myChartBarHorizontal');
     const categoriesName = categories.value.map((categorie) => categorie.name);
     const categoriesNumbers = categories.value.map((categorie) => categorie.count);
 
@@ -238,6 +238,9 @@ const createChartPie = () => {
             scales: {
                 x: {
                     beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                    }
                 },
                 y: {
                     ticks: {
@@ -276,8 +279,8 @@ onMounted(async () => {
     console.log(vcards)
     if (flag) {
         createChartLine()
+        createChartBarHorizontal()
         createChartPie()
-        createChartBarChart()
     }
 });
 </script>
@@ -319,10 +322,10 @@ onMounted(async () => {
                 <canvas id="myChartLine"></canvas>
             </div>
             <div class="col-md-6" v-show="numberOfTransactions">
-                <canvas id="myChartPie"></canvas>
+                <canvas id="myChartBarHorizontal"></canvas>
             </div>
             <div class="col-md-6" v-show="numberOfTransactions">
-                <canvas id="myChartBartChart"></canvas>
+                <canvas id="myChartPie"></canvas>
             </div>
             <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">
                 <h2>No Data</h2>
