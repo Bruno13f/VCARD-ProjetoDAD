@@ -52,6 +52,7 @@ const loadTransaction = async (id) => {
       const response = await axios.get('transactions/' + id)
       transaction.value = response.data.data
       transaction.value.category_id = transaction.value.category_id?.id == null ? null : transaction.value.category_id.id
+      transaction.value.vcard = transaction.value.vcard.phone_number
       console.log(transaction.value.category_id)
       originalValueStr = JSON.stringify(transaction.value)
     } catch (error) {
@@ -140,7 +141,7 @@ onMounted(async () => {
     return
 
   categories.value = []
-  const id = operation.value == 'update' ? transaction.value.vcard.phone_number : userStore.user.id
+  const id = operation.value == 'update' ? transaction.value.vcard : userStore.user.id
   try {
     const response = await axios.get(`vcards/${id}/categories?paginate=0`)
     categories.value = response.data.data

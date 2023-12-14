@@ -36,7 +36,6 @@ watch(
 )
 
 const save = () => {
-  console.log(editingTransaction.value)
   emit('save', editingTransaction.value)
 }
 
@@ -48,7 +47,7 @@ const cancel = () => {
 
 <template>
   <form class="row g-3 needs-validation" novalidate @submit.prevent="save">
-    <h3 class="mt-5 mb-3"></h3>
+    <h3 class="mt-5 mb-3">{{ operationType == 'insert' ? 'Create Transaction' : 'Edit Transaction' }}</h3>
     <hr>
 
     <div class="mb-3">
@@ -57,7 +56,7 @@ const cancel = () => {
         <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
         v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
         <!-- <input type="text" class="form-control" id="inputName" placeholder="Vcard Phone Number" required
-        v-else v-model="editingTransaction.vcard" :disabled="flagUser || flagOperation">
+        v-else v-model="editingTransaction.vcard.phone_number" :disabled="flagUser || flagOperation">
         <field-error-message :errors="errors" fieldName="vcard"></field-error-message> -->
       </div>
     </div>
