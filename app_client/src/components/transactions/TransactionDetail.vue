@@ -36,7 +36,6 @@ watch(
 )
 
 const save = () => {
-  console.log(editingTransaction.value)
   emit('save', editingTransaction.value)
 }
 

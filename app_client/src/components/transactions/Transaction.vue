@@ -141,7 +141,7 @@ onMounted(async () => {
     return
 
   categories.value = []
-  const id = operation.value == 'update' ? transaction.value.vcard.phone_number : userStore.user.id
+  const id = operation.value == 'update' ? transaction.value.vcard : userStore.user.id
   try {
     const response = await axios.get(`vcards/${id}/categories?paginate=0`)
     categories.value = response.data.data
