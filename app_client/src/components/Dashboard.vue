@@ -203,28 +203,21 @@ onMounted(async () => {
     <div class="container-fluid">
         <div class="row mt-5">
             <!-- Second Row -->
-            <div class="col-md-3 d-flex justify-content-center mb-2">
+            <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-success" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Vcard Balance: {{ balance }} €</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 d-flex justify-content-center mb-2">
+            <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-warning" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Transactions: {{ numberOfTransactions }}</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 d-flex justify-content-center mb-2">
-                <div class="card text-white bg-primary" style="width: 18rem;">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">: {{  }} </h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 d-flex justify-content-center mb-2">
+            <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-danger" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Used Categories: {{ numberOfCategories }}</h5>
