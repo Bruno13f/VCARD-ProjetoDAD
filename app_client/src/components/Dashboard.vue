@@ -53,7 +53,7 @@ const loadPaymentTypes = async () => {
 
 const loadVcardsActive = async () => {
     try {
-        const response =await axios.get(`vcardsActive`)
+        const response = flag ? '' : await axios.get(`vcardsActive`)
         vcards.value = response.data
         activeVcards.value = vcards.value.length
 
@@ -69,7 +69,7 @@ const loadVcardsActive = async () => {
 
 const loadTransactionsNotDeleted = async () => {
     try {
-        const response = await axios.get(`transactionsNotDeleted`)
+        const response = flag ? '' : await axios.get(`transactionsNotDeleted`)
         numberofAllTransactions.value = response.data
     } catch (error) {
         console.log(error)
@@ -129,6 +129,16 @@ const createChartLine = () => {
                 },
             },
             plugins: {
+                title:{
+                    display: true,
+                    text: 'LAST TRANSACTIONS',
+                    font: {
+                        size: 20,
+                    },
+                    padding: {
+                        bottom: 20,
+                    },
+                },
                 legend: {
                     display: true,
                 },
@@ -171,7 +181,7 @@ const createChartPie = () => {
             labels: paymentsMethod,
             datasets: [
                 {
-                    label: 'Payments',
+                    label: 'Number of Payments',
                     data: newCounts,
                     borderWidth: 1,
                     fill: false,
@@ -186,8 +196,19 @@ const createChartPie = () => {
             //         left: 50
             //     }
             // }
-        }
-
+            plugins: {
+                title:{
+                    display: true,
+                    text: 'TRANSACTIONS PER PAYMENT TYPE',
+                    font: {
+                        size: 20,
+                    },
+                    padding: {
+                        bottom: 20,
+                    },
+                },    
+            },
+        },
     })
 };
 
@@ -202,7 +223,7 @@ const createChartBarHorizontal = () => {
             labels: categoriesName,
             datasets: [
                 {
-                    label: 'Transactions per Category',
+                    label: 'Number of Transactions',
                     data: categoriesNumbers,
                     borderWidth: 1,
                     borderColor: 'rgba(255, 77, 77, 1)',
@@ -215,6 +236,16 @@ const createChartBarHorizontal = () => {
             responsive: true,
             indexAxis: 'y',
             plugins: {
+                title:{
+                    display: true,
+                    text: 'TRANSACTIONS PER CATEGORY',
+                    font: {
+                        size: 20,
+                    },
+                    padding: {
+                        bottom: 20,
+                    },
+                },
                 datalabels: {
                     anchor: 'end',
                     align: 'end',
