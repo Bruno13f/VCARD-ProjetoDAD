@@ -433,8 +433,7 @@ onMounted(async () => {
         </div>
         <div class="row d-flex justify-content-center mt-5">
             <div class="chart2">
-                <canvas v-if ="flag" id="myChartPie"></canvas>
-                <canvas v-else id="myChartLineTransactionsPerMonth"></canvas>
+                <canvas id="myChartPie"></canvas>
             </div>
         </div>
         <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">
