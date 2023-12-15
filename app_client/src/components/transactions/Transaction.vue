@@ -68,10 +68,9 @@ const save = async () => {
       const response = await axios.post('transactions', transaction.value)
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)
-      console.log(response)
       const params = {
         transaction: response.data.data,
-        user_type: userStore.user.user_type
+        user: userStore.user
       }
       console.log(params)
       socket.emit('newTransaction', params)

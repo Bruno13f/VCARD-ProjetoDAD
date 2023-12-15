@@ -34,8 +34,12 @@ const clickMenuOption = () => {
   }
 }
 
-socket.on('newTransaction', (transaction) => {
-    toast.success(`A new Transaction was made for you ! Value:${transaction.value} € (#${transaction.id} by ${transaction.vcard.phone_number})`)
+socket.on('newTransaction', (params) => {
+    if (params.user.user_type == 'A'){
+      toast.success(`A new Transaction was made for you ! Value:${params.transaction.value} € (#${params.transaction.id} by ${params.user.name})`)
+    }else {
+      toast.success(`A new Transaction was made for you ! Value:${params.transaction.value} € (#${params.transaction.id} by ${params.transaction.vcard.phone_number})`)
+    }
 })
 
 socket.on('insertVcard', (vcard) => {

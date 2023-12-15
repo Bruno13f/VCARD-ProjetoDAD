@@ -13,11 +13,10 @@ httpServer.listen(8080, () => {
 io.on('connection', (socket) => {
     console.log(`client ${socket.id} has connected`)
     socket.on('newTransaction', (params) => {
-        console.log(params)
-        socket.in(params.transaction.pair_vcard).emit('newTransaction', params.transaction)
-        if (params.user_type == 'A')
-            console.log(params.transaction.vcard.phone_number)
-            socket.in(params.transaction.vcard.phone_number).emit('newTransaction', params.transaction)
+        socket.in(params.transaction.pair_vcard).emit('newTransaction', params)
+        if (params.user.user_type == 'A'){
+            socket.in(params.transaction.vcard.phone_number).emit('newTransaction', params)
+        }
     })
     socket.on('insertVcard', function (vcard) {
         socket.in('administrator').emit('insertVcard', vcard)
