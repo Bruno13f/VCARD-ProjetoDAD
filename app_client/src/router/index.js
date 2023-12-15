@@ -262,6 +262,11 @@ router.beforeEach(async (to, from, next) => {
   }
   if (to.name == 'Category') {
 
+    if (userStore.user.user_type == 'A'){
+      next()
+      return
+    }
+
     const categoryId = parseInt(to.params.id);
     const response = await axios.get(`http://server-api.test/api/categories/${categoryId}`);
     const category = response.data;

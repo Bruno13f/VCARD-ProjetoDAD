@@ -42,7 +42,7 @@ Route::middleware('auth:api')->group(function () {
     //Users
     Route::get('users', [UserController::class, 'index'])->middleware('can:viewAny,App\Models\User');
     Route::get('users/{user}', [UserController::class, 'show'])->middleware('can:view,user');
-    Route::put('users/{user}', [UserController::class, 'update'])->middleware('can:update,user');
+    // Route::put('users/{user}', [UserController::class, 'update'])->middleware('can:update,user');
     
     //Vcards
     Route::get('vcards', [VcardController::class, 'index']);
@@ -84,7 +84,6 @@ Route::middleware('auth:api')->group(function () {
     Route::put('categories/{category}', [CategoryController::class, 'update']);
     Route::delete('categories/{category}', [CategoryController::class, 'delete']);
 
-    //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 });
 
 Route::get('categories/{category}', [CategoryController::class, 'show']);
