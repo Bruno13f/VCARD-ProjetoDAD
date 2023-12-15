@@ -36,7 +36,7 @@ const addVcard = () => {
   }
 
 const editCategory = async (category) => {
-  // router.push({name: 'Category', params: { id: category.id }})
+  router.push({name: 'Category', params: { id: category.id }})
 }
 
 const deleteCategory = async (category) => {

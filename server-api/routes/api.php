@@ -78,7 +78,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'delete']);
 
     Route::get('categories', [CategoryController::class, 'index']);
-    Route::get('categories/{category}', [CategoryController::class, 'show']);
+    
     Route::post('categories', [CategoryController::class, 'store']);
     Route::put('categories/{category}', [CategoryController::class, 'update']);
     Route::delete('categories/{category}', [CategoryController::class, 'delete']);
@@ -86,6 +86,7 @@ Route::middleware('auth:api')->group(function () {
     //Route::get('categories/{category}/transactions', [TransactionController::class, 'getCategoryOfTransaction']);
 });
 
+Route::get('categories/{category}', [CategoryController::class, 'show']);
 
 
 

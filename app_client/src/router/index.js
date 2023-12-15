@@ -68,6 +68,7 @@ const router = createRouter({
       path: '/users/new',
       name: 'NewUser',
       component: User,
+      props: { id: -1 }
     },
     {
       path: '/vcards',
@@ -77,7 +78,8 @@ const router = createRouter({
     {
       path: '/vcards/new',
       name: 'NewVcard',
-      component: Vcard 
+      component: Vcard,
+      props: { id: -1 }
     },
     {
       path: '/vcards/:phone_number',
@@ -122,7 +124,8 @@ const router = createRouter({
     {
       path: '/categories/new',
       name: 'NewCategory',
-      component: Category
+      component: Category,
+      props: { id: -1 }
     },
   ]
 })
@@ -215,10 +218,10 @@ router.beforeEach(async (to, from, next) => {
     const transactionId = parseInt(to.params.id);
 
     const response = await axios.get(`http://server-api.test/api/transactions/${transactionId}`);
-    const transactionDetails = response.data;
-    const vcardOfTransaction = transactionDetails.data.vcard.phone_number;
+    const transaction = response.data;
+    const phone_number = transaction.data.vcard.phone_number;
 
-    if (userStore.user.id ==vcardOfTransaction) {
+    if (userStore.user.id == phone_number) {
       next()
       return
     }
@@ -259,7 +262,12 @@ router.beforeEach(async (to, from, next) => {
   }
   if (to.name == 'Category') {
 
-    if (userStore.user) {
+    const categoryId = parseInt(to.params.id);
+    const response = await axios.get(`http://server-api.test/api/categories/${categoryId}`);
+    const category = response.data;
+    const phone_number = category.data.vcard.phone_number;
+
+    if (userStore.user.id == phone_number) {
       next()
       return
     }
