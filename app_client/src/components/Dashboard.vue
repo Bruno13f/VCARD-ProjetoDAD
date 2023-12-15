@@ -299,6 +299,9 @@ const createChartVertical = () => {
                             return value + '%';
                         },
                     },
+                    grid: {
+                        display: false,
+                    },
                 },
                 x: {
                     ticks: {
