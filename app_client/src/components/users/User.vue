@@ -77,7 +77,8 @@ const save = async () => {
       user.value = response.data.data;
       originalValueStr = JSON.stringify(user.value);
       socket.emit('updateVcard', response.data.data)
-      toast.success('User ' + user.value.name + ' was updated successfully.');
+      toast.success('User ' + user.value.name + ' was updated successfully.')
+      userStore.user.name = user.value.name
       if (user.value.phone_number == userStore.user.id) {
         await userStore.loadUser();
       }

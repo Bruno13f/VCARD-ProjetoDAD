@@ -65,7 +65,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('transactions/{vcard}/categories', [TransactionController::class, 'getCategoriesOfTransactions']);
     Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
     Route::get('transactionsNotDeleted', [TransactionController::class, 'getTransactionsNotDeleted']);
-    // Route::get('transactions/paymentMethod', [TransactionController::class, 'getPaymentMethodsOfTransaction']);
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
@@ -77,16 +76,15 @@ Route::middleware('auth:api')->group(function () {
     Route::post('defaultCategories', [DefaultCategoryController::class, 'store']);
     Route::put('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'update']);
     Route::delete('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'delete']);
-
-    Route::get('categories', [CategoryController::class, 'index']);
     
+    Route::get('categories/{category}', [CategoryController::class, 'show']);
+    Route::get('categories', [CategoryController::class, 'index']);
     Route::post('categories', [CategoryController::class, 'store']);
     Route::put('categories/{category}', [CategoryController::class, 'update']);
     Route::delete('categories/{category}', [CategoryController::class, 'delete']);
 
 });
 
-Route::get('categories/{category}', [CategoryController::class, 'show']);
 
 
 
