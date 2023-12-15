@@ -267,6 +267,21 @@ const createChartVertical = () => {
                         bottom: 20,
                     },
                 },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            var label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y + '%';
+                            return label
+                        },
+                        title: function (tooltipItems) {
+                            return tooltipItems[0].label === 'A' ? 'Administrator' : 'Vcard Owner';
+                        },
+                    }
+                }
             },
             scales: {
                 y: {
