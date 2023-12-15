@@ -63,7 +63,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::post('transactions', [TransactionController::class, 'store']);
     Route::get('transactions/{vcard}/categories', [TransactionController::class, 'getCategoriesOfTransactions']);
-    Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
+    Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactionsVcard']);
+    Route::get('transactions/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
     Route::get('transactionsNotDeleted', [TransactionController::class, 'getTransactionsNotDeleted']);
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);

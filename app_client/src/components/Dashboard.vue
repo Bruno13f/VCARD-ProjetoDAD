@@ -22,8 +22,10 @@ const numberofAllTransactions = ref(null)
 const vcardsBalances = ref(null)
 
 const loadTransactions = async () => {
+    if (!flag)
+        return
     try {
-        const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`) : ''
+        const response = await axios.get(`vcards/${userStore.user.id}/transactions`)
         transactions.value = response.data.data
         numberOfTransactions.value = response.data.meta.total
         balance.value = numberOfTransactions.value ? transactions.value[0]['new_balance'] : 0
@@ -33,8 +35,10 @@ const loadTransactions = async () => {
 };
 
 const loadCategories = async () => {
+    if (!flag)
+        return
     try {
-        const response = flag ? await axios.get(`transactions/${userStore.user.id}/categories`) : ''
+        const response = await axios.get(`transactions/${userStore.user.id}/categories`)
         categories.value = response.data
         numberOfCategories.value = categories.value.length
     } catch (error) {
@@ -44,16 +48,19 @@ const loadCategories = async () => {
 
 const loadPaymentTypes = async () => {
     try {
-        const response = flag ? await axios.get(`transactions/${userStore.user.id}/paymentTypes`) : ''
+        const response = flag ? await axios.get(`transactions/${userStore.user.id}/paymentTypes`) : await axios.get(`transactions/paymentTypes`)
         paymentTypes.value = response.data
+        console.log(paymentTypes)
     } catch (error) {
         console.log(error)
     }
 };
 
 const loadVcardsActive = async () => {
+    if (flag)
+        return
     try {
-        const response = flag ? '' : await axios.get(`vcardsActive`)
+        const response = await axios.get(`vcardsActive`)
         vcards.value = response.data
         activeVcards.value = vcards.value.length
 
@@ -68,8 +75,10 @@ const loadVcardsActive = async () => {
 };
 
 const loadTransactionsNotDeleted = async () => {
+    if (flag)
+        return
     try {
-        const response = flag ? '' : await axios.get(`transactionsNotDeleted`)
+        const response = await axios.get(`transactionsNotDeleted`)
         numberofAllTransactions.value = response.data
     } catch (error) {
         console.log(error)
@@ -281,8 +290,8 @@ onMounted(async () => {
     if (flag) {
         createChartLine()
         createChartBarHorizontal()
-        createChartPie()
     }
+    createChartPie()
 });
 </script>
 
@@ -326,7 +335,7 @@ onMounted(async () => {
             </div>
         </div>
         <div class="row d-flex justify-content-center mt-5">
-            <div class="chart2" v-show="numberOfTransactions">
+            <div class="chart2">
                 <canvas id="myChartPie"></canvas>
             </div>
         </div>
