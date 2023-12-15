@@ -114,6 +114,9 @@ const createChartLineTransactions = () => {
     const dates = transactionsMonth.value.map((transaction) => (transaction.month));
     const transaction_count = transactionsMonth.value.map((transaction) => (transaction.transaction_count));
 
+    dates.reverse();
+    transaction_count.reverse();
+    
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -475,7 +478,7 @@ onMounted(async () => {
             </div>
         </div>
         <div class="row d-flex justify-content-center mt-5">
-            <div class="col-md-6 mr-4" v-show="flag">
+            <div class="col-md-6 mr-4">
                 <canvas v-if="flag" id="myChartLineTransactions"></canvas>
                 <canvas v-else id="myChartLineTransactionsMonth"></canvas>
             </div>
