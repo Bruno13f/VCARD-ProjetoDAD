@@ -12,6 +12,7 @@ const categories = ref([])
 const paymentTypes = ref([])
 const vcards = ref([])
 const transactionsMonth = ref([])
+const transactionsType = ref([])
 const userStore = useUserStore()
 
 const flag = userStore.user.user_type == 'A' ? false : true
@@ -109,6 +110,64 @@ const loadTransactionsPerMonth = async () => {
     }
 }
 
+const loadTransactionsPerType = async () => {
+    if (flag)
+        return
+    try {
+        const response = await axios.get(`transactionsPerType`)
+        transactionsType.value = response.data
+        console.log(transactionsType)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const createChartLineTransactionsType = () => {
+    const ctx = document.getElementById('myChartPolarAreaTransactionType');
+    const types = transactionsType.value.map((transaction) => (transaction.type));
+    const types_count = transactionsType.value.map((transaction) => (transaction.count));
+
+    console.log(types)
+    console.log(types_count)
+
+    new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: types,
+            datasets: [
+                {
+                    label: 'Transaction Per Type',
+                    data: types_count,
+                    borderWidth: 1,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'NUMBER OF TRANSACTION PER TYPE',
+                    font: {
+                        size: 20,
+                    },
+                    padding: {
+                        bottom: 20,
+                    },
+                },
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                },
+            },
+        },
+    })
+};
+
 const createChartLineTransactions = () => {
     const ctx = document.getElementById('myChartLineTransactionsMonth');
     const dates = transactionsMonth.value.map((transaction) => (transaction.month));
@@ -116,7 +175,7 @@ const createChartLineTransactions = () => {
 
     dates.reverse();
     transaction_count.reverse();
-    
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -131,6 +190,18 @@ const createChartLineTransactions = () => {
             ],
         },
         options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'NUMBER OF TRANSACTION PER MONTH',
+                    font: {
+                        size: 20,
+                    },
+                    padding: {
+                        bottom: 20,
+                    },
+                },
+            },
             scales: {
                 x: {
                     title: {
@@ -435,12 +506,14 @@ onMounted(async () => {
     await loadTransactionsNotDeleted()
     await loadDistributionOfUsers()
     await loadTransactionsPerMonth()
+    await loadTransactionsPerType()
     if (flag) {
         createChartLine()
         createChartBarHorizontal()
     }else{
         createChartVertical()
         createChartLineTransactions()
+        createChartLineTransactionsType()
     }
     createChartPie()
 });
@@ -487,9 +560,13 @@ onMounted(async () => {
                 <canvas v-else id="myChartBarVerticalUsers"></canvas>
             </div>
         </div>
+    
         <div class="row d-flex justify-content-center mt-5">
-            <div class="chart2">
+            <div class="col-md-6 mr-4 chart2" >
                 <canvas id="myChartPie"></canvas>
+            </div>
+            <div class="col-md-6 ml-4 chart2">
+                <canvas  v-if="!flag" id="myChartPolarAreaTransactionType"></canvas>
             </div>
         </div>
         <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">

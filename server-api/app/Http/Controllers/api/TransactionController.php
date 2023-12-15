@@ -96,6 +96,16 @@ class TransactionController extends Controller {
         return response()->json($transactions);
     }
 
+    public function getTransactionsPerType(Request $request) {
+        $transactionsCountType = Transaction::select('type', \DB::raw('COUNT(*) as count'))
+            ->groupBy('type')
+            ->get();
+
+        return response()->json($transactionsCountType);
+    }
+
+    
+
     public function getTransactionsPerMonth(Request $request) {
         $year = $request->input('year', date('Y'));
     
