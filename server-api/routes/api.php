@@ -56,7 +56,7 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password']);
     Route::patch('vcards/{vcard}/confirmationCode', [VCardController::class, 'update_confirmation_code']);
     Route::get('vcards/{vcard}/categories', [VCardController::class, 'getCategoryOfVcard']);
-
+    Route::get('vcardsActive', [VCardController::class, 'getActiveVcards']);
 
     //Transactions
 
@@ -64,11 +64,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('transactions', [TransactionController::class, 'store']);
     Route::get('transactions/{vcard}/categories', [TransactionController::class, 'getCategoriesOfTransactions']);
     Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
+    Route::get('transactionsNotDeleted', [TransactionController::class, 'getTransactionsNotDeleted']);
     // Route::get('transactions/paymentMethod', [TransactionController::class, 'getPaymentMethodsOfTransaction']);
     Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
     Route::put('transactions/{transaction}', [TransactionController::class,'update']);
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
-
+    
     //Categorias
 
     Route::get('defaultCategories', [DefaultCategoryController::class, 'index']);

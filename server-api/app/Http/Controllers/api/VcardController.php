@@ -268,6 +268,12 @@ class VcardController extends Controller
         return CategoryResource::collection($pagedCategories);
     }
 
+    public function getActiveVcards(Request $request) {
+        $activeVcards = VCard::where('blocked', 0)->whereNull('deleted_at')->select('balance')->get();
+        
+    return response()->json($activeVcards);
+    }
+
     public function update_password (UpdateUserPasswordRequest $request, Vcard $vcard)
     {
         $vcard->password = bcrypt($request->validated()['password']);
