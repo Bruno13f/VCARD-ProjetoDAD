@@ -273,7 +273,7 @@ onMounted(async () => {
                 <div class="card text-white bg-warning" style="width: 18rem;">
                     <div class="card-body text-center">
                         <h5 v-if="flag" class="card-title">Transactions: {{ numberOfTransactions }}</h5>
-                        <h5 v-else class="card-title">Active Vcards Balance: {{ vcardsBalances }}</h5>
+                        <h5 v-else class="card-title">Active Vcards Balance: {{ vcardsBalances }}€</h5>
                     </div>
                 </div>
             </div>
