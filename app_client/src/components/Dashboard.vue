@@ -11,6 +11,7 @@ const transactions = ref([])
 const categories = ref([])
 const paymentTypes = ref([])
 const vcards = ref([])
+const transactionsMonth = ref([])
 const userStore = useUserStore()
 
 const flag = userStore.user.user_type == 'A' ? false : true
@@ -51,7 +52,6 @@ const loadPaymentTypes = async () => {
     try {
         const response = flag ? await axios.get(`transactions/${userStore.user.id}/paymentTypes`) : await axios.get(`transactions/paymentTypes`)
         paymentTypes.value = response.data
-        console.log(paymentTypes)
     } catch (error) {
         console.log(error)
     }
@@ -79,7 +79,7 @@ const loadTransactionsNotDeleted = async () => {
     if (flag)
         return
     try {
-        const response = await axios.get(`transactionsNotDeleted`)
+        const response = await axios.get(`transactions/valid`)
         numberofAllTransactions.value = response.data
     } catch (error) {
         console.log(error)
@@ -98,16 +98,24 @@ const loadDistributionOfUsers = async () => {
     }
 }
 
+const loadTransactionsPerMonth = async () => {
+    if (flag)
+        return
+    try {
+        const response = await axios.get(`transactionsPerMonth`)
+        transactionsMonth.value = response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const createChartLine = () => {
     const ctx = document.getElementById('myChartLineTransactions')
-
     const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
-
     const newBalances = transactions.value.map((transaction) => transaction.new_balance)
-
     const minBalance = Math.floor(Math.min(...newBalances) / 10) * 10;
     const maxBalance = Math.ceil(Math.max(...newBalances) / 10) * 10;
-
+    
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -187,7 +195,6 @@ const createChartLine = () => {
         },
     })
 }
-
 
 const createChartPie = () => {
     const ctx = document.getElementById('myChartPie')
@@ -373,6 +380,7 @@ onMounted(async () => {
     await loadVcardsActive()
     await loadTransactionsNotDeleted()
     await loadDistributionOfUsers()
+    await loadTransactionsPerMonth()
     if (flag) {
         createChartLine()
         createChartBarHorizontal()
@@ -425,7 +433,8 @@ onMounted(async () => {
         </div>
         <div class="row d-flex justify-content-center mt-5">
             <div class="chart2">
-                <canvas id="myChartPie"></canvas>
+                <canvas v-if ="flag" id="myChartPie"></canvas>
+                <canvas v-else id="myChartLineTransactionsPerMonth"></canvas>
             </div>
         </div>
         <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">

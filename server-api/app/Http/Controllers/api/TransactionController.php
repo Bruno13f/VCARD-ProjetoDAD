@@ -95,6 +95,18 @@ class TransactionController extends Controller {
 
         return response()->json($transactions);
     }
+
+    public function getTransactionsPerMonth(Request $request) {
+        $year = $request->input('year', date('Y'));
+    
+        $transactions = Transaction::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as transaction_count')
+            ->whereYear('created_at', $year)
+            ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+            ->orderByRaw('YEAR(created_at) DESC, MONTH(created_at) DESC')
+            ->get();
+    
+        return response()->json($transactions);
+    }
     
 
     public function store(StoreTransactionRequest $request) {
