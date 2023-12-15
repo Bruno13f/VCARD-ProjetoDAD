@@ -20,6 +20,7 @@ const numberOfCategories = ref(null)
 const activeVcards = ref(null)
 const numberofAllTransactions = ref(null)
 const vcardsBalances = ref(null)
+const distributionOfUsers = ref(null)
 
 const loadTransactions = async () => {
     if (!flag)
@@ -85,9 +86,20 @@ const loadTransactionsNotDeleted = async () => {
     }
 };
 
+const loadDistributionOfUsers = async () => {
+    if (flag)
+        return
+    try{
+        const response = await axios.get('distributionOfUsers')
+        distributionOfUsers.value = response.data
+        console.log(distributionOfUsers)
+    }catch(error){
+        console.log(error)
+    }
+}
 
 const createChartLine = () => {
-    const ctx = document.getElementById('myChartLine')
+    const ctx = document.getElementById('myChartLineTransactions')
 
     const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
 
@@ -221,8 +233,66 @@ const createChartPie = () => {
     })
 };
 
+const createChartVertical = () => {
+    const ctx = document.getElementById('myChartBarVerticalUsers')
+    const total = distributionOfUsers.value[0].count + distributionOfUsers.value[1].count
+    const distribution = distributionOfUsers.value.map((u) =>( u.count * 100 / total).toFixed(0))
+    const user_type = distributionOfUsers.value.map((u) => u.user_type)
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: user_type,
+            datasets: [
+                {
+                    label: 'Percentage of User',
+                    data: distribution,
+                    borderWidth: 1,
+                    borderColor: 'rgb(153, 102, 255)',
+                    backgroundColor: 'rgb(153, 102, 255)',
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'DISTRIBUTION OF USERS',
+                    font: {
+                        size: 20,
+                    },
+                    padding: {
+                        bottom: 20,
+                    },
+                },
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function (value) {
+                            return value + '%';
+                        },
+                    },
+                },
+                x: {
+                    ticks: {
+                        callback: function (value) {
+                            return value ? 'Administrator' : 'Vcard Owner';
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+}
+
 const createChartBarHorizontal = () => {
-    const ctx = document.getElementById('myChartBarHorizontal');
+    const ctx = document.getElementById('myChartBarHorizontalTransactionsCategories');
     const categoriesName = categories.value.map((categorie) => categorie.name);
     const categoriesNumbers = categories.value.map((categorie) => categorie.count);
 
@@ -287,9 +357,12 @@ onMounted(async () => {
     await loadPaymentTypes()
     await loadVcardsActive()
     await loadTransactionsNotDeleted()
+    await loadDistributionOfUsers()
     if (flag) {
         createChartLine()
         createChartBarHorizontal()
+    }else{
+        createChartVertical()
     }
     createChartPie()
 });
@@ -327,11 +400,12 @@ onMounted(async () => {
             </div>
         </div>
         <div class="row d-flex justify-content-center mt-5">
-            <div class="col-md-6 mr-4" v-show="numberOfTransactions">
-                <canvas id="myChartLine"></canvas>
+            <div class="col-md-6 mr-4" v-show="flag">
+                <canvas id="myChartLineTransactions"></canvas>
             </div>
-            <div class="col-md-6 ml-4" v-show="numberOfTransactions">
-                <canvas id="myChartBarHorizontal"></canvas>
+            <div class="col-md-6 ml-4">
+                <canvas  v-if="flag" id="myChartBarHorizontalTransactionsCategories"></canvas>
+                <canvas v-else id="myChartBarVerticalUsers"></canvas>
             </div>
         </div>
         <div class="row d-flex justify-content-center mt-5">

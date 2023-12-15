@@ -42,6 +42,7 @@ Route::middleware('auth:api')->group(function () {
     //Users
     Route::get('users', [UserController::class, 'index'])->middleware('can:viewAny,App\Models\User');
     Route::get('users/{user}', [UserController::class, 'show'])->middleware('can:view,user');
+    Route::get('distributionOfUsers', [UserController::class, 'getDistributionOfUsers']);
     // Route::put('users/{user}', [UserController::class, 'update'])->middleware('can:update,user');
     
     //Vcards
