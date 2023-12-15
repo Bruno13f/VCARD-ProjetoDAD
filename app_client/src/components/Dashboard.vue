@@ -10,6 +10,7 @@ import { useUserStore } from '@/stores/user.js'
 const transactions = ref([])
 const categories = ref([])
 const paymentTypes = ref([])
+const vcards = ref([])
 const userStore = useUserStore()
 
 const flag = userStore.user.user_type == 'A' ? false : true
@@ -19,9 +20,6 @@ const numberOfCategories = ref(null)
 const activeVcards = ref(null)
 const numberofAllTransactions = ref(null)
 const vcardsBalances = ref(null)
-
-const vcards = ref([])
-const filterByBlocked = ref(null)
 
 const loadTransactions = async () => {
     try {
@@ -53,10 +51,35 @@ const loadPaymentTypes = async () => {
     }
 };
 
+const loadVcardsActive = async () => {
+    try {
+        const response =await axios.get(`vcardsActive`)
+        vcards.value = response.data
+        activeVcards.value = vcards.value.length
+
+        const balances = vcards.value.map(item => parseFloat(item.balance) || 0);
+        const totalBalance = balances.reduce((acc, balance) => acc + balance, 0);
+        const formattedTotalBalance = totalBalance.toFixed(2);
+        vcardsBalances.value = formattedTotalBalance;
+
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+const loadTransactionsNotDeleted = async () => {
+    try {
+        const response = await axios.get(`transactionsNotDeleted`)
+        numberofAllTransactions.value = response.data
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+
 const createChartLine = () => {
     const ctx = document.getElementById('myChartLine')
 
-    // Ensure dates are properly formatted for time scale
     const formattedDates = transactions.value.map((transaction) => moment(transaction.datetime))
 
     const newBalances = transactions.value.map((transaction) => transaction.new_balance)
@@ -83,7 +106,7 @@ const createChartLine = () => {
                     type: 'time',
                     time: {
                         unit: 'day',
-                        tooltipFormat: 'YYYY-MM-DD HH:mm:ss', // Adjust the format as needed
+                        tooltipFormat: 'YYYY-MM-DD HH:mm:ss',
                     },
                     title: {
                         display: true,
@@ -116,7 +139,7 @@ const createChartLine = () => {
                             if (label) {
                                 label += ': ';
                             }
-                            label += context.parsed.y.toFixed(2) + ' €'; // Add the € symbol to tooltip values
+                            label += context.parsed.y.toFixed(2) + ' €';
                             return label;
                         }
                     }
@@ -138,12 +161,9 @@ const createChartLine = () => {
 const createChartPie = () => {
     const ctx = document.getElementById('myChartPie')
 
-    // Ensure dates are properly formatted for time scale
     const paymentsMethod = paymentTypes.value.map((transaction) => transaction.payment_type)
 
     const newCounts = paymentTypes.value.map((transaction) => transaction.count)
-
-
 
     new Chart(ctx, {
         type: 'pie',
@@ -221,30 +241,12 @@ const createChartBarHorizontal = () => {
 };
 
 
-const loadVcards = async () => {
-    try {
-        const response = await axios.get('vcards', {
-            params: {
-                blocked: filterByBlocked.value,
-            }
-        })
-        vcards.value = response.data.data
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-
-
 onMounted(async () => {
     await loadTransactions()
     await loadCategories()
-    await loadVcards()
     await loadPaymentTypes()
-    console.log(transactions)
-    console.log(categories)
-    console.log(vcards)
+    await loadVcardsActive()
+    await loadTransactionsNotDeleted()
     if (flag) {
         createChartLine()
         createChartBarHorizontal()

@@ -79,6 +79,12 @@ class TransactionController extends Controller {
     
         return response()->json($categoryCounts);
     }
+
+    public function getTransactionsNotDeleted(Request $request) {
+        $transactions = Transaction::whereNull('deleted_at')->count();
+
+        return response()->json($transactions);
+    }
     
 
     public function store(StoreTransactionRequest $request) {
