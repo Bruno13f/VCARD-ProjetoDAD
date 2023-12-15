@@ -151,7 +151,7 @@ const createChartPie = () => {
             labels: paymentsMethod,
             datasets: [
                 {
-                    label: 'Payment Methods',
+                    label: 'Payments',
                     data: newCounts,
                     borderWidth: 1,
                     fill: false,
@@ -284,13 +284,15 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
-        <div class="charts">
-            <div class="chart" v-show="numberOfTransactions">
+        <div class="row d-flex justify-content-center mt-5">
+            <div class="col-md-6 mr-4" v-show="numberOfTransactions">
                 <canvas id="myChartLine"></canvas>
             </div>
-            <div class="chart" v-show="numberOfTransactions">
+            <div class="col-md-6 ml-4" v-show="numberOfTransactions">
                 <canvas id="myChartBarHorizontal"></canvas>
             </div>
+        </div>
+        <div class="row d-flex justify-content-center mt-5">
             <div class="chart2" v-show="numberOfTransactions">
                 <canvas id="myChartPie"></canvas>
             </div>
@@ -302,19 +304,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.charts {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    
-}
-.chart {
-    width: 80%;
-    height: auto;
-    margin: 30px;
-}
-
 .chart2 {
     width: 40%;
     height: auto;

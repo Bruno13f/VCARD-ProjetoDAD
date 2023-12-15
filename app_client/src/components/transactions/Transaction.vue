@@ -128,8 +128,8 @@ watch(
   (newValue) => {
     loadTransaction(newValue)
   }, {
-  immediate: true,
-}
+    immediate: true,
+  }
 )
 
 onMounted(async () => {

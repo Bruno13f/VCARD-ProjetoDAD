@@ -100,7 +100,7 @@ const router = createRouter({
       path: '/transactions/new',
       name: 'NewTransaction',
       component: Transaction,
-      // props: route => ({ id: -1 })
+      props: { id: -1 }
     },
     {
       path: '/transactions/:id',

@@ -131,9 +131,6 @@ watch(
 }
 )
 
-onMounted(async () => {
-})
-
 let nextCallBack = null
 const leaveConfirmed = () => {
   if (nextCallBack) {

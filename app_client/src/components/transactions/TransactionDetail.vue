@@ -23,10 +23,11 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel'])
 const userStore = useUserStore()
-const flagOperation = props.operationType == 'insert' ? false : true
+const flagOperation = computed (() => props.operationType == 'insert' ? false : true)
 const flagUser = userStore.user.user_type == 'A'? false : true
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
 const editingTransaction = ref(props.transaction)
+console.log(flagOperation)
 
 watch(
   () => props.transaction,
