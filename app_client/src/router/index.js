@@ -79,7 +79,6 @@ const router = createRouter({
       path: '/vcards/new',
       name: 'NewVcard',
       component: Vcard,
-      props: { id: -1 }
     },
     {
       path: '/vcards/:phone_number',

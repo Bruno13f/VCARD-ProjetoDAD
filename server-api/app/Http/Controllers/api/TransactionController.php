@@ -52,34 +52,6 @@ class TransactionController extends Controller {
     public function show(Transaction $transaction) {
         return new TransactionResource($transaction);
     }
-
-    public function getCategoriesOfTransactions(Request $request, Vcard $vcard) {
-        if (!$vcard) {
-            return response()->json(['error' => 'Vcard not found'], Response::HTTP_NOT_FOUND);
-        }
-    
-        $categoryCounts = Transaction::select('categories.name', \DB::raw('COUNT(*) as count'))
-            ->join('categories', 'transactions.category_id', '=', 'categories.id')
-            ->where('transactions.vcard', $vcard->phone_number)
-            ->groupBy('categories.name')
-            ->get();
-    
-        return response()->json($categoryCounts);
-    }
-
-    public function getPaymentTypesOfTransactionsVcard(Request $request, Vcard $vcard) {
-        
-        if (!$vcard) {
-            return response()->json(['error' => 'Vcard not found'], Response::HTTP_NOT_FOUND);
-        }
-    
-        $paymentCount = Transaction::select('payment_type', \DB::raw('COUNT(*) as count'))
-            ->where('transactions.vcard', $vcard->phone_number)
-            ->groupBy('payment_type')
-            ->get();
-    
-        return response()->json($paymentCount);
-    }
     
     public function getPaymentTypesOfTransactions (Request $request){
 

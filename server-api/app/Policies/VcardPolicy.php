@@ -82,4 +82,14 @@ class VcardPolicy
     {
         return $user->user_type == 'A';
     }
+
+    public function getCategoriesOfTransactions (User $user, Vcard $vcard): bool
+    {
+        return $user->id == $vcard->phone_number;
+    }
+
+    public function getPaymentTypesOfTransactionsVcard (User $user, Vcard $vcard): bool
+    {
+        return $user->id == $vcard->phone_number;
+    }
 }

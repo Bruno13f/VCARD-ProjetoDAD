@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import moment from 'moment';
 import 'chart.js';
 import 'chartjs-adapter-moment';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import axios from 'axios'
 import { useUserStore } from '@/stores/user.js'
 
@@ -41,7 +41,7 @@ const loadCategories = async () => {
     if (!flag)
         return
     try {
-        const response = await axios.get(`transactions/${userStore.user.id}/categories`)
+        const response = await axios.get(`vcards/${userStore.user.id}/transactionsCategories`)
         categories.value = response.data
         numberOfCategories.value = categories.value.length
     } catch (error) {
@@ -51,7 +51,7 @@ const loadCategories = async () => {
 
 const loadPaymentTypes = async () => {
     try {
-        const response = flag ? await axios.get(`transactions/${userStore.user.id}/paymentTypes`) : await axios.get(`transactions/paymentTypes`)
+        const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactionsPaymentTypes`) : await axios.get(`paymentTypesOftransactions`)
         paymentTypes.value = response.data
     } catch (error) {
         console.log(error)
@@ -80,7 +80,7 @@ const loadTransactionsNotDeleted = async () => {
     if (flag)
         return
     try {
-        const response = await axios.get(`transactions/valid`)
+        const response = await axios.get(`transactionsValid`)
         numberofAllTransactions.value = response.data
     } catch (error) {
         console.log(error)
@@ -124,7 +124,7 @@ const loadTransactionsPerType = async () => {
 
 const createChartLineTransactionsType = () => {
     const ctx = document.getElementById('myChartPolarAreaTransactionType');
-    const types = transactionsType.value.map((transaction) => (transaction.type));
+    const types = transactionsType.value.map((transaction) => (transaction.type == 'C' ? 'Credit' : 'Debit'));
     const types_count = transactionsType.value.map((transaction) => (transaction.count));
 
     console.log(types)
@@ -147,7 +147,7 @@ const createChartLineTransactionsType = () => {
             plugins: {
                 title: {
                     display: true,
-                    text: 'NUMBER OF TRANSACTION PER TYPE',
+                    text: 'TRANSACTIONS PER TYPE',
                     font: {
                         size: 20,
                     },
@@ -182,7 +182,7 @@ const createChartLineTransactions = () => {
             labels: dates,
             datasets: [
                 {
-                    label: 'Total of Transactions',
+                    label: 'Transactions',
                     data: transaction_count,
                     borderWidth: 1,
                     fill: false,
@@ -193,7 +193,7 @@ const createChartLineTransactions = () => {
             plugins: {
                 title: {
                     display: true,
-                    text: 'NUMBER OF TRANSACTION PER MONTH',
+                    text: 'TRANSACTIONS PER MONTH',
                     font: {
                         size: 20,
                     },
@@ -212,7 +212,7 @@ const createChartLineTransactions = () => {
                 y: {
                     title: {
                         display: true,
-                        text: 'Transaction Count',
+                        text: 'Transactions',
                     },
                     ticks: {
                         beginAtZero: true,
@@ -497,6 +497,11 @@ const createChartBarHorizontal = () => {
     });
 };
 
+const computedClass = computed (() => {
+
+    return (userStore.user_type == 'A' ? 'col-md-6 ml-4 chart2' : 'col-md-12 chart2') ;
+})
+
 
 onMounted(async () => {
     await loadTransactions()
@@ -551,7 +556,7 @@ onMounted(async () => {
             </div>
         </div>
         <div class="row d-flex justify-content-center mt-5">
-            <div class="col-md-6 mr-4">
+            <div class="col-md-6 ml-4">
                 <canvas v-if="flag" id="myChartLineTransactions"></canvas>
                 <canvas v-else id="myChartLineTransactionsMonth"></canvas>
             </div>
@@ -561,12 +566,17 @@ onMounted(async () => {
             </div>
         </div>
     
-        <div class="row d-flex justify-content-center mt-5">
-            <div class="col-md-6 mr-4 chart2" >
+        <div class="row d-flex justify-content-center mt-5" v-if="!flag">
+            <div class="col-md-6 ml-4 chart2" >
                 <canvas id="myChartPie"></canvas>
             </div>
             <div class="col-md-6 ml-4 chart2">
-                <canvas  v-if="!flag" id="myChartPolarAreaTransactionType"></canvas>
+                <canvas id="myChartPolarAreaTransactionType"></canvas>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center mt-5" v-else>
+            <div class="col-md-12 ml-4 chart2" >
+                <canvas id="myChartPie"></canvas>
             </div>
         </div>
         <div class="col-md-12 d-flex justify-content-center mt-5" v-if="numberOfTransactions == 0">

@@ -13,7 +13,7 @@ class DefaultCategoryPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->user_type == 'A';
     }
 
     /**
@@ -21,7 +21,7 @@ class DefaultCategoryPolicy
      */
     public function view(User $user, DefaultCategory $defaultCategory): bool
     {
-        //
+        return $user->user_type == 'A';
     }
 
     /**
@@ -29,7 +29,7 @@ class DefaultCategoryPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->user_type == 'A';
     }
 
     /**
@@ -37,7 +37,7 @@ class DefaultCategoryPolicy
      */
     public function update(User $user, DefaultCategory $defaultCategory): bool
     {
-        //
+        return $user->user_type == 'A';
     }
 
     /**
@@ -45,22 +45,6 @@ class DefaultCategoryPolicy
      */
     public function delete(User $user, DefaultCategory $defaultCategory): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, DefaultCategory $defaultCategory): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, DefaultCategory $defaultCategory): bool
-    {
-        //
+        return $user->user_type == 'A';
     }
 }

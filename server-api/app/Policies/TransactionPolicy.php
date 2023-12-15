@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Vcard;
 use Illuminate\Auth\Access\Response;
 
 class TransactionPolicy
@@ -13,7 +14,7 @@ class TransactionPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->user_type == 'A';
     }
 
     /**
@@ -21,7 +22,7 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        //
+        return $user->user_type == 'A' || $user->id == $transaction->vcard;
     }
 
     /**
@@ -29,7 +30,7 @@ class TransactionPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user;
     }
 
     /**
@@ -37,7 +38,7 @@ class TransactionPolicy
      */
     public function update(User $user, Transaction $transaction): bool
     {
-        //
+        return $user->id == $transaction->vcard;
     }
 
     /**
@@ -45,22 +46,37 @@ class TransactionPolicy
      */
     public function delete(User $user, Transaction $transaction): bool
     {
-        //
+        return $user->id == $transaction->vcard;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Transaction $transaction): bool
+    public function getCategoriesOfTransactions (User $user, Vcard $vcard): bool
     {
-        //
+        return $user->id == $vcard->phone_number;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Transaction $transaction): bool
+    public function getPaymentTypesOfTransactionsVcard (User $user, Vcard $vcard): bool
     {
-        //
+        return $user->id == $vcard->phone_number;
     }
+
+    public function getPaymentTypesOfTransactions (User $user): bool 
+    {
+        return $user->user_type == 'A';
+    }
+
+    public function getTransactionsNotDeleted (User $user): bool 
+    {
+        return $user->user_type == 'A';
+    }
+
+    public function getTransactionsPerMonth (User $user): bool 
+    {
+        return $user->user_type == 'A';
+    }
+
+    public function getTransactionsPerType (User $user): bool 
+    {
+        return $user->user_type == 'A';
+    }
+
 }

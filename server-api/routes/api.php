@@ -56,35 +56,36 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password'])->middleware('can:updatePassword,vcard');
     Route::patch('vcards/{vcard}/confirmationCode', [VCardController::class, 'update_confirmation_code'])->middleware('can:updateConfirmationCode,App\Models\Vcard');
     Route::get('vcards/{vcard}/categories', [VCardController::class, 'getCategoryOfVcard'])->middleware('can:getCategories,vcard');
-    Route::get('vcardsActive', [VCardController::class, 'getActiveVcards'])->middleware('can:getActiveVcards,App\Models\Vcard');;
+    Route::get('vcardsActive', [VCardController::class, 'getActiveVcards'])->middleware('can:getActiveVcards,App\Models\Vcard');
+
+    Route::get('vcards/{vcard}/transactionsCategories', [VcardController::class, 'getCategoriesOfTransactions'])->middleware('can:getCategoriesOfTransactions,vcard');
+    Route::get('vcards/{vcard}/transactionsPaymentTypes', [VcardController::class, 'getPaymentTypesOfTransactionsVcard'])->middleware('can:getPaymentTypesOfTransactionsVcard,vcard');
 
     //Transactions
 
-    Route::get('transactions', [TransactionController::class, 'index']);
-    Route::post('transactions', [TransactionController::class, 'store']);
-    Route::get('transactions/{vcard}/categories', [TransactionController::class, 'getCategoriesOfTransactions']);
-    Route::get('transactions/{vcard}/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactionsVcard']);
-    Route::get('transactions/paymentTypes', [TransactionController::class, 'getPaymentTypesOfTransactions']);
-    Route::get('transactions/valid', [TransactionController::class, 'getTransactionsNotDeleted']);
-    Route::get('transactionsPerMonth', [TransactionController::class, 'getTransactionsPerMonth']);
-    Route::get('transactionsPerType', [TransactionController::class, 'getTransactionsPerType']);
-    Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
-    Route::put('transactions/{transaction}', [TransactionController::class,'update']);
-    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy']);
+    Route::get('transactions', [TransactionController::class, 'index'])->middleware('can:viewAny,App\Models\Transaction');
+    Route::get('transactions/{transaction}', [TransactionController::class, 'show'])->middleware('can:view,transaction');
+    Route::put('transactions/{transaction}', [TransactionController::class,'update'])->middleware('can:update,transaction');
+    Route::post('transactions', [TransactionController::class, 'store'])->middleware('can:create,App\Models\Transaction');
+    Route::get('paymentTypesOftransactions', [TransactionController::class, 'getPaymentTypesOfTransactions'])->middleware('can:getPaymentTypesOfTransactions,App\Models\Transaction');
+    Route::get('transactionsValid', [TransactionController::class, 'getTransactionsNotDeleted'])->middleware('can:getTransactionsNotDeleted,App\Models\Transaction');
+    Route::get('transactionsPerMonth', [TransactionController::class, 'getTransactionsPerMonth'])->middleware('can:getTransactionsPerMonth,App\Models\Transaction');
+    Route::get('transactionsPerType', [TransactionController::class, 'getTransactionsPerType'])->middleware('can:getTransactionsPerType,App\Models\Transaction');
+    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->middleware('can:delete,transaction');
     
     //Categorias
 
-    Route::get('defaultCategories', [DefaultCategoryController::class, 'index']);
-    Route::get('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'show']);
-    Route::post('defaultCategories', [DefaultCategoryController::class, 'store']);
-    Route::put('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'update']);
-    Route::delete('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'delete']);
+    Route::get('defaultCategories', [DefaultCategoryController::class, 'index'])->middleware('can:viewAny,App\Models\DefaultCategory');
+    Route::get('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'show'])->middleware('can:view,defaultCategory');
+    Route::post('defaultCategories', [DefaultCategoryController::class, 'store'])->middleware('can:create,App\Models\DefaultCategory');
+    Route::put('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'update'])->middleware('can:update,defaultCategory');
+    Route::delete('defaultCategories/{defaultCategory}', [DefaultCategoryController::class, 'delete'])->middleware('can:delete,defaultCategory');
     
-    Route::get('categories', [CategoryController::class, 'index']);
-    Route::get('categories/{category}', [CategoryController::class, 'show']);
-    Route::post('categories', [CategoryController::class, 'store']);
-    Route::put('categories/{category}', [CategoryController::class, 'update']);
-    Route::delete('categories/{category}', [CategoryController::class, 'delete']);
+    Route::get('categories', [CategoryController::class, 'index'])->middleware('can:viewAny,App\Models\Category');
+    Route::get('categories/{category}', [CategoryController::class, 'show'])->middleware('can:view,category');
+    Route::post('categories', [CategoryController::class, 'store'])->middleware('can:create,App\Models\Category');
+    Route::put('categories/{category}', [CategoryController::class, 'update'])->middleware('can:update,category');
+    Route::delete('categories/{category}', [CategoryController::class, 'delete'])->middleware('can:delete,category');
 
 });
 
