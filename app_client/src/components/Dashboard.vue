@@ -92,7 +92,6 @@ const loadDistributionOfUsers = async () => {
     try{
         const response = await axios.get('distributionOfUsers')
         distributionOfUsers.value = response.data
-        console.log(distributionOfUsers)
     }catch(error){
         console.log(error)
     }
@@ -104,10 +103,59 @@ const loadTransactionsPerMonth = async () => {
     try {
         const response = await axios.get(`transactionsPerMonth`)
         transactionsMonth.value = response.data
+        console.log(transactionsMonth)
     } catch (error) {
         console.log(error)
     }
 }
+
+const createChartLineTransactions = () => {
+    const ctx = document.getElementById('myChartLineTransactionsMonth');
+    const dates = transactionsMonth.value.map((transaction) => (transaction.month));
+    const transaction_count = transactionsMonth.value.map((transaction) => (transaction.transaction_count));
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [
+                {
+                    label: 'Total of Transactions',
+                    data: transaction_count,
+                    borderWidth: 1,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month',
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Transaction Count',
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                },
+            },
+        },
+    })
+};
 
 const createChartLine = () => {
     const ctx = document.getElementById('myChartLineTransactions')
@@ -389,6 +437,7 @@ onMounted(async () => {
         createChartBarHorizontal()
     }else{
         createChartVertical()
+        createChartLineTransactions()
     }
     createChartPie()
 });
@@ -427,7 +476,8 @@ onMounted(async () => {
         </div>
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-md-6 mr-4" v-show="flag">
-                <canvas id="myChartLineTransactions"></canvas>
+                <canvas v-if="flag" id="myChartLineTransactions"></canvas>
+                <canvas v-else id="myChartLineTransactionsMonth"></canvas>
             </div>
             <div class="col-md-6 ml-4">
                 <canvas  v-if="flag" id="myChartBarHorizontalTransactionsCategories"></canvas>
