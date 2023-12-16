@@ -86,6 +86,11 @@ class TransactionController extends Controller {
             ->groupByRaw('YEAR(created_at), MONTH(created_at)')
             ->orderByRaw('YEAR(created_at) DESC, MONTH(created_at) DESC')
             ->get();
+
+        $transactions = $transactions->map(function ($transaction) {
+            $transaction->year = substr($transaction->year, -2);
+            return $transaction;
+        });
     
         return response()->json($transactions);
     }

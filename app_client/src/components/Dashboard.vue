@@ -104,7 +104,6 @@ const loadTransactionsPerMonth = async () => {
     try {
         const response = await axios.get(`transactionsPerMonth`)
         transactionsMonth.value = response.data
-        console.log(transactionsMonth)
     } catch (error) {
         console.log(error)
     }
@@ -116,7 +115,6 @@ const loadTransactionsPerType = async () => {
     try {
         const response = await axios.get(`transactionsPerType`)
         transactionsType.value = response.data
-        console.log(transactionsType)
     } catch (error) {
         console.log(error)
     }
@@ -126,9 +124,6 @@ const createChartLineTransactionsType = () => {
     const ctx = document.getElementById('myChartPolarAreaTransactionType');
     const types = transactionsType.value.map((transaction) => (transaction.type == 'C' ? 'Credit' : 'Debit'));
     const types_count = transactionsType.value.map((transaction) => (transaction.count));
-
-    console.log(types)
-    console.log(types_count)
 
     new Chart(ctx, {
         type: 'polarArea',
@@ -170,16 +165,28 @@ const createChartLineTransactionsType = () => {
 
 const createChartLineTransactions = () => {
     const ctx = document.getElementById('myChartLineTransactionsMonth');
-    const dates = transactionsMonth.value.map((transaction) => (transaction.month));
-    const transaction_count = transactionsMonth.value.map((transaction) => (transaction.transaction_count));
+    const monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "June",
+        "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
-    dates.reverse();
+    const months = transactionsMonth.value.map((transaction) => transaction.month);
+    const years = transactionsMonth.value.map((transaction) => transaction.year);
+    const transaction_count = transactionsMonth.value.map((transaction) => transaction.transaction_count);
+
+    months.reverse();
+    years.reverse();
+
+    const formattedDates = months.map((month, index) => {
+        const monthName = monthNames[month - 1];
+        return `${monthName}-${years[index]}`;
+    });
+
     transaction_count.reverse();
 
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: dates,
+            labels: formattedDates,
             datasets: [
                 {
                     label: 'Transactions',
