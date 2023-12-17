@@ -57,6 +57,28 @@ const editTransaction = (transaction) => {
   console.log('Navigate to Edit Transaction with id = ' + transaction.id)
 }
 
+const pdfTransaction = async (transaction) => {
+  try {
+    const response = await axios.get(`/transactions/${transaction.id}/pdf`, {
+      responseType: 'blob',
+    });
+
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Receipt_${transaction.date}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+  }
+};
+
+
   const deleteTransaction = async (transaction) => {
     try{
       const response = await axios.delete('transactions/' + transaction.id)
@@ -141,8 +163,8 @@ onMounted(() => {
       </select>
     </div>
   </div>
-  <transaction-table :transactions="transactions" :showId="true" :showDates="true" :showEditButton="flag" :showDeleteButton="flag" @edit="editTransaction"
-    @delete="deleteTransaction"></transaction-table>
+  <transaction-table :transactions="transactions" :showId="true" :showDates="true" :showEditButton="flag" :showDeleteButton="flag" :showCreatePDFButton="flag" @edit="editTransaction"
+    @delete="deleteTransaction" @createPDF="pdfTransaction"></transaction-table>
   <Bootstrap5Pagination :data="paginationData" @pagination-change-page="loadTransactions" :limit="2">
   </Bootstrap5Pagination>
 </template>

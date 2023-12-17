@@ -72,6 +72,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('transactionsPerMonth', [TransactionController::class, 'getTransactionsPerMonth'])->middleware('can:getTransactionsPerMonth,App\Models\Transaction');
     Route::get('transactionsPerType', [TransactionController::class, 'getTransactionsPerType'])->middleware('can:getTransactionsPerType,App\Models\Transaction');
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroy'])->middleware('can:delete,transaction');
+    Route::get('/transactions/{transaction}/pdf', [TransactionController::class, 'generatePDF']);
     
     //Categorias
 

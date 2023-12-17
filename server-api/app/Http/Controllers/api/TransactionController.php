@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\Vcard;
 use App\Models\Category;
 use App\Models\Transaction;
+use PDF;
 use App\Http\Resources\TransactionResource;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Controllers\Controller;
@@ -60,6 +61,12 @@ class TransactionController extends Controller {
             ->get();
     
         return response()->json($paymentCount);
+    }
+
+    public function generatePDF(Transaction $transaction)
+    {
+        $pdf = PDF::loadView('pdf.transaction', ['transaction' => $transaction]);
+        return $pdf->download('transaction_' . $transaction->id . '.pdf');
     }
 
     public function getTransactionsNotDeleted(Request $request) {

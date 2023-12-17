@@ -56,6 +56,10 @@ const props = defineProps({
   showDeleteButton: {
     type: Boolean,
     default: true,
+  },
+  showCreatePDFButton: {
+    type: Boolean,
+    default: true,
   }
 })
 
@@ -67,6 +71,10 @@ const editClick = (transaction) => {
 
 const deleteClick = (transaction) => {
   emit('delete', transaction)
+}
+
+const createPDFClick = (transaction) => {
+  emit('createPDF', transaction)
 }
 
 </script>
@@ -86,7 +94,7 @@ const deleteClick = (transaction) => {
         <th v-if="showPaymentReference">Payment Reference</th>
         <th v-if="showCategory">Category</th>
         <th v-if="showDescription">Description</th>
-        <th v-if="showEditButton || showDeleteButton"></th>
+        <th v-if="showEditButton || showDeleteButton || showCreatePDFButton"></th>
       </tr>
     </thead>
     <tbody>
@@ -106,7 +114,7 @@ const deleteClick = (transaction) => {
         </td>
 
         <td v-if="showDescription">{{ transaction.description }}</td>
-        <td class="text-end" v-if="showEditButton || showDeleteButton">
+        <td class="text-end" v-if="showEditButton || showDeleteButton || showCreatePDFButton">
           <div class="d-flex justify-content-end">
             <button class="btn btn-xs btn-light" @click="editClick(transaction)" v-if="showEditButton"><i
                 class="bi bi-xs bi-pencil"></i>
@@ -114,6 +122,10 @@ const deleteClick = (transaction) => {
 
             <button class="btn btn-xs btn-light" @click="deleteClick(transaction)" v-if="showDeleteButton"><i
                 class="bi bi-xs bi-x-square-fill"></i>
+            </button>
+
+            <button class="btn btn-xs btn-light" @click="createPDFClick(transaction)" v-if="showCreatePDFButton">
+              <i class="bi bi-filetype-pdf"></i>
             </button>
           </div>
         </td>
