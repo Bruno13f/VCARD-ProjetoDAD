@@ -48,7 +48,7 @@
                                 <h5 class="font-size-15 mb-3">Transaction Information:</h5>
                                 <p class="mb-1">Type: {{ $transaction->type == 'C' ? 'Credit' : 'Debit' }}</p>
                                 <p class="mb-1">Date: {{ $transaction->created_at }}</p>
-                                <p class="mb-1">Category: {{ $transaction->category == null ? 'No Category' : $transaction->category}}</p>
+                                <p class="mb-1">Category: {{ $transaction->category == null ? 'No Category' : $transaction->category->name}}</p>
                                 <p class="mb-1">Description: {{ $transaction->description == null ? 'No Description' : $transaction->category}}</p>
                             </div>
                         </div>
