@@ -28,12 +28,10 @@ class Transaction extends Model
         return $this->belongsTo(Category::class, 'category_id')->withTrashed();
     }
 
-    // ????
-    public function transactionVcards(){
-        return $this->hasMany(Vcard::class, 'pair_vcard');
+    public function transactionPairVcard(){
+        return $this->belongsTo(Vcard::class, 'pair_vcard', 'phone_number')->withTrashed();
     }
 
-    // ????
     public function pair_transactions(){
         return $this->hasOne(self::class,'pair_transaction');
     }

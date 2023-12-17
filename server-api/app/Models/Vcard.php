@@ -20,9 +20,8 @@ class Vcard extends Model
         return $this->hasMany(Transaction::class, 'vcard', 'phone_number');
     }
 
-    // ????
     public function vcardPair(){
-        return $this->hasMany(Transaction::class, 'pair_vcard');
+        return $this->hasMany(Transaction::class, 'pair_vcard', 'phone_number');
     }
 
     public function categories(){

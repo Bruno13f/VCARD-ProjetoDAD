@@ -65,6 +65,9 @@ class TransactionController extends Controller {
 
     public function generatePDF(Transaction $transaction)
     {
+        if ($transaction->payment_type == 'MB')
+            $transaction->payment_type = 'Multibanco';
+        
         $pdf = PDF::loadView('pdf.transaction', ['transaction' => $transaction]);
         return $pdf->download('transaction_' . $transaction->id . '.pdf');
     }

@@ -63,7 +63,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['edit', 'delete'])
+const emit = defineEmits(['edit', 'delete', 'createPDF'])
 
 const editClick = (transaction) => {
   emit('edit', transaction)

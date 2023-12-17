@@ -49,16 +49,6 @@ class TransactionPolicy
         return $user->id == $transaction->vcard;
     }
 
-    public function getCategoriesOfTransactions (User $user, Vcard $vcard): bool
-    {
-        return $user->id == $vcard->phone_number;
-    }
-
-    public function getPaymentTypesOfTransactionsVcard (User $user, Vcard $vcard): bool
-    {
-        return $user->id == $vcard->phone_number;
-    }
-
     public function getPaymentTypesOfTransactions (User $user): bool 
     {
         return $user->user_type == 'A';
@@ -75,6 +65,11 @@ class TransactionPolicy
     }
 
     public function getTransactionsPerType (User $user): bool 
+    {
+        return $user->user_type == 'A';
+    }
+
+    public function generatePDF (User $user, Transaction $transaction): bool 
     {
         return $user->user_type == 'A';
     }
