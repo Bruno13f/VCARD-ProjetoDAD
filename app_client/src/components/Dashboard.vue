@@ -28,7 +28,7 @@ const loadTransactions = async () => {
     if (!flag)
         return
     try {
-        const response = await axios.get(`vcards/${userStore.user.id}/transactions?accepted=1`)
+        const response = await axios.get(`vcards/${userStore.user.id}/transactions?requested=nreq`)
         transactions.value = response.data.data
         numberOfTransactions.value = response.data.meta.total
         balance.value = numberOfTransactions.value ? transactions.value[0]['new_balance'] : 0

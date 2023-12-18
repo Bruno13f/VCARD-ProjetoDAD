@@ -124,7 +124,7 @@ const cancel = () => {
     </div>
 
     <div class="mb-3 d-flex justify-content-center ">
-      <button type="button" class="btn btn-success px-5 mx-2" @click="save">{{operationType == 'update' ? 'Save' : 'Create'}}</button>
+      <button type="button" class="btn btn-success px-5 mx-2" @click="save">{{operationType == 'insert' ? 'Create' :  operationType == 'request' ? 'Request' : 'Save'}}</button>
       <button type="button" class="btn btn-dark px-5" @click="cancel">Cancel</button>
     </div>
 

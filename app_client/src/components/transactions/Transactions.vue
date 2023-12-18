@@ -18,6 +18,7 @@ const categories = ref([])
 const filterByType = ref(null)
 const filterByPaymentType = ref(null)
 const filterByCategory = ref(null)
+const filterByRequested = ref(null)
 const orderBy = ref(null)
 const socket = inject("socket")
 
@@ -28,7 +29,8 @@ const loadTransactions = async (page = 1) => {
       type: filterByType.value,
       payment: filterByPaymentType.value,
       category: filterByCategory.value,
-      order: orderBy.value
+      order: orderBy.value,
+      requested: filterByRequested.value,
     }
     const response = flag ? await axios.get(`vcards/${userStore.user.id}/transactions`, { params: params }) : await axios.get('transactions', { params: params })
     transactions.value = response.data.data
@@ -168,6 +170,14 @@ onMounted(() => {
         <option :value="null"></option>
         <option value='none'>No Category</option>
         <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+    <div class="mx-2 mt-2 flex-grow-1 filter-div">
+      <label for="selectRequested" class="form-label">Filter By Requested:</label>
+      <select class="form-select" id="selectRequested" v-model="filterByRequested">
+        <option :value="null"></option>
+        <option value='req'>Requested</option>
+        <option value='nreq'>Not Requested</option>
       </select>
     </div>
     <div class="mx-2 mt-2 flex-grow-1 filter-div">

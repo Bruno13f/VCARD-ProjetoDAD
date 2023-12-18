@@ -223,7 +223,11 @@ class VcardController extends Controller
 
         $transactionsQuery = $vcard->transactions();
 
-        if ($request['accepted'] == 1){
+        $requested = $request->requested;
+
+        if (strcmp($requested,'req') == 0){
+            $transactionsQuery->whereNotNull('custom_options');
+        }elseif(strcmp($requested,'nreq') == 0){
             $transactionsQuery->whereNull('custom_options');
         }else{
             $transactionsQuery->orderBy('custom_options', 'desc');
