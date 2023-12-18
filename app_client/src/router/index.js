@@ -249,6 +249,14 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'home' })
     return
   }
+  if (to.name == 'RequestTransaction') {
+    if (userStore.user.user_type == 'V') {
+      next()
+      return
+    }
+    next({ name: 'home' })
+    return
+  }
   if (to.name == 'Categories') {
     if (userStore.user) {
       next()

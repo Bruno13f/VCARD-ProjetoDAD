@@ -29,7 +29,7 @@ class CategoryPolicy
      */
     public function create(User $user): bool
     {
-        return $user->id == 'V';
+        return $user->user_type == 'V';
     }
 
     /**

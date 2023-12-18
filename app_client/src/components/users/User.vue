@@ -62,7 +62,6 @@ const save = async () => {
         await userStore.loadUser();
       }
       router.back();
-      
     } catch (error) {
       if (error.response && error.response.status === 422) {
         errors.value = error.response.data.errors;
@@ -78,10 +77,21 @@ const save = async () => {
       originalValueStr = JSON.stringify(user.value);
       socket.emit('updateVcard', response.data.data)
       toast.success('User ' + user.value.name + ' was updated successfully.')
-      userStore.user.name = user.value.name
+
+      if (userStore.user.user_type == 'A'){
+        if (userStore.user.id == user.value.id){
+          userStore.user.name = user.value.name
+        }
+      }
+
+      if (userStore.user.user_type == 'V'){
+        userStore.user.name == user.value.name
+      }
+
       if (user.value.phone_number == userStore.user.id) {
         await userStore.loadUser();
       }
+      
       router.back();
       
     } catch (error) {

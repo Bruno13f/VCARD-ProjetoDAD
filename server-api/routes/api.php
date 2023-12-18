@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('vcards', [VcardController::class, 'store'])->middleware('can:create,App\Models\Vcard');
+Route::post('vcards', [VcardController::class, 'store']);
 Route::middleware('auth:api')->group(function () {
     
     Route::post('logout', [AuthController::class, 'logout']);
@@ -54,7 +54,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('vcards/{vcard}/transactions', [VCardController::class, 'getTransactionsOfVcard'])->middleware('can:getTransactions,vcard');
     Route::delete('vcards/{vcard}', [VCardController::class,'destroy'])->middleware('can:delete,vcard');
     Route::patch('vcards/{vcard}/password', [VCardController::class, 'update_password'])->middleware('can:updatePassword,vcard');
-    Route::patch('vcards/{vcard}/confirmationCode', [VCardController::class, 'update_confirmation_code'])->middleware('can:updateConfirmationCode,App\Models\Vcard');
+    Route::patch('vcards/{vcard}/confirmationCode', [VCardController::class, 'update_confirmation_code'])->middleware('can:updateConfirmationCode,vcard');
     Route::get('vcards/{vcard}/categories', [VCardController::class, 'getCategoryOfVcard'])->middleware('can:getCategories,vcard');
     Route::get('vcardsActive', [VCardController::class, 'getActiveVcards'])->middleware('can:getActiveVcards,App\Models\Vcard');
 
