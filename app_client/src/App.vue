@@ -51,7 +51,6 @@ socket.on('newRequest', (transaction) => {
 })
 
 socket.on('cancelRequest', () => {
-    console.log("hello")
     toast.error(`Your Transaction Request was declined !`)
 })
 

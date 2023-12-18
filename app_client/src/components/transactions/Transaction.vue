@@ -73,7 +73,6 @@ const save = async () => {
         transaction: response.data.data,
         user: userStore.user
       }
-      console.log(params)
       if (operation.value == 'request'){
         socket.emit('newRequest', transaction.value )
         toast.success('Transaction was requested successfully.')
