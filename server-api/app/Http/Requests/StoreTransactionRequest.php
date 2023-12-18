@@ -57,7 +57,7 @@ class StoreTransactionRequest extends FormRequest {
                     break;
             }
 
-            $valueRules = ['required', 'numeric', 'regex:/^\d{0,9}(\.\d{1,3})?$/'];
+            $valueRules = ['required', 'numeric', 'regex:/^\d{0,9}(\.\d{1,3})?$/',...$limitRules];
 
         }
 

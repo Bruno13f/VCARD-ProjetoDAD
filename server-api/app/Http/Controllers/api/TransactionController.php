@@ -127,7 +127,6 @@ class TransactionController extends Controller {
             }
             
             $requestTransaction = new Transaction([
-                // transação para o colega que aceita
                 'vcard' => $validatedRequest['payment_reference'],
                 'value' => $validatedRequest['value'],
                 'type' => 'D',
