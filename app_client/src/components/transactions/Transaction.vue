@@ -74,10 +74,11 @@ const save = async () => {
         user: userStore.user
       }
       console.log(params)
-      socket.emit('newTransaction', params)
       if (operation.value == 'request'){
+        socket.emit('newRequest', transaction.value )
         toast.success('Transaction was requested successfully.')
       }else{
+        socket.emit('newTransaction', params)
         toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
       }
       router.push('/transactions');

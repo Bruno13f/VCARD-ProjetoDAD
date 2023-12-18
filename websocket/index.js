@@ -18,6 +18,14 @@ io.on('connection', (socket) => {
             socket.in(params.transaction.vcard.phone_number).emit('newTransaction', params)
         }
     })
+    socket.on('newRequest', (transaction) => {
+        console.log(transaction)
+        if (transaction.custom_options != null){
+            socket.in(transaction.vcard.phone_number).emit('newRequest', transaction)
+        }else{
+            socket.in(transaction.pair_vcard).emit('newRequest', transaction)
+        }
+    })
     socket.on('insertVcard', function (vcard) {
         socket.in('administrator').emit('insertVcard', vcard)
     })

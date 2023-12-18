@@ -42,6 +42,14 @@ socket.on('newTransaction', (params) => {
     }
 })
 
+socket.on('newRequest', (transaction) => {
+  if (transaction.custom_options != null){
+    toast.success(`A new Transaction was requested for you !)`)
+  }else{
+    toast.success(`Your Transaction Request was accepted !)`)}
+  
+})
+
 socket.on('insertVcard', (vcard) => {
     toast.success(`A new Vcard was create ! # ${vcard.phone_number} (${vcard.name})`)
 })

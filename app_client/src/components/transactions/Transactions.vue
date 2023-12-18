@@ -108,9 +108,9 @@ const pdfTransaction = async (transaction) => {
     transaction.custom_options = null
     transaction.vcard = transaction.vcard.phone_number
     try {
-      await axios.post('transactions', transaction)
+      const response = await axios.post('transactions', transaction)
+      socket.emit('newRequest', response.data.data)
       await deleteTransaction(originalTransaction)
-      router.go()
 
     } catch (error) {
       toast.error('Transaction was not accepted.')
@@ -118,6 +118,10 @@ const pdfTransaction = async (transaction) => {
   }
 
   socket.on('newTransaction', () => { 
+    loadTransactions()
+  })
+
+  socket.on('newRequest', () => { 
     loadTransactions()
   })
 
