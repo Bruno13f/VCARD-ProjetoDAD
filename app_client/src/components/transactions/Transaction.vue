@@ -92,17 +92,14 @@ const save = async () => {
     }
   } else {
     try {
-      console.log(transaction.value)
       const response = await axios.put('transactions/' + props.id, transaction.value)
       transaction.value = response.data.data
       originalValueStr = JSON.stringify(transaction.value)
-      console.log('Transaction Updated')
       toast.success('Transaction #' + response.data.data.id + ' was edited successfully.')
       router.back()
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        console.log(errors)
         toast.error('Transaction was not edited due to validation errors!')
       } else {
         toast.error('Transaction was not edited due to unknown server error!')
@@ -141,8 +138,6 @@ onMounted(async () => {
   await loadTransaction(props.id);
   // post - user user.id / admin nada
   // put - user transaction.id / admin transaction.id
-
-  console.log(operation.value)
 
   if (operation.value == 'insert' && userStore.user.user_type == 'A')
     return

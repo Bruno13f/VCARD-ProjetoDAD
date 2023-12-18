@@ -37,7 +37,6 @@
     try{
       const response = await axios.get('users', {params:{paginate: 0, userType: 'V',}})
       users.value = response.data.data
-      console.log(users.value)
     }catch(error){
       console.log(error)
     }
@@ -45,17 +44,14 @@
 
   const addVcard = () => {
       router.push({ name: 'NewVcard'})
-      console.log("Navigate to New Vcard")
   }
   
   const editVcard = (vcard) => {
       router.push({name: 'Vcard', params: { phone_number: vcard.phone_number }})
-      console.log('Navigate to Edit Vcard with Phone_Number = ' + vcard.phone_number)
   }
 
   const deleteVcard = async (vcard) => { 
     router.push({name: 'VcardConfirmation', params: { phone_number: vcard.phone_number }})
-    console.log('Navigate to Delete Vcard with Phone_Number = ' + vcard.phone_number)
   }
 
   const blockVcard = async (vcard) => {

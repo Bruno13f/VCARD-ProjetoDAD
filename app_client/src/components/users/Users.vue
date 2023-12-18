@@ -36,7 +36,6 @@
   }
 
   const editUser = (user) => {
-      console.log('Navigate to Edit User with ID = ' + user.id)
       router.push({name: 'User', params: { id: user.id }})
   }
 
@@ -56,7 +55,6 @@
 
   const addAdmin = () => {
       router.push({ name: 'NewUser'})
-      console.log("Navigate to New User")
   }
 
   socket.on('updateVcard', () => {

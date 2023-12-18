@@ -25,7 +25,6 @@
       emit('changedConfirmationCode')
       router.back()
     } catch (error) {
-      console.log(error)
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
         toast.error('Confirmation Code has not been changed due to validation errors!')

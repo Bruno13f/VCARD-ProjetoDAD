@@ -27,7 +27,6 @@ const flagOperation = computed (() => props.operationType == 'insert' || props.o
 const flagUser = userStore.user.user_type == 'A'? false : true
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
 const editingTransaction = ref(props.transaction)
-console.log(flagOperation)
 
 watch(
   () => props.transaction,

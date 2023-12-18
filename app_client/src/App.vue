@@ -44,10 +44,15 @@ socket.on('newTransaction', (params) => {
 
 socket.on('newRequest', (transaction) => {
   if (transaction.custom_options != null){
-    toast.success(`A new Transaction was requested for you !)`)
+    toast.success(`A new Transaction was requested for you !`)
   }else{
-    toast.success(`Your Transaction Request was accepted !)`)}
+    toast.success(`Your Transaction Request was accepted !`)}
   
+})
+
+socket.on('cancelRequest', () => {
+    console.log("hello")
+    toast.error(`Your Transaction Request was declined !`)
 })
 
 socket.on('insertVcard', (vcard) => {

@@ -48,7 +48,6 @@ const loadCategories = async () => {
   try {
     const response = await axios.get(`vcards/${userStore.user.id}/categories?paginate=0`)
     categories.value = response.data.data
-    console.log(categories)
   } catch (error) {
     console.log(error)
   }
@@ -56,7 +55,6 @@ const loadCategories = async () => {
 
 const editTransaction = (transaction) => {
   router.push({ name: 'Transaction', params: { id: transaction.id } })
-  console.log('Navigate to Edit Transaction with id = ' + transaction.id)
 }
 
 const pdfTransaction = async (transaction) => {
@@ -81,7 +79,7 @@ const pdfTransaction = async (transaction) => {
 };
 
 
-  const deleteTransaction = async (transaction) => {
+  const deleteTransaction = async (transaction, flag=true) => {
     
     try{
       const response = await axios.delete('transactions/' + transaction.id)
@@ -90,8 +88,14 @@ const pdfTransaction = async (transaction) => {
       if (idx >= 0) {
         transactions.value.splice(idx, 1)
       }
-      
-      toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
+
+      if(flag){
+        toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
+      }
+
+      if (flag && deletedTransaction.custom_options != null){
+        socket.emit('cancelRequest', deletedTransaction)
+      }
       
     }catch(error){
       if (error.response.status == 422){
@@ -110,7 +114,9 @@ const pdfTransaction = async (transaction) => {
     try {
       const response = await axios.post('transactions', transaction)
       socket.emit('newRequest', response.data.data)
-      await deleteTransaction(originalTransaction)
+      await deleteTransaction(originalTransaction, false)
+
+      toast.success('Transaction was accepted successfully.')
 
     } catch (error) {
       toast.error('Transaction was not accepted.')

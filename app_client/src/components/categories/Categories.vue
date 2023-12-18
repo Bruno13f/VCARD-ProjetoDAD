@@ -24,7 +24,6 @@ const loadCategories = async (page = 1) => {
         categories.value = response.data.data
         paginationData.value = response.data
         totalCategories.value = paginationData.value.meta.total
-        console.log(categories)
     }catch(error){
         console.log(error)
     }
@@ -32,7 +31,6 @@ const loadCategories = async (page = 1) => {
 
 const addVcard = () => {
       router.push({ name: 'NewCategory'})
-      console.log("Navigate to New Category")
   }
 
 const editCategory = async (category) => {

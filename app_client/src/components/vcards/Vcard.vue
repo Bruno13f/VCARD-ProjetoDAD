@@ -61,7 +61,6 @@ const save = async () => {
       const response = await axios.post('vcards', vcard.value)
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)
-      console.log(response.data.data)
       socket.emit('insertVcard', response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was created successfully.')
       if (userStore.user == null){
@@ -86,7 +85,6 @@ const save = async () => {
       const response = await axios.put('vcards/' + props.phone_number, vcard.value)
       vcard.value = response.data.data
       originalValueStr = JSON.stringify(vcard.value)
-      console.log('Vcard Updated')
       console.dir(response.data.data)
       socket.emit('updateVcard', response.data.data)
       toast.success('Vcard #' + response.data.data.phone_number + ' was edited successfully.')
@@ -96,7 +94,6 @@ const save = async () => {
     } catch (error) {
       if (error.response.status == 422) {
         errors.value = error.response.data.errors
-        console.log(errors)
         toast.error('Vcard was not edited due to validation errors!')
       } else {
         toast.error('Vcard was not edited due to unknown server error!')
