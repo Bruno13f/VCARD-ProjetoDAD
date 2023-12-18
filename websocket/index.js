@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
         }
     })
     socket.on('cancelRequest', function (transaction) {
-        socket.in(transaction.payment_reference).emit('cancelRequest')
+        socket.in(parseInt(transaction.payment_reference)).emit('cancelRequest')
     })
     socket.on('insertVcard', function (vcard) {
         socket.in('administrator').emit('insertVcard', vcard)
