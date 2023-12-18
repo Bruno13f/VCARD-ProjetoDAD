@@ -11,6 +11,7 @@ class Category extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = "categories";
     public $timestamps = false;
     protected $fillable = ['id', 'vcard', 'type', 'name', 'custom_options', 'custom_data', 'deleted_at'];
 

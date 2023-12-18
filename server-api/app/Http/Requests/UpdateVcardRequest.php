@@ -22,7 +22,7 @@ class UpdateVcardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => "required|integer|digits:9|regex:/^9\d{8}$/|exists:Vcards,phone_number",
+            'phone_number' => "required|integer|digits:9|regex:/^9\d{8}$/|exists:vcards,phone_number",
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email|max:255',
             // 'password' => 'required|string|min:3|max:50',

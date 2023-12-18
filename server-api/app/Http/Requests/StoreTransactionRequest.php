@@ -21,13 +21,13 @@ class StoreTransactionRequest extends FormRequest {
     public function rules(): array {
 
         if ($this->custom_options != null){
-            $rulesRef = ['regex:/^9\d{8}$/', 'exists:Vcards,phone_number'];
+            $rulesRef = ['regex:/^9\d{8}$/', 'exists:vcards,phone_number'];
             $valueRules = ['required', 'numeric', 'regex:/^\d{0,9}(\.\d{1,3})?$/'];
         }else{
                 
             switch($this->payment_type) {
                 case 'VCARD':
-                    $rulesRef = ['regex:/^9\d{8}$/', 'exists:Vcards,phone_number'];
+                    $rulesRef = ['regex:/^9\d{8}$/', 'exists:vcards,phone_number'];
                     $maxDebit = Vcard::where('phone_number', '=', $this->vcard)->value('max_debit');
                     $limitRules = ['max:' . $maxDebit];
                     break;

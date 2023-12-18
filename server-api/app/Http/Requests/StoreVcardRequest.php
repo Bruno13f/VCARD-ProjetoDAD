@@ -24,7 +24,7 @@ class StoreVcardRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|integer|digits:9|regex:/^9\d{8}$/|unique:Vcards,phone_number',
+            'phone_number' => 'required|integer|digits:9|regex:/^9\d{8}$/|unique:vcards,phone_number',
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email',
             'photo_url' => 'nullable|file|image',

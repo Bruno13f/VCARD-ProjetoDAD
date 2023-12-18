@@ -11,6 +11,7 @@ class Vcard extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = "vcards";
     public $timestamps = true;
 
     protected $primaryKey = 'phone_number';

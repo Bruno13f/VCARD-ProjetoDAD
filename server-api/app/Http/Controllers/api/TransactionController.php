@@ -144,7 +144,9 @@ class TransactionController extends Controller {
             return new TransactionResource($requestTransaction);
         }
 
-        if((($vcard->balance - $validatedRequest['value']) < 0) && $validatedRequest['type'] == 'D') {
+        $balancevard = $vcard->balance;
+
+        if((($balancevard - $validatedRequest['value']) < 0) && $validatedRequest['type'] == 'D') {
             return response()->json(['error' => "The Vcard doesnt have enough money to complete the transaction"], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -163,6 +165,7 @@ class TransactionController extends Controller {
             if($validatedRequest['vcard'] == $validatedRequest['payment_reference']) {
                 return response()->json(['error' => "You can't transfer money to yourself"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
+            $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
 
             if($validatedRequest['type'] == 'D') {
                 $vcardReceiver->balance += $validatedRequest['value'];
@@ -172,12 +175,11 @@ class TransactionController extends Controller {
     
             } else{
                 $vcardReceiver->balance -= $validatedRequest['value'];
-                $validatedRequest['new_balance'] = $vcard->balance += $validatedRequest['value'];
+                $validatedRequest['new_balance'] = $vcard->balance;
                 $vcard->save();
                 $vcardReceiver->save();
             }
 
-            $createdTransaction = $this->createAdditionalTransaction($vcardReceiver, $validatedRequest);
             
         } else {
             $paymentServiceUrl = 'https://dad-202324-payments-api.vercel.app';

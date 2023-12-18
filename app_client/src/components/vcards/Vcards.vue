@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios'
-  import { ref, watchEffect, computed, onMounted } from 'vue'
+  import { ref, watchEffect, computed, onMounted, inject } from 'vue'
   import {useRouter} from 'vue-router'
   import VcardTable from "./VcardTable.vue"
   import { Bootstrap5Pagination } from 'laravel-vue-pagination';
@@ -16,6 +16,7 @@
   const filterByBlocked = ref(null)
   const orderBy = ref(null)
   const totalVcards = ref(null)
+  const socket = inject("socket")
 
   const loadVcards = async (page = 1) => {
     try{
@@ -67,6 +68,12 @@
       toast.error('Vcard was not ' + blocked + ' due to unknown server error!')
     }
   }
+
+  socket.on('insertVcard', () => { 
+    loadUsers()
+  })
+
+  
 
   watchEffect(
   () => {

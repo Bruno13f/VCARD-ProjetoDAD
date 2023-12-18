@@ -536,7 +536,7 @@ onMounted(async () => {
         <h1 class="h2">Dashboard</h1>
     </div>
     <div class="container-fluid">
-        <div class="row mt-5">
+        <div class="row mt-5" v-if="numberOfTransactions != 0">
             <div class="col-md-4 d-flex justify-content-center mb-2">
                 <div class="card text-white bg-success" style="width: 18rem;">
                     <div class="card-body text-center align-items-center d-flex justify-content-center">
@@ -562,7 +562,7 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
-        <div class="row d-flex justify-content-center mt-5">
+        <div class="row d-flex justify-content-center mt-5" v-if="numberOfTransactions != 0">
             <div class="col-md-6 ml-4">
                 <canvas v-if="flag" id="myChartLineTransactions"></canvas>
                 <canvas v-else id="myChartLineTransactionsMonth"></canvas>
@@ -573,7 +573,7 @@ onMounted(async () => {
             </div>
         </div>
     
-        <div class="row d-flex justify-content-center mt-5" v-if="!flag">
+        <div class="row d-flex justify-content-center mt-5" v-if="!flag && numberOfTransactions != 0">
             <div class="col-md-6 ml-4 chart2" >
                 <canvas id="myChartPie"></canvas>
             </div>
@@ -581,7 +581,7 @@ onMounted(async () => {
                 <canvas id="myChartPolarAreaTransactionType"></canvas>
             </div>
         </div>
-        <div class="row d-flex justify-content-center mt-5" v-else>
+        <div class="row d-flex justify-content-center mt-5" v-if="flag && numberOfTransactions != 0">
             <div class="col-md-12 ml-4 chart2" >
                 <canvas id="myChartPie"></canvas>
             </div>
