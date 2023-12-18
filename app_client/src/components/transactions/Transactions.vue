@@ -80,6 +80,7 @@ const pdfTransaction = async (transaction) => {
 
 
   const deleteTransaction = async (transaction) => {
+    
     try{
       const response = await axios.delete('transactions/' + transaction.id)
       let deletedTransaction = response.data.data
@@ -87,13 +88,30 @@ const pdfTransaction = async (transaction) => {
       if (idx >= 0) {
         transactions.value.splice(idx, 1)
       }
+      
       toast.success('Transaction #' + response.data.data.id + ' was deleted successfully.')
+      
     }catch(error){
       if (error.response.status == 422){
         toast.error("Can't delete Transaction - Vcard exists")
       }else {
         toast.error("Transaction wasn't deleted due to unknown server error!")
       }
+    }
+  }
+
+  const confirmTransaction = async (transaction) => {
+
+    const originalTransaction = transaction
+    transaction.custom_options = null
+    transaction.vcard = transaction.vcard.phone_number
+    try {
+      await axios.post('transactions', transaction)
+      await deleteTransaction(originalTransaction)
+      router.go()
+
+    } catch (error) {
+      toast.error('Transaction was not accepted.')
     }
   }
 
@@ -158,13 +176,13 @@ onMounted(() => {
         <option :value="null"></option>
         <option value="desc">Recent</option>
         <option value="asc">Oldest</option>
-        <option value="pasc">Price - Asc</option>
-        <option value="pdesc">Price - Desc</option>
+        <option value="pasc">Value - Asc</option>
+        <option value="pdesc">Value - Desc</option>
       </select>
     </div>
   </div>
   <transaction-table :transactions="transactions" :showId="true" :showDates="true" :showEditButton="flag" :showDeleteButton="flag" @edit="editTransaction"
-    @delete="deleteTransaction" @createPDF="pdfTransaction"></transaction-table>
+    @delete="deleteTransaction" @createPDF="pdfTransaction" @confirmTransaction="confirmTransaction"></transaction-table>
   <Bootstrap5Pagination :data="paginationData" @pagination-change-page="loadTransactions" :limit="2">
   </Bootstrap5Pagination>
 </template>

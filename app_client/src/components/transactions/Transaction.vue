@@ -45,7 +45,9 @@ const loadTransaction = async (id) => {
   if (!id || id < 0) {
     transaction.value = newTransaction()
     transaction.value.vcard = flagUser ? userStore.user.id : ''
-    transaction.value.type = operation.value == 'insert' && flagUser ? 'D' : ''
+    transaction.value.type = operation.value == 'request' ? 'C' : operation.value == 'insert' && flagUser ? 'D' : ''
+    transaction.value.payment_type = operation.value == 'request' ? 'VCARD' : ''
+    transaction.value.custom_options = operation.value == 'request' ? '[{ "request": true }]' : ''
     originalValueStr = JSON.stringify(transaction.value)
   } else {
     try {
@@ -62,7 +64,7 @@ const loadTransaction = async (id) => {
 
 const save = async () => {
   errors.value = null
-  if (operation.value == 'insert') {
+  if (operation.value == 'insert' || operation.value == 'request') {
     try {
       const response = await axios.post('transactions', transaction.value)
       transaction.value = response.data.data
@@ -118,7 +120,7 @@ const props = defineProps({
 })
 
 const operation = computed(() => {
-  return (!props.id || (props.id < 0)) ? 'insert' : 'update'
+  return props.id == -2 ? 'request' : (!props.id || (props.id < 0)) ? 'insert' : 'update'
 })
 
 watch(
@@ -134,6 +136,8 @@ onMounted(async () => {
   await loadTransaction(props.id);
   // post - user user.id / admin nada
   // put - user transaction.id / admin transaction.id
+
+  console.log(operation.value)
 
   if (operation.value == 'insert' && userStore.user.user_type == 'A')
     return

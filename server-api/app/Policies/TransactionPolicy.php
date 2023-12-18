@@ -30,7 +30,7 @@ class TransactionPolicy
      */
     public function create(User $user): bool
     {
-        return $user;
+        return $user != null;
     }
 
     /**
@@ -71,7 +71,7 @@ class TransactionPolicy
 
     public function generatePDF (User $user, Transaction $transaction): bool 
     {
-        return $user->user_type == 'A';
+        return $user != null;
     }
 
 }

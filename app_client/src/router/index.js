@@ -104,6 +104,12 @@ const router = createRouter({
       props: { id: -1 }
     },
     {
+      path: '/transactions/request',
+      name: 'RequestTransaction',
+      component: Transaction,
+      props: { id: -2 }
+    },
+    {
       path: '/transactions/:id',
       name: 'Transaction',
       component: Transaction,

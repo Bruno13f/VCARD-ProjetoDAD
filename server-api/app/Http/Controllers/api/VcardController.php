@@ -223,6 +223,12 @@ class VcardController extends Controller
 
         $transactionsQuery = $vcard->transactions();
 
+        if ($request['accepted'] == 1){
+            $transactionsQuery->whereNull('custom_options');
+        }else{
+            $transactionsQuery->orderBy('custom_options', 'desc');
+        }
+
         $type = $request->type;
         $payment = $request->payment;
         $category = $request->category;
@@ -311,6 +317,7 @@ class VcardController extends Controller
     
         $paymentCount = Transaction::select('payment_type', \DB::raw('COUNT(*) as count'))
             ->where('transactions.vcard', $vcard->phone_number)
+            ->whereNull('custom_options')
             ->groupBy('payment_type')
             ->get();
     

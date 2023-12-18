@@ -163,6 +163,14 @@ socket.on('updateVcard', (vcard) => {
                   </router-link>
                 </a>
             </li>
+            <li class="nav-item" v-if="userStore.user?.user_type == 'V'">
+              <a class="dropdown-item" href="#">
+                  <router-link class="nav-link" :class="{active: $route.name === 'RequestTransaction'}" :to="{ name: 'RequestTransaction'}" @click="() => clickMenuOption('Payments')">
+                    <i class="bi bi-send-arrow-up"></i>
+                    Request Transaction
+                  </router-link>
+                </a>
+            </li>
             <li class="nav-item" v-if="userStore.user">
               <router-link class="nav-link" :class="{active: $route.name === 'Categories'}" :to="{ name: 'Categories'}" @click="() => clickMenuOption('Categories')">
                 <i class="bi bi-bookmarks"></i>

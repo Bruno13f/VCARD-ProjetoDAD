@@ -23,7 +23,7 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel'])
 const userStore = useUserStore()
-const flagOperation = computed (() => props.operationType == 'insert' ? false : true)
+const flagOperation = computed (() => props.operationType == 'insert' || props.operationType == 'request' ? false : true)
 const flagUser = userStore.user.user_type == 'A'? false : true
 const filteredCategories = computed (() => props.categories.filter(c => c.type == props.transaction.type))
 const editingTransaction = ref(props.transaction)
@@ -48,7 +48,7 @@ const cancel = () => {
 
 <template>
   <form class="row g-3 needs-validation" novalidate @submit.prevent="save">
-    <h3 class="mt-5 mb-3">{{ operationType == 'insert' ? 'Create Transaction' : 'Edit Transaction' }}</h3>
+    <h3 class="mt-5 mb-3">{{ operationType == 'insert' ? 'Create Transaction' :  operationType == 'request' ? 'Request Transaction' : 'Edit Transaction' }}</h3>
     <hr>
 
     <div class="mb-3">
@@ -81,7 +81,7 @@ const cancel = () => {
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectType" class="form-label">Type: *</label>
-      <select class="form-select" id="selectType" v-model="editingTransaction.type" required :disabled=flagOperation>
+      <select class="form-select" id="selectType" v-model="editingTransaction.type" required :disabled="props.operationType == 'request' ? 'true' : flagOperation">
         <option v-show=flagOperation value="null"></option>
         <option value="D">Debit</option>
         <option v-show=!flagUser value="C">Credit</option>
@@ -91,7 +91,7 @@ const cancel = () => {
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectPaymentType" class="form-label">Payment Type: *</label>
-      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled=flagOperation
+      <select class="form-select" id="selectPaymentType" v-model="editingTransaction.payment_type" :disabled="props.operationType == 'request' ? 'true' : flagOperation"
         required>
         <option :value="null"></option>
         <option v-if="(flagUser || flagOperation)" option value="VCARD">VCARD</option>
@@ -106,7 +106,7 @@ const cancel = () => {
 
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="selectCategory" class="form-label">Category: </label>
-      <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id" :disabled="!flagUser">
+      <select class="form-select" id="selectCategory" v-model="editingTransaction.category_id" :disabled="props.operationType == 'request' ? 'true' : !flagUser">
         <option :value="null">No Category</option>
         <option v-for="category in filteredCategories" :key="category.id" :value="category.id">{{ category.name }}</option>
       </select>
@@ -116,7 +116,7 @@ const cancel = () => {
     <div class="mb-3 ms-xs-3 flex-grow-1">
       <label for="inputDescription" class="form-label">Description </label>
       <input type="text" class="form-control" id="inputDescription" placeholder="Description"
-        v-model="editingTransaction.description">
+        v-model="editingTransaction.description" :disabled="props.operationType == 'request'">
       <field-error-message :errors="errors" fieldName="description"></field-error-message>
     </div>
 
@@ -124,7 +124,7 @@ const cancel = () => {
     </div>
 
     <div class="mb-3 d-flex justify-content-center ">
-      <button type="button" class="btn btn-success px-5 mx-2" @click="save">Save</button>
+      <button type="button" class="btn btn-success px-5 mx-2" @click="save">{{operationType == 'update' ? 'Save' : 'Create'}}</button>
       <button type="button" class="btn btn-dark px-5" @click="cancel">Cancel</button>
     </div>
 

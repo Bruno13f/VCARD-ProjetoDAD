@@ -60,10 +60,14 @@ const props = defineProps({
   showCreatePDFButton: {
     type: Boolean,
     default: true,
+  },
+  showConfirmTransactionButton: {
+    type: Boolean,
+    default: true,
   }
 })
 
-const emit = defineEmits(['edit', 'delete', 'createPDF'])
+const emit = defineEmits(['edit', 'delete', 'createPDF', 'confirmTransaction'])
 
 const editClick = (transaction) => {
   emit('edit', transaction)
@@ -75,6 +79,10 @@ const deleteClick = (transaction) => {
 
 const createPDFClick = (transaction) => {
   emit('createPDF', transaction)
+}
+
+const confirmTransactionClick = (transaction) => {
+  emit('confirmTransaction', transaction)
 }
 
 </script>
@@ -99,14 +107,14 @@ const createPDFClick = (transaction) => {
     </thead>
     <tbody>
       <tr v-for="transaction in transactions" :key="transaction.id">
-        <td v-if="showId">{{ transaction.id }}</td>
+        <td class="text-center" v-if="showId">{{ transaction.custom_options == null ? transaction.id : 'REQUEST - ' + transaction.id}}</td>
         <td>{{ transaction.vcard.phone_number }}</td>
         <td v-if="showDateTime">{{ transaction.datetime }}</td>
         <td v-if="showType">{{ transaction.type == 'C' ? 'Credit' : 'Debit' }}</td>
         <td v-if="showValue" :class="transaction.type == 'C' ? 'text-success' : 'text-danger'">
           {{ transaction.type == 'C' ? '+ ' + transaction.value : '- ' + transaction.value }}</td>
-        <td v-if="showOldBalance">{{ transaction.old_balance + ' €' }}</td>
-        <td v-if="showNewBalance">{{ transaction.new_balance + ' €' }}</td>
+        <td v-if="showOldBalance">{{ transaction.custom_options == null ? transaction.old_balance + ' €' : ''}}</td>
+        <td v-if="showNewBalance">{{ transaction.custom_options == null ? transaction.new_balance + ' €' : ''}}</td>
         <td v-if="showPaymentType">{{ transaction.payment_type }}</td>
         <td v-if="showPaymentReference">{{ transaction.payment_reference }}</td>
         <td v-if="showCategory">
@@ -115,7 +123,7 @@ const createPDFClick = (transaction) => {
 
         <td v-if="showDescription">{{ transaction.description }}</td>
         <td class="text-end" v-if="showEditButton || showDeleteButton || showCreatePDFButton">
-          <div class="d-flex justify-content-end">
+          <div v-if="transaction.custom_options == null" class="d-flex justify-content-center">
             <button class="btn btn-xs btn-light" @click="editClick(transaction)" v-if="showEditButton"><i
                 class="bi bi-xs bi-pencil"></i>
             </button>
@@ -125,7 +133,16 @@ const createPDFClick = (transaction) => {
             </button>
 
             <button class="btn btn-xs btn-light" @click="createPDFClick(transaction)" v-if="showCreatePDFButton">
-              <i class="bi bi-filetype-pdf"></i>
+              <i class="bi bi-xs bi-filetype-pdf"></i>
+            </button>
+          </div>
+          <div v-else class="d-flex justify-content-center">
+            <button class="btn btn-xs btn-light" @click="confirmTransactionClick(transaction)" v-if="showConfirmTransactionButton">
+              <i class="bi bi-xs bi-check-circle"></i>
+            </button>
+
+            <button class="btn btn-xs btn-light" @click="deleteClick(transaction)" v-if="showDeleteButton"><i
+                class="bi bi-xs bi-x-square-fill"></i>
             </button>
           </div>
         </td>
@@ -140,3 +157,5 @@ button {
   margin-right: 3px;
 }
 </style>
+
+

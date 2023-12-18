@@ -23,13 +23,13 @@ class TransactionResource extends JsonResource
             'value' => $this->value,
             'old_balance' => $this->old_balance,
             'new_balance' => $this->new_balance,
-            'payment_type' => $this->payment_type == 'MB' ? 'Multibanco' : $this->payment_type,
+            'payment_type' => $this->payment_type,
             'payment_reference' => $this->payment_reference,
             'pair_transaction' => $this->pair_transaction,
             'pair_vcard' => $this->pair_vcard,
             'category_id' => new CategoryResource($this->category),
-            'description' => $this->description
-            // custom_data e custom_options??
+            'description' => $this->description,
+            'custom_options' => $this->custom_options,
 
         ];
     }
