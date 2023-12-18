@@ -250,7 +250,7 @@ class TransactionController extends Controller {
     public function destroy(Transaction $transaction) {
 
         if ($transaction->custom_options != null){
-            $transaction->delete();
+            $transaction->forceDelete();
             return new TransactionResource($transaction);
         }
 

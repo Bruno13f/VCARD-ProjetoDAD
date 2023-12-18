@@ -75,7 +75,11 @@ const save = async () => {
       }
       console.log(params)
       socket.emit('newTransaction', params)
-      toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
+      if (operation.value == 'request'){
+        toast.success('Transaction was requested successfully.')
+      }else{
+        toast.success('Transaction #' + response.data.data.id + ' was created successfully.')
+      }
       router.push('/transactions');
     } catch (error) {
       if (error.response.status == 422) {
